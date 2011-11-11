@@ -11,7 +11,9 @@
 #include <SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <stdexcept>
+#include <map>
 #include "texte.h"
+#include "option.h"
 
 class Jeu {
 protected:
@@ -20,8 +22,10 @@ protected:
 	SDL_Surface* m_ecran;
 	TTF_Font* m_policeCalligraphiee;
 	TTF_Font* m_policeBasique;
+	std::map<std::string, SDL_Color> m_couleurs;
 
 	void chargerPolices();
+	void initialiserCouleurs();
 
 	void afficherEcranPrincipal();
 	void afficherMenuPrincipal();
