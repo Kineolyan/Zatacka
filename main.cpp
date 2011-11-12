@@ -14,6 +14,7 @@ int main(int argc, char* argv[] ){
 		cerr << "Erreur à l'initialisation de la SDL : " << SDL_GetError() << endl;;
 		exit(EXIT_FAILURE);
 	}
+	SDL_EnableUNICODE(1);
 
 	try {
 		Jeu jeu(800,600);
