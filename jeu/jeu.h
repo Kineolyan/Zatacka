@@ -9,7 +9,6 @@
 #define JEU_H_
 
 #include <SDL.h>
-#include <SDL/SDL_ttf.h>
 #include <stdexcept>
 #include <map>
 #include "texte.h"
