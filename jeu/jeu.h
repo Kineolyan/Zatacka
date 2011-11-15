@@ -28,6 +28,7 @@ protected:
 
 	void afficherEcranPrincipal();
 	void afficherMenuPrincipal();
+	void afficherMenuOptions();
 
 public:
 	Jeu(int widht, int hauteur);

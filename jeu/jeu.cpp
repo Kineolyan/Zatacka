@@ -5,7 +5,7 @@ using namespace std;
 Jeu::Jeu(int largeur, int hauteur):
 		m_largeur(largeur), m_hauteur(hauteur),	m_ecran(NULL),
 		m_policeCalligraphiee(NULL), m_policeBasique(NULL) {
-	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
 	if (NULL==m_ecran) {
 		throw ExceptionGenerale("Impossible de creer l'ecran");
 	}
@@ -85,9 +85,7 @@ void Jeu::afficherEcranPrincipal() {
 void Jeu::afficherMenuPrincipal() {
 	SDL_FillRect(m_ecran, NULL,
 			SDL_MapRGB(m_ecran->format, 0, 0, 0));
-	Option optionTest("jouer", "oui", "non", m_policeBasique,
-			m_couleurs["blanc"]),
-			optionJoueur1("1 A", "READY", " ", m_policeBasique,
+	Option optionJoueur1("1 A", "READY", " ", m_policeBasique,
 				m_couleurs["rouge"]),
 			optionJoueur2("W X", "READY", " ", m_policeBasique,
 				m_couleurs["jaune"]),
@@ -99,6 +97,8 @@ void Jeu::afficherMenuPrincipal() {
 				m_couleurs["orange"]),
 			optionJoueur6("LCLICK RCLICK", "READY", " ", m_policeBasique,
 				m_couleurs["bleu"]);
+    TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
+			m_couleurs["blanc"]);
 	SDL_Rect position = {50, 50},
 			positionEtat = {450, 50};
 	optionJoueur1.position(position, positionEtat);
@@ -118,14 +118,15 @@ void Jeu::afficherMenuPrincipal() {
 	positionEtat.y+= 50;
 	optionJoueur6.position(position, positionEtat);
 	position.y+= 100;
-	optionTest.position(position);
+	options.position(position);
+
 	optionJoueur1.afficher(m_ecran);
 	optionJoueur2.afficher(m_ecran);
 	optionJoueur3.afficher(m_ecran);
 	optionJoueur4.afficher(m_ecran);
 	optionJoueur5.afficher(m_ecran);
 	optionJoueur6.afficher(m_ecran);
-	optionTest.afficher(m_ecran);
+	options.afficher(m_ecran);
 	SDL_Flip(m_ecran);
 
 	// passer à l'étape suivante
@@ -189,9 +190,8 @@ void Jeu::afficherMenuPrincipal() {
 				optionJoueur5.afficher(m_ecran);
 				break;
 
-			case SDLK_p:
-				optionTest.echanger();
-				optionTest.afficher(m_ecran);
+			case SDLK_o:
+				afficherMenuOptions();
 				break;
 
 			default:
@@ -224,6 +224,44 @@ void Jeu::afficherMenuPrincipal() {
 			case SDL_BUTTON_RIGHT:
 				optionJoueur6.desactiver();
 				optionJoueur6.afficher(m_ecran);
+				break;
+
+			default:
+				break;
+			}
+			break;
+
+		default:
+			break;
+		}
+		SDL_Flip(m_ecran);
+	}
+}
+
+void Jeu::afficherMenuOptions() {
+	SDL_FillRect(m_ecran, NULL,
+			SDL_MapRGB(m_ecran->format, 0, 0, 0));
+	Option optionTest("jouer", "oui", "non", m_policeBasique,
+			m_couleurs["blanc"]);
+	SDL_Rect position = {100, 50};
+	optionTest.position(position);
+	optionTest.afficher(m_ecran);
+	SDL_Flip(m_ecran);
+
+	// passer à l'étape suivante
+	SDL_Event event;
+	bool boucler = true;
+	while (boucler) {
+		SDL_WaitEvent(&event);
+		switch (event.type) {
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.unicode) {
+			case SDLK_ESCAPE:
+				return;
+
+			case SDLK_p:
+				optionTest.echanger();
+				optionTest.afficher(m_ecran);
 				break;
 
 			default:
