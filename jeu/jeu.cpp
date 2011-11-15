@@ -7,7 +7,7 @@ Jeu::Jeu(int largeur, int hauteur):
 		m_policeCalligraphiee(NULL), m_policeBasique(NULL) {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
 	if (NULL==m_ecran) {
-		throw runtime_error("Impossible de creer l'ecran");
+		throw ExceptionGenerale("Impossible de creer l'ecran");
 	}
 	SDL_WM_SetCaption("Zatacka", NULL);
 
@@ -21,6 +21,13 @@ Jeu::Jeu(int largeur, int hauteur):
 Jeu::~Jeu() {
 	TTF_CloseFont(m_policeCalligraphiee);
 	TTF_CloseFont(m_policeBasique);
+
+	map<string, SDL_Color*>::iterator it = m_couleurs.begin(),
+        end = m_couleurs.end();
+    for ( ; it!=end; it++) {
+        delete it->second;
+    }
+
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -28,37 +35,24 @@ Jeu::~Jeu() {
 void Jeu::chargerPolices() {
 	m_policeCalligraphiee = TTF_OpenFont("MLSJN.TTF", 65);
 	m_policeBasique = TTF_OpenFont("SANFW___.TTF", 30);
+
+	if (NULL==m_policeBasique || NULL==m_policeCalligraphiee) {
+        throw ParametreManquant("Une des polices n'a pas ete creee.");
+	}
 }
 
 void Jeu::initialiserCouleurs() {
-	//#ifdef MINGW32
-	SDL_Color blanc = { 255, 255, 255 },
-		jaune = { 250, 225, 0 },
-		bleu = { 0, 191, 249 },
-		rouge = { 254, 1, 1 },
-		vert = { 1, 236, 8 },
-		violet = { 199, 8, 167 },
-		orange = { 254, 151, 16 };
-	m_couleurs["blanc"] = SDL_Color(blanc);
-	m_couleurs["jaune"] = SDL_Color(jaune);
-	m_couleurs["bleu"] = SDL_Color(bleu);
-	m_couleurs["rouge"] = SDL_Color(rouge);
-	m_couleurs["vert"] = SDL_Color(vert);
-	m_couleurs["violet"] = SDL_Color(violet);
-	m_couleurs["orange"] = SDL_Color(orange);
-	/*#else
-	m_couleurs["blanc"] = { 255, 255, 255 };
-	m_couleurs["jaune"] = { 250, 225, 0 };
-	m_couleurs["bleu"] = { 0, 191, 249 };
-	m_couleurs["rouge"] = { 254, 1, 1 };
-	m_couleurs["vert"] = { 1, 236, 8 };
-	m_couleurs["violet"] = { 199, 8, 167 };
-	m_couleurs["orange"] = { 254, 151, 16 };
-	#endif*/
+	m_couleurs["blanc"] = new SDL_Color({255, 255, 255});
+    m_couleurs["jaune"] = new SDL_Color({250, 225, 0 });
+	m_couleurs["bleu"] = new SDL_Color({0, 191, 249});
+	m_couleurs["rouge"] = new SDL_Color({254, 1, 1});
+	m_couleurs["vert"] = new SDL_Color({1, 236, 8});
+	m_couleurs["violet"] = new SDL_Color({199, 8, 167});
+	m_couleurs["orange"] = new SDL_Color({254, 151, 16});
 }
 
 void Jeu::afficherEcranPrincipal() {
-	TexteSDL texte("Achtung, die kurve !", m_policeCalligraphiee, &(m_couleurs["blanc"]));
+	TexteSDL texte("Achtung, die kurve !", m_policeCalligraphiee, m_couleurs["blanc"]);
 	SDL_Rect position;
 	position.x = (m_largeur - texte.largeur()) / 2;
 	position.y = (m_hauteur - texte.hauteur()) / 2;
@@ -92,19 +86,19 @@ void Jeu::afficherMenuPrincipal() {
 	SDL_FillRect(m_ecran, NULL,
 			SDL_MapRGB(m_ecran->format, 0, 0, 0));
 	Option optionTest("jouer", "oui", "non", m_policeBasique,
-			&(m_couleurs["blanc"])),
+			m_couleurs["blanc"]),
 			optionJoueur1("1 A", "READY", " ", m_policeBasique,
-				&(m_couleurs["rouge"])),
+				m_couleurs["rouge"]),
 			optionJoueur2("W X", "READY", " ", m_policeBasique,
-				&(m_couleurs["jaune"])),
+				m_couleurs["jaune"]),
 			optionJoueur3(", ;", "READY", " ", m_policeBasique,
-				&(m_couleurs["vert"])),
+				m_couleurs["vert"]),
 			optionJoueur4("LARROW DARROW", "READY", " ", m_policeBasique,
-				&(m_couleurs["violet"])),
+				m_couleurs["violet"]),
 			optionJoueur5("/ *", "READY", " ", m_policeBasique,
-				&(m_couleurs["orange"])),
+				m_couleurs["orange"]),
 			optionJoueur6("LCLICK RCLICK", "READY", " ", m_policeBasique,
-				&(m_couleurs["bleu"]));
+				m_couleurs["bleu"]);
 	SDL_Rect position = {50, 50},
 			positionEtat = {450, 50};
 	optionJoueur1.position(position, positionEtat);
