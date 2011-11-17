@@ -1,10 +1,3 @@
-/*
- * texte.cpp
- *
- *  Created on: 6 nov. 2011
- *      Author: oliv
- */
-
 #include "texte.h"
 
 using namespace std;
@@ -79,6 +72,15 @@ int TexteSDL::hauteur() {
 }
 
 SDL_Surface* TexteSDL::texte() {
+	if (NULL==m_police) {
+		throw ParametreManquant(string("La police du texte '")
+			+ m_contenu +"' n'est pas chargee");
+	}
+	if (NULL==m_couleur) {
+		throw ParametreManquant(string("Le texte '")
+			+ m_contenu +"' n'a pas de couleur");
+	}
+
 	if (false==m_surfaceAJour) {
 		SDL_FreeSurface(m_texte);
 		m_texte = TTF_RenderText_Blended(

@@ -11,6 +11,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <string>
+#include "../exceptions/exception.h"
 
 class TexteSDL {
 protected:
@@ -23,7 +24,7 @@ protected:
 	bool m_surfaceAJour;
 
 public:
-	TexteSDL(std::string contenu, int positionX, int positionY);
+	TexteSDL(std::string contenu ="", int positionX =0, int positionY =0);
 	TexteSDL(std::string contenu, TTF_Font* police, SDL_Color* couleur);
 	TexteSDL(std::string contenu, int positionX, int positionY,
 			TTF_Font* police, SDL_Color* couleur);
