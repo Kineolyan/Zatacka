@@ -15,13 +15,13 @@ MODE = debug
 
 ifeq ($(OS), windows)
 PROGNAME = zatacka.exe
-LIBS = `sdl-config --libs` -lSDL_image -lSDL_ttf
+LIBS = `sdl-config --libs` -lSDL_ttf
 BIN = /usr/bin
 DEST = /usr/local/games/zatac
 else
 ifeq ($(OS), unix)
 PROGNAME = zatacka
-LIBS = `sdl-config --libs` -lSDL_image -lSDL_ttf
+LIBS = `sdl-config --libs` -lSDL_ttf
 BIN = /usr/bin
 DEST = /usr/local/games/zatacka
 endif
@@ -54,7 +54,13 @@ $(OBJ)/%.o: $(SRC)/exceptions/%.cpp
 	$(CC) $(CFLAGS) -c $(SRC)/exceptions/$*.cpp
 	mv $*.o $(OBJ)
 	
-# Ecrire les dépendances pour chaque fichier, pour éviter de faire un clean
+# Règles de dépendance
+#$(OBJ)/main.o : $(SRC)/jeu/jeu.h 
+#$(OBJ)/jeu.o : $(SRC)/jeu/jeu.* $(OBJ)/jeu/texte.h \
+#	$(SRC)/jeu/option.h $(SRC)/exception.h
+#$(OBJ)/texte.o : $(SRC)/jeu/texte.h
+#$(OBJ)/option.o : $(SRC)/jeu/option.h $(SRC)/jeu/texte.h
+#$(OBJ)/exception.o : $(SRC)/exceptions/exception.h
 
 all: $(PROGNAME)
 
