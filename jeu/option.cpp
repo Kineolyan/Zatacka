@@ -8,7 +8,7 @@ Option::Option(string texte, string optionActive, string optionInactive,
 		m_texte(texte, police, couleur),
 		m_optionActive(optionActive, police, couleur),
 		m_optionInactive(optionInactive, police, couleur),
-		m_blocEffaceur(NULL),
+		m_blocEffaceur(NULL), m_position({0, 0}),
 		m_active(false), m_offset(40)
 {
 	m_position.x = 0;
