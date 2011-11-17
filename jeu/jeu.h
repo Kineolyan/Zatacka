@@ -8,8 +8,9 @@
 #ifndef JEU_H_
 #define JEU_H_
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <map>
+#include <vector>
 #include "texte.h"
 #include "option.h"
 #include "../exceptions/exception.h"
@@ -22,9 +23,14 @@ protected:
 	TTF_Font* m_policeCalligraphiee;
 	TTF_Font* m_policeBasique;
 	std::map<std::string, SDL_Color*> m_couleurs;
+	std::vector<Option*> m_optionJoueurs;
+	std::vector<Option*> m_options;
 
 	void chargerPolices();
 	void initialiserCouleurs();
+
+	void creerMenuPrincipal();
+	void creerMenuOptions();
 
 	void afficherEcranPrincipal();
 	void afficherMenuPrincipal();

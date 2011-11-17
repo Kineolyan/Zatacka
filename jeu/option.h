@@ -13,11 +13,13 @@
 
 class Option {
 protected:
+	int m_largeur;
+	int m_hauteur;
 	TexteSDL m_texte;
 	TexteSDL m_optionActive;
 	TexteSDL m_optionInactive;
 	SDL_Surface* m_blocEffaceur;
-	SDL_Rect m_positionOption;
+	SDL_Rect m_position;
 	bool m_active;
 	int m_offset;
 
@@ -27,6 +29,8 @@ public:
 			SDL_Color* couleur);
 	~Option();
 
+	int hauteur();
+	int largeur();
 	void position(const SDL_Rect& position);
 	void position(const SDL_Rect& positionOption,
 			const SDL_Rect& positionEtat);

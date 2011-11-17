@@ -4,7 +4,8 @@ using namespace std;
 
 Jeu::Jeu(int largeur, int hauteur):
 		m_largeur(largeur), m_hauteur(hauteur),	m_ecran(NULL),
-		m_policeCalligraphiee(NULL), m_policeBasique(NULL) {
+		m_policeCalligraphiee(NULL), m_policeBasique(NULL),
+		m_optionJoueurs(6), m_options() {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
 	if (NULL==m_ecran) {
 		throw ExceptionGenerale("Impossible de creer l'ecran");
@@ -15,6 +16,9 @@ Jeu::Jeu(int largeur, int hauteur):
 	chargerPolices();
 	initialiserCouleurs();
 
+	creerMenuPrincipal();
+	creerMenuOptions();
+
 	afficherEcranPrincipal();
 }
 
@@ -22,10 +26,15 @@ Jeu::~Jeu() {
 	TTF_CloseFont(m_policeCalligraphiee);
 	TTF_CloseFont(m_policeBasique);
 
-	map<string, SDL_Color*>::iterator it = m_couleurs.begin(),
-        end = m_couleurs.end();
-    for ( ; it!=end; it++) {
+
+    for (map<string, SDL_Color*>::iterator it = m_couleurs.begin(),
+        end = m_couleurs.end() ; it!=end; it++) {
         delete it->second;
+    }
+
+    for (vector<Option*>::iterator it = m_options.begin(),
+            end = m_options.end(); it!=end; it++) {
+    	delete *it;
     }
 
 	TTF_Quit();
@@ -33,8 +42,8 @@ Jeu::~Jeu() {
 }
 
 void Jeu::chargerPolices() {
-	m_policeCalligraphiee = TTF_OpenFont("MLSJN.TTF", 65);
-	m_policeBasique = TTF_OpenFont("SANFW___.TTF", 30);
+	m_policeCalligraphiee = TTF_OpenFont("SCORE.TTF", 65);
+	m_policeBasique = TTF_OpenFont("MENU.TTF", 25);
 
 	if (NULL==m_policeBasique || NULL==m_policeCalligraphiee) {
         throw ParametreManquant("Une des polices n'a pas ete creee.");
@@ -73,59 +82,64 @@ void Jeu::afficherEcranPrincipal() {
 
 			case SDLK_SPACE:
 				boucler = false;
-				afficherMenuPrincipal();
 
 			default:
 				break;
 			}
 		}
 	}
+	afficherMenuPrincipal();
+}
+
+void Jeu::creerMenuPrincipal() {
+	m_optionJoueurs[0] = new Option("(1 A)", "READY", " ", m_policeBasique,
+				m_couleurs["rouge"]);
+	m_optionJoueurs[1] = new Option("(X C)", "READY", " ", m_policeBasique,
+				m_couleurs["jaune"]);
+	m_optionJoueurs[2] = new Option("(, ;)", "READY", " ", m_policeBasique,
+				m_couleurs["orange"]);
+	m_optionJoueurs[3] = new Option("(L.Arrow D.Arrow)", "READY", " ", m_policeBasique,
+				m_couleurs["vert"]);
+	m_optionJoueurs[4] = new Option("(/ *)", "READY", " ", m_policeBasique,
+				m_couleurs["violet"]);
+	m_optionJoueurs[5] = new Option("(L.Mouse R.Mouse)", "READY", " ", m_policeBasique,
+				m_couleurs["bleu"]);
+
+	SDL_Rect position = {50, 50},
+			positionEtat = {450, 50};
+	m_optionJoueurs[0]->position(position, positionEtat);
+	position.y+= 50;
+	positionEtat.y+= 50;
+	m_optionJoueurs[1]->position(position, positionEtat);
+	position.y+= 50;
+	positionEtat.y+= 50;
+	m_optionJoueurs[2]->position(position, positionEtat);
+	position.y+= 50;
+	positionEtat.y+= 50;
+	m_optionJoueurs[3]->position(position, positionEtat);
+	position.y+= 50;
+	positionEtat.y+= 50;
+	m_optionJoueurs[4]->position(position, positionEtat);
+	position.y+= 50;
+	positionEtat.y+= 50;
+	m_optionJoueurs[5]->position(position, positionEtat);
 }
 
 void Jeu::afficherMenuPrincipal() {
 	SDL_FillRect(m_ecran, NULL,
 			SDL_MapRGB(m_ecran->format, 0, 0, 0));
-	Option optionJoueur1("1 A", "READY", " ", m_policeBasique,
-				m_couleurs["rouge"]),
-			optionJoueur2("W X", "READY", " ", m_policeBasique,
-				m_couleurs["jaune"]),
-			optionJoueur3(", ;", "READY", " ", m_policeBasique,
-				m_couleurs["vert"]),
-			optionJoueur4("LARROW DARROW", "READY", " ", m_policeBasique,
-				m_couleurs["violet"]),
-			optionJoueur5("/ *", "READY", " ", m_policeBasique,
-				m_couleurs["orange"]),
-			optionJoueur6("LCLICK RCLICK", "READY", " ", m_policeBasique,
-				m_couleurs["bleu"]);
-    TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
+
+	TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
 			m_couleurs["blanc"]);
-	SDL_Rect position = {50, 50},
-			positionEtat = {450, 50};
-	optionJoueur1.position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	optionJoueur2.position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	optionJoueur3.position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	optionJoueur4.position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	optionJoueur5.position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	optionJoueur6.position(position, positionEtat);
-	position.y+= 100;
+	SDL_Rect position = {50, 400};
 	options.position(position);
 
-	optionJoueur1.afficher(m_ecran);
-	optionJoueur2.afficher(m_ecran);
-	optionJoueur3.afficher(m_ecran);
-	optionJoueur4.afficher(m_ecran);
-	optionJoueur5.afficher(m_ecran);
-	optionJoueur6.afficher(m_ecran);
+	m_optionJoueurs[0]->afficher(m_ecran);
+	m_optionJoueurs[1]->afficher(m_ecran);
+	m_optionJoueurs[2]->afficher(m_ecran);
+	m_optionJoueurs[3]->afficher(m_ecran);
+	m_optionJoueurs[4]->afficher(m_ecran);
+	m_optionJoueurs[5]->afficher(m_ecran);
 	options.afficher(m_ecran);
 	SDL_Flip(m_ecran);
 
@@ -141,57 +155,47 @@ void Jeu::afficherMenuPrincipal() {
 				return;
 
 			case SDLK_AMPERSAND:
-				optionJoueur1.activer();
-				optionJoueur1.afficher(m_ecran);
+				m_optionJoueurs[0]->activer();
+				m_optionJoueurs[0]->afficher(m_ecran);
 				break;
 
 			case SDLK_a:
-				optionJoueur1.desactiver();
-				optionJoueur1.afficher(m_ecran);
-				break;
-
-			case SDLK_w:
-				optionJoueur2.activer();
-				optionJoueur2.afficher(m_ecran);
+				m_optionJoueurs[0]->desactiver();
+				m_optionJoueurs[0]->afficher(m_ecran);
 				break;
 
 			case SDLK_x:
-				optionJoueur2.desactiver();
-				optionJoueur2.afficher(m_ecran);
+				m_optionJoueurs[1]->activer();
+				m_optionJoueurs[1]->afficher(m_ecran);
+				break;
+
+			case SDLK_c:
+				m_optionJoueurs[1]->desactiver();
+				m_optionJoueurs[1]->afficher(m_ecran);
 				break;
 
 			case SDLK_COMMA:
-				optionJoueur3.activer();
-				optionJoueur3.afficher(m_ecran);
+				m_optionJoueurs[2]->activer();
+				m_optionJoueurs[2]->afficher(m_ecran);
 				break;
 
 			case SDLK_SEMICOLON:
-				optionJoueur3.desactiver();
-				optionJoueur3.afficher(m_ecran);
-				break;
-
-			case SDLK_LEFT:
-				optionJoueur4.activer();
-				optionJoueur4.afficher(m_ecran);
-				break;
-
-			case SDLK_DOWN:
-				optionJoueur4.desactiver();
-				optionJoueur4.afficher(m_ecran);
+				m_optionJoueurs[2]->desactiver();
+				m_optionJoueurs[2]->afficher(m_ecran);
 				break;
 
 			case SDLK_SLASH:
-				optionJoueur5.activer();
-				optionJoueur5.afficher(m_ecran);
+				m_optionJoueurs[4]->activer();
+				m_optionJoueurs[4]->afficher(m_ecran);
 				break;
 
 			case SDLK_ASTERISK:
-				optionJoueur5.desactiver();
-				optionJoueur5.afficher(m_ecran);
+				m_optionJoueurs[4]->desactiver();
+				m_optionJoueurs[4]->afficher(m_ecran);
 				break;
 
 			case SDLK_o:
-				afficherMenuOptions();
+				boucler = false;
 				break;
 
 			default:
@@ -200,13 +204,13 @@ void Jeu::afficherMenuPrincipal() {
 
 			switch (event.key.keysym.sym) {
 			case SDLK_LEFT:
-				optionJoueur4.activer();
-				optionJoueur4.afficher(m_ecran);
+				m_optionJoueurs[3]->activer();
+				m_optionJoueurs[3]->afficher(m_ecran);
 				break;
 
 			case SDLK_DOWN:
-				optionJoueur4.desactiver();
-				optionJoueur4.afficher(m_ecran);
+				m_optionJoueurs[3]->desactiver();
+				m_optionJoueurs[3]->afficher(m_ecran);
 				break;
 
 			default:
@@ -217,13 +221,13 @@ void Jeu::afficherMenuPrincipal() {
 		case SDL_MOUSEBUTTONDOWN:
 			switch (event.button.button) {
 			case SDL_BUTTON_LEFT:
-				optionJoueur6.activer();
-				optionJoueur6.afficher(m_ecran);
+				m_optionJoueurs[5]->activer();
+				m_optionJoueurs[5]->afficher(m_ecran);
 				break;
 
 			case SDL_BUTTON_RIGHT:
-				optionJoueur6.desactiver();
-				optionJoueur6.afficher(m_ecran);
+				m_optionJoueurs[5]->desactiver();
+				m_optionJoueurs[5]->afficher(m_ecran);
 				break;
 
 			default:
@@ -236,16 +240,43 @@ void Jeu::afficherMenuPrincipal() {
 		}
 		SDL_Flip(m_ecran);
 	}
+	afficherMenuOptions();
+}
+
+void Jeu::creerMenuOptions() {
+	Option *option1 = new Option("jouer (P)", "oui", "non",
+			m_policeBasique, m_couleurs["blanc"]),
+			*option2 = new Option("jouer par equipe (E)", "oui", "non",
+					m_policeBasique, m_couleurs["blanc"]),
+			*info = new Option("jouer par equipe (T)", "oui", "non",
+					m_policeBasique, m_couleurs["blanc"]);
+	SDL_Rect position = {100, 50};
+	option1->position(position);
+	position.y+= 50;
+	option2->position(position);
+	position.y+= 50;
+	info->position(position);
+
+	m_options.push_back(option1);
+	m_options.push_back(option2);
+	m_options.push_back(info);
 }
 
 void Jeu::afficherMenuOptions() {
 	SDL_FillRect(m_ecran, NULL,
 			SDL_MapRGB(m_ecran->format, 0, 0, 0));
-	Option optionTest("jouer", "oui", "non", m_policeBasique,
-			m_couleurs["blanc"]);
-	SDL_Rect position = {100, 50};
-	optionTest.position(position);
-	optionTest.afficher(m_ecran);
+	vector<Option*>::iterator it = m_options.begin(),
+			end = m_options.end();
+	for ( ; it!=end; it++) {
+		(*it)->afficher(m_ecran);
+	}
+
+	TexteSDL retour("Retour au menu principal (space)",
+			m_policeBasique, m_couleurs["blanc"]);
+	SDL_Rect position = {100, 200};
+	retour.position(position);
+	retour.afficher(m_ecran);
+
 	SDL_Flip(m_ecran);
 
 	// passer à l'étape suivante
@@ -259,9 +290,23 @@ void Jeu::afficherMenuOptions() {
 			case SDLK_ESCAPE:
 				return;
 
+			case SDLK_SPACE:
+				boucler = false;
+				break;
+
 			case SDLK_p:
-				optionTest.echanger();
-				optionTest.afficher(m_ecran);
+				m_options[0]->echanger();
+				m_options[0]->afficher(m_ecran);
+				break;
+
+			case SDLK_e:
+				m_options[1]->echanger();
+				m_options[1]->afficher(m_ecran);
+				break;
+
+			case SDLK_t:
+				m_options[2]->echanger();
+				m_options[2]->afficher(m_ecran);
 				break;
 
 			default:
@@ -274,4 +319,5 @@ void Jeu::afficherMenuOptions() {
 		}
 		SDL_Flip(m_ecran);
 	}
+	afficherMenuPrincipal();
 }

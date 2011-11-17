@@ -4,37 +4,55 @@ using namespace std;
 
 Option::Option(string texte, string optionActive, string optionInactive,
 		TTF_Font* police, SDL_Color* couleur):
+		m_largeur(0), m_hauteur(0),
 		m_texte(texte, police, couleur),
 		m_optionActive(optionActive, police, couleur),
 		m_optionInactive(optionInactive, police, couleur),
 		m_blocEffaceur(NULL),
 		m_active(false), m_offset(40)
-{}
+{
+	m_position.x = 0;
+	m_position.y = 0;
+}
 
 Option::~Option() {
 	SDL_FreeSurface(m_blocEffaceur);
 }
 
-void Option::position(const SDL_Rect& position) {
-	m_positionOption.x = position.x;
-	m_positionOption.y = position.y;
-	m_texte.position(m_positionOption);
+int Option::hauteur()
+{	return m_hauteur;	}
 
-	m_positionOption.x+= m_offset + m_texte.largeur();
-	m_optionActive.position(m_positionOption);
-	m_optionInactive.position(m_positionOption);
+int Option::largeur()
+{	return m_largeur;	}
+
+void Option::position(const SDL_Rect& position) {
+	m_position.x = position.x;
+	m_position.y = position.y;
+	m_texte.position(m_position);
+
+	m_position.x+= m_offset + m_texte.largeur();
+	m_optionActive.position(m_position);
+	m_optionInactive.position(m_position);
+
+	m_largeur = m_position.x
+		+ (m_optionActive.largeur() > m_optionInactive.largeur() ?
+			m_optionActive.largeur(): m_optionInactive.largeur());
+	m_hauteur = m_texte.hauteur();
 }
 
 void Option::position(const SDL_Rect& positionOption,
 		const SDL_Rect& positionEtat) {
-	m_positionOption.x = positionOption.x;
-	m_positionOption.y = positionOption.y;
-	m_texte.position(m_positionOption);
+	m_position.x = positionOption.x;
+	m_position.y = positionOption.y;
+	m_texte.position(m_position);
 
-	m_positionOption.x = positionEtat.x;
-	m_positionOption.y = positionEtat.y;
-	m_optionActive.position(m_positionOption);
-	m_optionInactive.position(m_positionOption);
+	m_optionActive.position(positionEtat);
+	m_optionInactive.position(positionEtat);
+
+	m_largeur = positionEtat.x - m_position.x
+			+ (m_optionActive.largeur() > m_optionInactive.largeur() ?
+				m_optionActive.largeur(): m_optionInactive.largeur());
+	m_hauteur = positionEtat.y - m_position.y + m_texte.hauteur();
 }
 
 void Option::activer()
@@ -49,16 +67,13 @@ void Option::echanger()
 void Option::afficher(SDL_Surface* ecran) {
 	if (NULL==m_blocEffaceur) {
 		m_blocEffaceur = SDL_CreateRGBSurface(SDL_HWSURFACE,
-				m_optionActive.largeur() > m_optionInactive.largeur() ?
-						m_optionActive.largeur(): m_optionInactive.largeur(),
-				m_optionActive.hauteur(),
-				32, 0, 0, 0, 0);
+				m_largeur, m_hauteur, 32, 0, 0, 0, 0);
 		SDL_FillRect(m_blocEffaceur, NULL,
 				SDL_MapRGB(ecran->format, 0, 0, 0));
-
-		m_texte.afficher(ecran);
 	}
-	SDL_BlitSurface(m_blocEffaceur, NULL, ecran, &m_positionOption);
+
+	SDL_BlitSurface(m_blocEffaceur, NULL, ecran, &m_position);
+	m_texte.afficher(ecran);
 	if (m_active) {
 		m_optionActive.afficher(ecran);
 	}

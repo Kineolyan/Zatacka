@@ -32,7 +32,7 @@ DEBUG = -ggdb
 DEFINES = $(INCLUDES) $(DEFS) -DSYS_UNIX=1 $(DEBUG)
 CFLAGS = $(DEFINES) `sdl-config --cflags` -Wall
 
-OBJS = $(OBJ)/main.o $(OBJ)/jeu.o $(OBJ)/texte.o $(OBJ)/option.o
+OBJS = $(OBJ)/main.o $(OBJ)/jeu.o $(OBJ)/texte.o $(OBJ)/option.o $(OBJ)/exception.o
 
 $(OBJ)/SDL_prim.o: $(SRC)/SDL_lib/SDL_prim.c
 	$(CC) $(CFLAGS) -c $(SRC)/SDL_lib/SDL_prim.c
@@ -49,6 +49,12 @@ $(OBJ)/%.o: $(SRC)/jeu/%.cpp
 $(OBJ)/%.o: $(SRC)/serpent/%.cpp
 	$(CC) $(CFLAGS) -c $(SRC)/serpent/$*.cpp
 	mv $*.o $(OBJ)
+
+$(OBJ)/%.o: $(SRC)/exceptions/%.cpp
+	$(CC) $(CFLAGS) -c $(SRC)/exceptions/$*.cpp
+	mv $*.o $(OBJ)
+	
+# Ecrire les dépendances pour chaque fichier, pour éviter de faire un clean
 
 all: $(PROGNAME)
 
