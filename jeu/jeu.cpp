@@ -37,6 +37,11 @@ Jeu::~Jeu() {
     	delete *it;
     }
 
+    for (vector<Option*>::iterator it = m_optionJoueurs.begin(),
+            end = m_optionJoueurs.end(); it!=end; it++) {
+    	delete *it;
+    }
+
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -61,7 +66,7 @@ void Jeu::initialiserCouleurs() {
 }
 
 void Jeu::afficherEcranPrincipal() {
-	TexteSDL texte("Achtung, die kurve !", m_policeCalligraphiee, m_couleurs["blanc"]);
+	TexteSDL texte("Achtung, die Kurve !", m_policeCalligraphiee, m_couleurs["blanc"]);
 	SDL_Rect position;
 	position.x = (m_largeur - texte.largeur()) / 2;
 	position.y = (m_hauteur - texte.hauteur()) / 2;
@@ -88,21 +93,21 @@ void Jeu::afficherEcranPrincipal() {
 			}
 		}
 	}
-	afficherMenuPrincipal();
+	afficher(MENU_PRINCIPAL);
 }
 
 void Jeu::creerMenuPrincipal() {
-	m_optionJoueurs[0] = new Option("(1 A)", "READY", " ", m_policeBasique,
+	m_optionJoueurs[0] = new Option("(1 A)", "READY", "", m_policeBasique,
 				m_couleurs["rouge"]);
-	m_optionJoueurs[1] = new Option("(X C)", "READY", " ", m_policeBasique,
+	m_optionJoueurs[1] = new Option("(X C)", "READY", "", m_policeBasique,
 				m_couleurs["jaune"]);
-	m_optionJoueurs[2] = new Option("(, ;)", "READY", " ", m_policeBasique,
+	m_optionJoueurs[2] = new Option("(, ;)", "READY", "", m_policeBasique,
 				m_couleurs["orange"]);
-	m_optionJoueurs[3] = new Option("(L.Arrow D.Arrow)", "READY", " ", m_policeBasique,
+	m_optionJoueurs[3] = new Option("(L.Arrow D.Arrow)", "READY", "", m_policeBasique,
 				m_couleurs["vert"]);
-	m_optionJoueurs[4] = new Option("(/ *)", "READY", " ", m_policeBasique,
+	m_optionJoueurs[4] = new Option("(/ *)", "READY", "", m_policeBasique,
 				m_couleurs["violet"]);
-	m_optionJoueurs[5] = new Option("(L.Mouse R.Mouse)", "READY", " ", m_policeBasique,
+	m_optionJoueurs[5] = new Option("(L.Mouse R.Mouse)", "READY", "", m_policeBasique,
 				m_couleurs["bleu"]);
 
 	SDL_Rect position = {50, 50},
@@ -154,6 +159,11 @@ void Jeu::afficherMenuPrincipal() {
 			case SDLK_ESCAPE:
 				return;
 
+			case SDLK_SPACE:
+				m_ecranAAfficher = JEU;
+				boucler = false;
+				break;
+
 			case SDLK_AMPERSAND:
 				m_optionJoueurs[0]->activer();
 				m_optionJoueurs[0]->afficher(m_ecran);
@@ -195,6 +205,7 @@ void Jeu::afficherMenuPrincipal() {
 				break;
 
 			case SDLK_o:
+				m_ecranAAfficher = MENU_OPTIONS;
 				boucler = false;
 				break;
 
@@ -240,7 +251,7 @@ void Jeu::afficherMenuPrincipal() {
 		}
 		SDL_Flip(m_ecran);
 	}
-	afficherMenuOptions();
+	afficher(m_ecranAAfficher);
 }
 
 void Jeu::creerMenuOptions() {
@@ -291,6 +302,7 @@ void Jeu::afficherMenuOptions() {
 				return;
 
 			case SDLK_SPACE:
+				m_ecranAAfficher = MENU_PRINCIPAL;
 				boucler = false;
 				break;
 
@@ -319,5 +331,66 @@ void Jeu::afficherMenuOptions() {
 		}
 		SDL_Flip(m_ecran);
 	}
-	afficherMenuPrincipal();
+	afficher(m_ecranAAfficher);
+}
+
+void Jeu::afficherJeu() {
+	int largeurScores = 125;
+	m_ecranScores = SDL_CreateRGBSurface(SDL_HWSURFACE,
+				largeurScores, m_hauteur, 32, 0, 0, 0, 0);
+	m_ecranJeu = SDL_CreateRGBSurface(SDL_HWSURFACE,
+				m_largeur - largeurScores, m_hauteur, 32, 0, 0, 0, 0);
+
+	SDL_FillRect(m_ecranJeu, NULL,
+		SDL_MapRGB(m_ecran->format, 0, 0, 0));
+	SDL_FillRect(m_ecranScores, NULL,
+		SDL_MapRGB(m_ecran->format, 128, 128, 128));
+
+	SDL_Rect position = {0,0};
+	SDL_BlitSurface(m_ecranJeu, NULL, m_ecran, &position);
+	position.x = m_largeur - largeurScores;
+	SDL_BlitSurface(m_ecranScores, NULL, m_ecran, &position);
+	SDL_Flip(m_ecran);
+
+	SDL_Event event;
+	bool boucler = true;
+	while (boucler) {
+		SDL_WaitEvent(&event);
+		switch (event.type) {
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.unicode) {
+			case SDLK_ESCAPE:
+				return;
+
+			default:
+				break;
+			}
+
+		default:
+			break;
+		}
+	}
+}
+
+void Jeu::afficher(NomEcran ecran) {
+	switch(ecran) {
+	case ACCUEIL:
+		afficherEcranPrincipal();
+		break;
+
+	case MENU_PRINCIPAL:
+		afficherMenuPrincipal();
+		break;
+
+	case MENU_OPTIONS:
+		afficherMenuOptions();
+		break;
+
+	case JEU:
+		afficherJeu();
+		break;
+
+	default:
+		break;
+	}
 }
