@@ -12,21 +12,30 @@ using namespace std;
 TexteSDL::TexteSDL(string contenu, int positionX, int positionY):
 		m_positionX(positionX), m_positionY(positionY), m_contenu(contenu),
 		m_police(NULL), m_couleur(NULL),
-		m_texte(NULL), m_surfaceAJour(false)
-{}
+		m_texte(NULL), m_surfaceAJour(false) {
+	if (""==m_contenu) {
+		m_contenu = " ";
+	}
+}
 
 TexteSDL::TexteSDL(string contenu, TTF_Font* police, SDL_Color* couleur):
 		m_positionX(0), m_positionY(0), m_contenu(contenu),
 		m_police(police), m_couleur(couleur),
-		m_texte(NULL), m_surfaceAJour(false)
-{}
+		m_texte(NULL), m_surfaceAJour(false) {
+	if (""==m_contenu) {
+		m_contenu = " ";
+	}
+}
 
 TexteSDL::TexteSDL(string contenu, int positionX, int positionY,
 		TTF_Font* police, SDL_Color* couleur):
 		m_positionX(positionX), m_positionY(positionY), m_contenu(contenu),
 		m_police(police), m_couleur(couleur),
-		m_texte(NULL), m_surfaceAJour(false)
-{}
+		m_texte(NULL), m_surfaceAJour(false) {
+	if (""==m_contenu) {
+		m_contenu = " ";
+	}
+}
 
 TexteSDL::~TexteSDL() {
 	if (NULL!=m_texte) {
