@@ -3,7 +3,8 @@
 using namespace std;
 
 Jeu::Jeu(int largeur, int hauteur):
-		m_largeur(largeur), m_hauteur(hauteur),	m_ecran(NULL),
+		m_largeur(largeur), m_hauteur(hauteur),
+		m_largeurScores(100), m_ecran(NULL),
 		m_policeCalligraphiee(NULL), m_policeBasique(NULL),
 		m_optionJoueurs(6), m_options() {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
@@ -15,6 +16,7 @@ Jeu::Jeu(int largeur, int hauteur):
 	TTF_Init();
 	chargerPolices();
 	initialiserCouleurs();
+	initialiserScores();
 
 	creerMenuPrincipal();
 	creerMenuOptions();
@@ -65,7 +67,26 @@ void Jeu::initialiserCouleurs() {
 	m_couleurs["orange"] = new SDL_Color({254, 151, 16});
 }
 
+void Jeu::initialiserScores() {
+    m_scores[0].couleur(m_couleurs["jaune"]);
+    m_scores[1].couleur(m_couleurs["bleu"]);
+    m_scores[2].couleur(m_couleurs["rouge"]);
+    m_scores[3].couleur(m_couleurs["vert"]);
+    m_scores[4].couleur(m_couleurs["violet"]);
+    m_scores[5].couleur(m_couleurs["orange"]);
+
+    SDL_Rect position = {m_largeur - m_largeurScores +10, 10};
+    int pas = (m_hauteur-20)/6;
+    for (int i=0; i<6; i++) {
+        m_scores[i].police(m_policeCalligraphiee);
+    	m_scores[i].position(position);
+    	position.y+= pas;
+    }
+}
+
 void Jeu::afficherEcranPrincipal() {
+	effacer();
+
 	TexteSDL texte("Achtung, die Kurve !", m_policeCalligraphiee, m_couleurs["blanc"]);
 	SDL_Rect position;
 	position.x = (m_largeur - texte.largeur()) / 2;
@@ -131,8 +152,7 @@ void Jeu::creerMenuPrincipal() {
 }
 
 void Jeu::afficherMenuPrincipal() {
-	SDL_FillRect(m_ecran, NULL,
-			SDL_MapRGB(m_ecran->format, 0, 0, 0));
+	effacer();
 
 	TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
 			m_couleurs["blanc"]);
@@ -270,12 +290,13 @@ void Jeu::creerMenuOptions() {
 
 	m_options.push_back(option1);
 	m_options.push_back(option2);
-	m_options.push_back(info);
+	m_options.push_back(info);SDL_FillRect(m_ecran, NULL,
+			SDL_MapRGB(m_ecran->format, 0, 0, 0));
 }
 
 void Jeu::afficherMenuOptions() {
-	SDL_FillRect(m_ecran, NULL,
-			SDL_MapRGB(m_ecran->format, 0, 0, 0));
+	effacer();
+
 	vector<Option*>::iterator it = m_options.begin(),
 			end = m_options.end();
 	for ( ; it!=end; it++) {
@@ -335,11 +356,12 @@ void Jeu::afficherMenuOptions() {
 }
 
 void Jeu::afficherJeu() {
-	int largeurScores = 125;
+	effacer();
+
 	m_ecranScores = SDL_CreateRGBSurface(SDL_HWSURFACE,
-				largeurScores, m_hauteur, 32, 0, 0, 0, 0);
+				m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
 	m_ecranJeu = SDL_CreateRGBSurface(SDL_HWSURFACE,
-				m_largeur - largeurScores, m_hauteur, 32, 0, 0, 0, 0);
+				m_largeur - m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
 
 	SDL_FillRect(m_ecranJeu, NULL,
 		SDL_MapRGB(m_ecran->format, 0, 0, 0));
@@ -348,12 +370,18 @@ void Jeu::afficherJeu() {
 
 	SDL_Rect position = {0,0};
 	SDL_BlitSurface(m_ecranJeu, NULL, m_ecran, &position);
-	position.x = m_largeur - largeurScores;
+	position.x = m_largeur - m_largeurScores;
 	SDL_BlitSurface(m_ecranScores, NULL, m_ecran, &position);
+
+	for (int i=0; i<6; i++) {
+		m_scores[i].contenu("99");
+		m_scores[i].afficher(m_ecran);
+	}
 	SDL_Flip(m_ecran);
 
 	SDL_Event event;
 	bool boucler = true;
+	int utilisationRetour = 0;
 	while (boucler) {
 		SDL_WaitEvent(&event);
 		switch (event.type) {
@@ -361,6 +389,13 @@ void Jeu::afficherJeu() {
 			switch (event.key.keysym.unicode) {
 			case SDLK_ESCAPE:
 				return;
+
+			case SDLK_BACKSPACE:
+				if (++utilisationRetour>2) {
+					boucler = false;
+					m_ecranAAfficher = ACCUEIL;
+				}
+				break;
 
 			default:
 				break;
@@ -370,6 +405,7 @@ void Jeu::afficherJeu() {
 			break;
 		}
 	}
+	afficher(m_ecranAAfficher);
 }
 
 void Jeu::afficher(NomEcran ecran) {
@@ -393,4 +429,9 @@ void Jeu::afficher(NomEcran ecran) {
 	default:
 		break;
 	}
+}
+
+void Jeu::effacer() {
+	SDL_FillRect(m_ecran, NULL,
+		SDL_MapRGB(m_ecran->format, 0, 0, 0));
 }

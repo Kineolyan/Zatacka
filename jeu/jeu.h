@@ -25,14 +25,19 @@ private:
 	};
 
 	/**
-	 * largeur de la fenetre de jeu
+	 * Largeur de la fenetre de jeu
 	 */
 	int m_largeur;
 
 	/**
-	 * hauteur de la fenetre
+	 * Hauteur de la fenetre
 	 */
 	int m_hauteur;
+
+	/**
+	 * Largeur du panneau des scores
+	 */
+	int m_largeurScores;
 
 	/**
 	 * Ecran principal
@@ -80,6 +85,12 @@ private:
 	std::vector<Option*> m_options;
 
 	/**
+	 * Tableau des textes affichant les scores sur l'écran
+	 * de jeu
+	 */
+	TexteSDL m_scores[6];
+
+	/**
 	 * Instancie les polices en chargeant le fichier et définit la taille
 	 */
 	void chargerPolices();
@@ -88,6 +99,11 @@ private:
 	 * Crée la liste des couleurs, en donnant les codes RGB
 	 */
 	void initialiserCouleurs();
+
+	/**
+	 * Donne à chaque score une couleur, une police et une position
+	 */
+	void initialiserScores();
 
 	/**
 	 * Créer les options du menu principal et leur assigne une position à
@@ -125,6 +141,11 @@ private:
 	 * @param ecran: nom de l'écran à afficher
 	 */
 	void afficher(NomEcran ecran);
+
+	/**
+	 * Efface l'écran
+	 */
+	void effacer();
 
 public:
 	/**
