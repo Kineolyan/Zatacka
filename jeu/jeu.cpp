@@ -68,12 +68,12 @@ void Jeu::initialiserCouleurs() {
 }
 
 void Jeu::initialiserScores() {
-    m_scores[0].couleur(m_couleurs["jaune"]);
-    m_scores[1].couleur(m_couleurs["bleu"]);
-    m_scores[2].couleur(m_couleurs["rouge"]);
+    m_scores[0].couleur(m_couleurs["rouge"]);
+    m_scores[1].couleur(m_couleurs["jaune"]);
+    m_scores[2].couleur(m_couleurs["orange"]);
     m_scores[3].couleur(m_couleurs["vert"]);
     m_scores[4].couleur(m_couleurs["violet"]);
-    m_scores[5].couleur(m_couleurs["orange"]);
+    m_scores[5].couleur(m_couleurs["bleu"]);
 
     SDL_Rect position = {m_largeur - m_largeurScores +10, 10};
     int pas = (m_hauteur-20)/6;
@@ -159,12 +159,9 @@ void Jeu::afficherMenuPrincipal() {
 	SDL_Rect position = {50, 400};
 	options.position(position);
 
-	m_optionJoueurs[0]->afficher(m_ecran);
-	m_optionJoueurs[1]->afficher(m_ecran);
-	m_optionJoueurs[2]->afficher(m_ecran);
-	m_optionJoueurs[3]->afficher(m_ecran);
-	m_optionJoueurs[4]->afficher(m_ecran);
-	m_optionJoueurs[5]->afficher(m_ecran);
+    for (int i=0; i<6; i++) {
+        m_optionJoueurs[i]->afficher(m_ecran);
+    }
 	options.afficher(m_ecran);
 	SDL_Flip(m_ecran);
 
