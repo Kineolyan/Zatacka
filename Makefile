@@ -32,7 +32,13 @@ DEBUG = -ggdb
 DEFINES = $(INCLUDES) $(DEFS) -DSYS_UNIX=1 $(DEBUG)
 CFLAGS = $(DEFINES) `sdl-config --cflags` -Wall
 
-OBJS = $(OBJ)/main.o $(OBJ)/zatacka.o $(OBJ)/texte.o $(OBJ)/option.o $(OBJ)/exception.o
+OBJS = $(OBJ)/itemEcran.o \
+	$(OBJ)/exception.o \
+	$(OBJ)/texte.o \
+	$(OBJ)/option.o \
+	$(OBJ)/zatacka.o \
+	$(OBJ)/jeu.o \
+	$(OBJ)/main.o
 
 $(OBJ)/SDL_prim.o: $(SRC)/SDL_lib/SDL_prim.c
 	$(CC) $(CFLAGS) -c $(SRC)/SDL_lib/SDL_prim.c
