@@ -2,8 +2,8 @@
 
 using namespace std;
 
-TexteSDL::TexteSDL(string contenu, int positionX, int positionY):
-		m_positionX(positionX), m_positionY(positionY), m_contenu(contenu),
+TexteSDL::TexteSDL():
+		ItemEcran(), m_contenu(""),
 		m_police(NULL), m_couleur(NULL),
 		m_texte(NULL), m_surfaceAJour(false) {
 	if (""==m_contenu) {
@@ -12,7 +12,7 @@ TexteSDL::TexteSDL(string contenu, int positionX, int positionY):
 }
 
 TexteSDL::TexteSDL(string contenu, TTF_Font* police, SDL_Color* couleur):
-		m_positionX(0), m_positionY(0), m_contenu(contenu),
+		ItemEcran(), m_contenu(contenu),
 		m_police(police), m_couleur(couleur),
 		m_texte(NULL), m_surfaceAJour(false) {
 	if (""==m_contenu) {
@@ -20,9 +20,9 @@ TexteSDL::TexteSDL(string contenu, TTF_Font* police, SDL_Color* couleur):
 	}
 }
 
-TexteSDL::TexteSDL(string contenu, int positionX, int positionY,
-		TTF_Font* police, SDL_Color* couleur):
-		m_positionX(positionX), m_positionY(positionY), m_contenu(contenu),
+TexteSDL::TexteSDL(string contenu, TTF_Font* police,
+		SDL_Color* couleur, const SDL_Rect& position):
+		ItemEcran(position), m_contenu(contenu),
 		m_police(police), m_couleur(couleur),
 		m_texte(NULL), m_surfaceAJour(false) {
 	if (""==m_contenu) {
@@ -52,8 +52,7 @@ void TexteSDL::couleur(SDL_Color* couleur) {
 }
 
 void TexteSDL::position(const SDL_Rect& position) {
-	m_positionX = position.x;
-	m_positionY = position.y;
+	ItemEcran::position(position);
 	m_surfaceAJour = false;
 }
 
@@ -61,14 +60,14 @@ int TexteSDL::largeur() {
 	if (false==m_surfaceAJour) {
 		texte();
 	}
-	return m_texte->w;
+	return m_largeur;
 }
 
 int TexteSDL::hauteur() {
 	if (false==m_surfaceAJour) {
 		texte();
 	}
-	return m_texte->h;
+	return m_hauteur;
 }
 
 SDL_Surface* TexteSDL::texte() {
@@ -88,12 +87,14 @@ SDL_Surface* TexteSDL::texte() {
 		m_surfaceAJour = true;
 	}
 
+	m_largeur = m_texte->w;
+	m_hauteur = m_texte->h;
+
 	return m_texte;
 }
 
 void TexteSDL::afficher(SDL_Surface* ecran) {
 	texte();
 
-	SDL_Rect position = { m_positionX, m_positionY };
-	SDL_BlitSurface(m_texte, NULL, ecran, &position);
+	SDL_BlitSurface(m_texte, NULL, ecran, &m_position);
 }

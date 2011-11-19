@@ -4,27 +4,18 @@ using namespace std;
 
 Option::Option(string texte, string optionActive, string optionInactive,
 		TTF_Font* police, SDL_Color* couleur):
-		m_largeur(0), m_hauteur(0),
+		ItemEcran(),
 		m_texte(texte, police, couleur),
 		m_optionActive(optionActive, police, couleur),
 		m_optionInactive(optionInactive, police, couleur),
 		m_blocEffaceur(NULL),
-		m_active(false), m_offset(40)
-{
-	m_position.x = 0;
-	m_position.y = 0;
+		m_active(false), m_offset(40) {
 	position(m_position);
 }
 
 Option::~Option() {
 	SDL_FreeSurface(m_blocEffaceur);
 }
-
-int Option::hauteur()
-{	return m_hauteur;	}
-
-int Option::largeur()
-{	return m_largeur;	}
 
 void Option::position(const SDL_Rect& position) {
 	m_position.x = position.x;
