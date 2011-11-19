@@ -6,7 +6,9 @@
 #include <vector>
 #include "texte.h"
 #include "option.h"
+#include "couleurs.h"
 #include "../exceptions/exception.h"
+#include "../serpent/serpent.h"
 
 /**
  * Instance de jeu gerant les différents écrans, les serpents, les options
@@ -15,12 +17,6 @@ class Zatacka {
 private:
 	enum NomEcran {
 		ACCUEIL, MENU_PRINCIPAL, MENU_OPTIONS, JEU
-	};
-
-public:
-	enum Couleur {
-		BLANC=0, JAUNE=1, BLEU=2, ROUGE=3, VERT=4, VIOLET=5, ORANGE=6,
-		NOIR=7
 	};
 
 private:
@@ -97,6 +93,11 @@ private:
 	TexteSDL m_scores[6];
 
 	/**
+	 * Tableau des joueurs
+	 */
+	Serpent m_joueurs[6];
+
+	/**
 	 * Instancie les polices en chargeant le fichier et définit la taille
 	 */
 	void chargerPolices();
@@ -121,14 +122,6 @@ private:
 	 * Crée les options du menu d'options et leur assigne une position.
 	 */
 	void creerMenuOptions();
-
-	/**
-	 * Crée l'écran de jeu avec avec la zone de jeu et le panneau des scores.
-	 * Les motifs utilises pour tracer les serpents sont egalement instancies.
-	 *
-	 * @throw InstanceManquante
-	 */
-	void creerJeu();
 
 	/**
 	 * Affiche l'écran d'accueil
@@ -172,6 +165,17 @@ public:
 	 * Destructeur
 	 */
 	~Zatacka();
+
+	int hauteur();
+	int largeur();
+	SDL_Color* couleur(Couleur couleur);
+	TTF_Font* policeCalligraphiee();
+	TTF_Font* policeBasique();
+
+	/**
+	 * Remplit une surface de la couleur demandee
+	 */
+	void colorer(SDL_Surface* ecran, Couleur couleur);
 
 	/**
 	 * Dessine un point d'une couleur donnée sur l'écran de jeu.

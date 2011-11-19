@@ -10,7 +10,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
 		m_couleurs(8), m_optionJoueurs(6), m_options() {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
 	if (NULL==m_ecran) {
-		throw ExceptionGenerale("Impossible de creer l'ecran");
+		throw InstanceManquante("Impossible de creer l'ecran");
 	}
 	SDL_WM_SetCaption("Zatacka", NULL);
 
@@ -21,7 +21,6 @@ Zatacka::Zatacka(int largeur, int hauteur):
 
 	creerMenuPrincipal();
 	creerMenuOptions();
-	creerJeu();
 
 	afficherEcranPrincipal();
 }
@@ -45,9 +44,6 @@ Zatacka::~Zatacka() {
             end = m_optionJoueurs.end(); it!=end; it++) {
     	delete *it;
     }
-
-    SDL_FreeSurface(m_ecranJeu);
-    SDL_FreeSurface(m_ecranScores);
 
     TTF_Quit();
 	SDL_Quit();
@@ -361,39 +357,8 @@ void Zatacka::afficherMenuOptions() {
 	afficher(m_ecranAAfficher);
 }
 
-/**
- * Crée l'écran de jeu avec avec la zone de jeu et le panneau des scores.
- * Les motifs utilises pour tracer les serpents sont egalement instancies.
- *
- * @throw InstanceManquante
- */
-void Zatacka::creerJeu() {
-	m_ecranScores = SDL_CreateRGBSurface(SDL_HWSURFACE,
-					m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
-	m_ecranJeu = SDL_CreateRGBSurface(SDL_HWSURFACE,
-				m_largeur - m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
-
-	if (NULL==m_ecranJeu) {
-		throw InstanceManquante("Impossible de creer l'ecran de jeu");
-	}
-	if (NULL==m_ecranScores) {
-		throw InstanceManquante("Impossible de creer le panneau des scores");
-	}
-
-	for (int i=0; i<8; i++) {
-		m_points[i] = SDL_CreateRGBSurface(SDL_HWSURFACE,
-			4, 4, 32, 0, 0, 0, 0);
-		SDL_FillRect(m_points[i], NULL,
-			SDL_MapRGB(m_ecran->format,
-				m_couleurs[i]->r, m_couleurs[i]->g, m_couleurs[i]->b)
-		);
-		if (NULL==m_points[i]) {
-			throw InstanceManquante("Impossible de creer un motif de trace");
-		}
-	}
-}
-
 void Zatacka::afficherJeu() {
+	return;
 	effacer();
 
 	SDL_FillRect(m_ecranJeu, NULL,
@@ -421,6 +386,7 @@ void Zatacka::afficherJeu() {
 	SDL_Event event;
 	bool boucler = true;
 	int utilisationRetour = 0;
+	int joueursVivants;
 	while (boucler) {
 		SDL_WaitEvent(&event);
 		switch (event.type) {
@@ -436,9 +402,57 @@ void Zatacka::afficherJeu() {
 				}
 				break;
 
+			case SDLK_SPACE:
+				m_ecranAAfficher = JEU;
+				boucler = false;
+				break;
+
+			case SDLK_AMPERSAND:
+			case SDLK_a:
+				//m_joueurs[0].joueur(event);
+				break;
+
+			case SDLK_x:
+			case SDLK_c:
+				//m_joueurs[1].joueur(event);
+				break;
+
+			case SDLK_COMMA:
+			case SDLK_SEMICOLON:
+				//m_joueurs[2].joueur(event);
+				break;
+
+			case SDLK_SLASH:
+			case SDLK_ASTERISK:
+				//m_joueurs[4].joueur(event);
+				break;
+
 			default:
 				break;
 			}
+
+			switch (event.key.keysym.sym) {
+			case SDLK_LEFT:
+			case SDLK_DOWN:
+				//m_joueurs[3].joueur(event);
+				break;
+
+			default:
+				break;
+			}
+			break;
+
+		case SDL_MOUSEBUTTONDOWN:
+			switch (event.button.button) {
+			case SDL_BUTTON_LEFT:
+			case SDL_BUTTON_RIGHT:
+				//m_joueurs[5].joueur(event);
+				break;
+
+			default:
+				break;
+			}
+			break;
 
 		default:
 			break;
@@ -475,6 +489,33 @@ void Zatacka::effacer() {
 		SDL_MapRGB(m_ecran->format, 0, 0, 0));
 }
 
+int Zatacka::hauteur()
+{	return m_hauteur;	}
+
+int Zatacka::largeur()
+{	return m_largeur;	}
+
+SDL_Color* Zatacka::couleur(Couleur couleur)
+{	return m_couleurs[couleur];	}
+
+TTF_Font* Zatacka::policeCalligraphiee()
+{	return m_policeCalligraphiee;	}
+
+TTF_Font* Zatacka::policeBasique()
+{	return m_policeBasique;	}
+
+/**
+ * Remplit une surface de la couleur demandee
+ */
+void Zatacka::colorer(SDL_Surface* ecran, Couleur couleur) {
+	SDL_FillRect(ecran, NULL,
+		SDL_MapRGB(m_ecran->format,
+			m_couleurs[couleur]->r,
+			m_couleurs[couleur]->g,
+			m_couleurs[couleur]->b)
+	);
+}
+
 /**
  * Dessine un point d'une couleur donnée sur l'écran de jeu.
  * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
@@ -490,9 +531,8 @@ void Zatacka::tracerPoint(SDL_Rect* position, Couleur couleur) {
 		throw TraceImpossible("impossible de tracer un point hors de l'écran de jeu");
 	}
 
-	SDL_Rect p = {0, 0};
-	SDL_BlitSurface(m_points[couleur], NULL, m_ecranJeu, position);
-	SDL_BlitSurface(m_ecranJeu, NULL, m_ecran, &p);
+	//m_ecranJeu.tracerPoint(position, couleur);
+	//m_ecranJeu.afficher(m_ecran);
 	SDL_Flip(m_ecran);
 }
 
