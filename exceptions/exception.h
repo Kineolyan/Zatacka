@@ -22,10 +22,18 @@ public:
     virtual const char* what() const throw();
 };
 
-class ParametreManquant: public ExceptionGenerale {
+class InstanceManquante: public ExceptionGenerale {
 public:
-    ParametreManquant(std::string message) throw();
-    virtual ~ParametreManquant() throw();
+    InstanceManquante(std::string message) throw();
+    virtual ~InstanceManquante() throw();
+
+    virtual const char* what() const throw();
+};
+
+class TraceImpossible: public ExceptionGenerale {
+public:
+	TraceImpossible(std::string message) throw();
+    virtual ~TraceImpossible() throw();
 
     virtual const char* what() const throw();
 };

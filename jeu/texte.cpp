@@ -73,11 +73,11 @@ int TexteSDL::hauteur() {
 
 SDL_Surface* TexteSDL::texte() {
 	if (NULL==m_police) {
-		throw ParametreManquant(string("La police du texte '")
+		throw InstanceManquante(string("La police du texte '")
 			+ m_contenu +"' n'est pas chargee");
 	}
 	if (NULL==m_couleur) {
-		throw ParametreManquant(string("Le texte '")
+		throw InstanceManquante(string("Le texte '")
 			+ m_contenu +"' n'a pas de couleur");
 	}
 

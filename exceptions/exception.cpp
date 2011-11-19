@@ -13,15 +13,28 @@ const char* ExceptionGenerale::what() const throw() {
     return m_message.c_str();
 }
 
-ParametreManquant::ParametreManquant(string message) throw():
+InstanceManquante::InstanceManquante(string message) throw():
     ExceptionGenerale(message)
 {}
 
-ParametreManquant::~ParametreManquant() throw()
+InstanceManquante::~InstanceManquante() throw()
 {}
 
-const char* ParametreManquant::what() const throw() {
-    string explication = "[Parametre manquant] ";
+const char* InstanceManquante::what() const throw() {
+    string explication = "[Instance manquante] ";
+    explication+= m_message;
+    return explication.c_str();
+}
+
+TraceImpossible::TraceImpossible(string message) throw():
+    ExceptionGenerale(message)
+{}
+
+TraceImpossible::~TraceImpossible() throw()
+{}
+
+const char* TraceImpossible::what() const throw() {
+    string explication = "[Trace impossible] ";
     explication+= m_message;
     return explication.c_str();
 }
