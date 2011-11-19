@@ -5,8 +5,9 @@ using namespace std;
 Jeu::Jeu(int largeur, int hauteur):
 		m_largeur(largeur), m_hauteur(hauteur),
 		m_largeurScores(100), m_ecran(NULL),
+		m_ecranJeu(NULL), m_ecranScores(NULL), m_points(8),
 		m_policeCalligraphiee(NULL), m_policeBasique(NULL),
-		m_optionJoueurs(6), m_options() {
+		m_couleurs(8), m_optionJoueurs(6), m_options() {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
 	if (NULL==m_ecran) {
 		throw ExceptionGenerale("Impossible de creer l'ecran");
@@ -20,6 +21,7 @@ Jeu::Jeu(int largeur, int hauteur):
 
 	creerMenuPrincipal();
 	creerMenuOptions();
+	creerJeu();
 
 	afficherEcranPrincipal();
 }
@@ -29,9 +31,9 @@ Jeu::~Jeu() {
 	TTF_CloseFont(m_policeBasique);
 
 
-    for (map<string, SDL_Color*>::iterator it = m_couleurs.begin(),
+    for (vector<SDL_Color*>::iterator it = m_couleurs.begin(),
         end = m_couleurs.end() ; it!=end; it++) {
-        delete it->second;
+        delete *it;
     }
 
     for (vector<Option*>::iterator it = m_options.begin(),
@@ -53,27 +55,28 @@ void Jeu::chargerPolices() {
 	m_policeBasique = TTF_OpenFont("MENU.TTF", 25);
 
 	if (NULL==m_policeBasique || NULL==m_policeCalligraphiee) {
-        throw ParametreManquant("Une des polices n'a pas ete creee.");
+        throw InstanceManquante("Une des polices n'a pas ete creee.");
 	}
 }
 
 void Jeu::initialiserCouleurs() {
-	m_couleurs["blanc"] = new SDL_Color({255, 255, 255});
-    m_couleurs["jaune"] = new SDL_Color({250, 225, 0 });
-	m_couleurs["bleu"] = new SDL_Color({0, 191, 249});
-	m_couleurs["rouge"] = new SDL_Color({254, 1, 1});
-	m_couleurs["vert"] = new SDL_Color({1, 236, 8});
-	m_couleurs["violet"] = new SDL_Color({199, 8, 167});
-	m_couleurs["orange"] = new SDL_Color({254, 151, 16});
+	m_couleurs[BLANC] = new SDL_Color({255, 255, 255});
+    m_couleurs[JAUNE] = new SDL_Color({250, 225, 0 });
+	m_couleurs[BLEU] = new SDL_Color({0, 191, 249});
+	m_couleurs[ROUGE] = new SDL_Color({254, 1, 1});
+	m_couleurs[VERT] = new SDL_Color({1, 236, 8});
+	m_couleurs[VIOLET] = new SDL_Color({254, 47, 254});
+	m_couleurs[ORANGE] = new SDL_Color({254, 151, 16});
+	m_couleurs[NOIR] = new SDL_Color({0, 0, 0});
 }
 
 void Jeu::initialiserScores() {
-    m_scores[0].couleur(m_couleurs["jaune"]);
-    m_scores[1].couleur(m_couleurs["bleu"]);
-    m_scores[2].couleur(m_couleurs["rouge"]);
-    m_scores[3].couleur(m_couleurs["vert"]);
-    m_scores[4].couleur(m_couleurs["violet"]);
-    m_scores[5].couleur(m_couleurs["orange"]);
+    m_scores[0].couleur(m_couleurs[JAUNE]);
+    m_scores[1].couleur(m_couleurs[BLEU]);
+    m_scores[2].couleur(m_couleurs[ROUGE]);
+    m_scores[3].couleur(m_couleurs[VERT]);
+    m_scores[4].couleur(m_couleurs[VIOLET]);
+    m_scores[5].couleur(m_couleurs[ORANGE]);
 
     SDL_Rect position = {m_largeur - m_largeurScores +10, 10};
     int pas = (m_hauteur-20)/6;
@@ -87,7 +90,7 @@ void Jeu::initialiserScores() {
 void Jeu::afficherEcranPrincipal() {
 	effacer();
 
-	TexteSDL texte("Achtung, die Kurve !", m_policeCalligraphiee, m_couleurs["blanc"]);
+	TexteSDL texte("Achtung, die Kurve !", m_policeCalligraphiee, m_couleurs[BLANC]);
 	SDL_Rect position;
 	position.x = (m_largeur - texte.largeur()) / 2;
 	position.y = (m_hauteur - texte.hauteur()) / 2;
@@ -119,17 +122,17 @@ void Jeu::afficherEcranPrincipal() {
 
 void Jeu::creerMenuPrincipal() {
 	m_optionJoueurs[0] = new Option("(1 A)", "READY", "", m_policeBasique,
-				m_couleurs["rouge"]);
+				m_couleurs[ROUGE]);
 	m_optionJoueurs[1] = new Option("(X C)", "READY", "", m_policeBasique,
-				m_couleurs["jaune"]);
+				m_couleurs[JAUNE]);
 	m_optionJoueurs[2] = new Option("(, ;)", "READY", "", m_policeBasique,
-				m_couleurs["orange"]);
+				m_couleurs[ORANGE]);
 	m_optionJoueurs[3] = new Option("(L.Arrow D.Arrow)", "READY", "", m_policeBasique,
-				m_couleurs["vert"]);
+				m_couleurs[VERT]);
 	m_optionJoueurs[4] = new Option("(/ *)", "READY", "", m_policeBasique,
-				m_couleurs["violet"]);
+				m_couleurs[VIOLET]);
 	m_optionJoueurs[5] = new Option("(L.Mouse R.Mouse)", "READY", "", m_policeBasique,
-				m_couleurs["bleu"]);
+				m_couleurs[BLEU]);
 
 	SDL_Rect position = {50, 50},
 			positionEtat = {450, 50};
@@ -155,7 +158,7 @@ void Jeu::afficherMenuPrincipal() {
 	effacer();
 
 	TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
-			m_couleurs["blanc"]);
+			m_couleurs[BLANC]);
 	SDL_Rect position = {50, 400};
 	options.position(position);
 
@@ -276,11 +279,11 @@ void Jeu::afficherMenuPrincipal() {
 
 void Jeu::creerMenuOptions() {
 	Option *option1 = new Option("jouer (P)", "oui", "non",
-			m_policeBasique, m_couleurs["blanc"]),
+			m_policeBasique, m_couleurs[BLANC]),
 			*option2 = new Option("jouer par equipe (E)", "oui", "non",
-					m_policeBasique, m_couleurs["blanc"]),
+					m_policeBasique, m_couleurs[BLANC]),
 			*info = new Option("jouer par equipe (T)", "oui", "non",
-					m_policeBasique, m_couleurs["blanc"]);
+					m_policeBasique, m_couleurs[BLANC]);
 	SDL_Rect position = {100, 50};
 	option1->position(position);
 	position.y+= 50;
@@ -304,7 +307,7 @@ void Jeu::afficherMenuOptions() {
 	}
 
 	TexteSDL retour("Retour au menu principal (space)",
-			m_policeBasique, m_couleurs["blanc"]);
+			m_policeBasique, m_couleurs[BLANC]);
 	SDL_Rect position = {100, 200};
 	retour.position(position);
 	retour.afficher(m_ecran);
@@ -355,13 +358,40 @@ void Jeu::afficherMenuOptions() {
 	afficher(m_ecranAAfficher);
 }
 
-void Jeu::afficherJeu() {
-	effacer();
-
+/**
+ * Crée l'écran de jeu avec avec la zone de jeu et le panneau des scores.
+ * Les motifs utilises pour tracer les serpents sont egalement instancies.
+ *
+ * @throw InstanceManquante
+ */
+void Jeu::creerJeu() {
 	m_ecranScores = SDL_CreateRGBSurface(SDL_HWSURFACE,
-				m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
+					m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
 	m_ecranJeu = SDL_CreateRGBSurface(SDL_HWSURFACE,
 				m_largeur - m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
+
+	if (NULL==m_ecranJeu) {
+		throw InstanceManquante("Impossible de creer l'ecran de jeu");
+	}
+	if (NULL==m_ecranScores) {
+		throw InstanceManquante("Impossible de creer le panneau des scores");
+	}
+
+	for (int i=0; i<8; i++) {
+		m_points[i] = SDL_CreateRGBSurface(SDL_HWSURFACE,
+			4, 4, 32, 0, 0, 0, 0);
+		SDL_FillRect(m_points[i], NULL,
+			SDL_MapRGB(m_ecran->format,
+				m_couleurs[i]->r, m_couleurs[i]->g, m_couleurs[i]->b)
+		);
+		if (NULL==m_points[i]) {
+			throw InstanceManquante("Impossible de creer un motif de trace");
+		}
+	}
+}
+
+void Jeu::afficherJeu() {
+	effacer();
 
 	SDL_FillRect(m_ecranJeu, NULL,
 		SDL_MapRGB(m_ecran->format, 0, 0, 0));
@@ -378,6 +408,12 @@ void Jeu::afficherJeu() {
 		m_scores[i].afficher(m_ecran);
 	}
 	SDL_Flip(m_ecran);
+
+	SDL_Rect positionSerpent = {100, 100};
+	for (int i=0; i<10; i++) {
+		positionSerpent.x+= 3;
+		tracerPoint(&positionSerpent, JAUNE);
+	}
 
 	SDL_Event event;
 	bool boucler = true;
@@ -434,4 +470,40 @@ void Jeu::afficher(NomEcran ecran) {
 void Jeu::effacer() {
 	SDL_FillRect(m_ecran, NULL,
 		SDL_MapRGB(m_ecran->format, 0, 0, 0));
+}
+
+/**
+ * Dessine un point d'une couleur donnée sur l'écran de jeu.
+ * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
+ * sur un autre écran lancera une exception.
+ *
+ * @param position: position du point à tracer
+ * @param couleur: nom de la couleur à utiliser
+ *
+ * @throw TraceImpossible
+ */
+void Jeu::tracerPoint(SDL_Rect* position, Couleur couleur) {
+	if (JEU!=m_ecranAAfficher) {
+		throw TraceImpossible("impossible de tracer un point hors de l'écran de jeu");
+	}
+
+	SDL_Rect p = {0, 0};
+	SDL_BlitSurface(m_points[couleur], NULL, m_ecranJeu, position);
+	SDL_BlitSurface(m_ecranJeu, NULL, m_ecran, &p);
+	SDL_Flip(m_ecran);
+}
+
+/**
+ * Met à jour le score d'un joueur
+ * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
+ * sur un autre écran lancera une exception.
+ *
+ * @param joueurId: Id du joueur dont le score change. Cela correspond
+ * 	a l'index du texte de score dans le vecteur m_scores
+ * @param score: le nouveau score à afficher
+ *
+ * @throw TraceImpossible
+ */
+void Jeu::changerScore(int joueurId, int score) {
+
 }

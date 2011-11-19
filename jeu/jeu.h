@@ -24,6 +24,14 @@ private:
 		ACCUEIL, MENU_PRINCIPAL, MENU_OPTIONS, JEU
 	};
 
+public:
+	enum Couleur {
+		BLANC=0, JAUNE=1, BLEU=2, ROUGE=3, VERT=4, VIOLET=5, ORANGE=6,
+		NOIR=7
+	};
+
+private:
+
 	/**
 	 * Largeur de la fenetre de jeu
 	 */
@@ -55,6 +63,11 @@ private:
 	SDL_Surface* m_ecranScores;
 
 	/**
+	 * Motifs de base pour le trace des serpents
+	 */
+	std::vector<SDL_Surface*> m_points;
+
+	/**
 	 * Ecran à afficher
 	 */
 	NomEcran m_ecranAAfficher;
@@ -72,7 +85,7 @@ private:
 	/**
 	 * Tableau des couleurs rgb à utiliser
 	 */
-	std::map<std::string, SDL_Color*> m_couleurs;
+	std::vector<SDL_Color*> m_couleurs;
 
 	/**
 	 * Options pour activer ou pas un joueur
@@ -117,6 +130,14 @@ private:
 	void creerMenuOptions();
 
 	/**
+	 * Crée l'écran de jeu avec avec la zone de jeu et le panneau des scores.
+	 * Les motifs utilises pour tracer les serpents sont egalement instancies.
+	 *
+	 * @throw InstanceManquante
+	 */
+	void creerJeu();
+
+	/**
 	 * Affiche l'écran d'accueil
 	 */
 	void afficherEcranPrincipal();
@@ -158,6 +179,36 @@ public:
 	 * Destructeur
 	 */
 	~Jeu();
+
+	/**
+	 * Dessine un point d'une couleur donnée sur l'écran de jeu.
+	 * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
+	 * sur un autre écran lancera une exception.
+	 *
+	 * @param position: position du point à tracer
+	 * @param couleur: nom de la couleur à utiliser
+	 *
+	 * @throw TraceImpossible
+	 */
+	void tracerPoint(SDL_Rect* position, Couleur couleur);
+
+	/**
+	 * Renvoie la couleur des pixels d'une position donnee
+	 */
+	//Couleur donnerCouleurs(const SDL_Rect& position);
+
+	/**
+	 * Met à jour le score d'un joueur
+	 * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
+	 * sur un autre écran lancera une exception.
+	 *
+	 * @param joueurId: Id du joueur dont le score change. Cela correspond
+	 * 	a l'index du texte de score dans le vecteur m_scores
+	 * @param score: le nouveau score à afficher
+	 *
+	 * @throw TraceImpossible
+	 */
+	void changerScore(int joueurId, int score);
 };
 
 #endif /* JEU_H_ */
