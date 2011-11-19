@@ -8,5 +8,6 @@
 #ifndef SERPENT_H_
 #define SERPENT_H_
 
+class Serpent {};
 
 #endif /* SERPENT_H_ */
