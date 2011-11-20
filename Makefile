@@ -78,6 +78,7 @@ prepare:
 
 clean:
 	rm -f $(OBJ)/*.o
+	rm -f $(PROGNAME)
 
 install: prepare all
 
