@@ -498,6 +498,35 @@ void Zatacka::tracerPoint(SDL_Rect* position, Couleur couleur) {
 }
 
 /**
+ * Renvoie la couleur des pixels d'une position donnee
+ */
+Couleur Zatacka::donnerCouleur(const SDL_Rect& position) {
+	Uint32 pixel = ((Uint32*)m_ecran->pixels)[position.y * m_ecran->w + position.x];
+
+	SDL_Color couleurPixel = {0, 0, 0};
+	SDL_GetRGB(pixel, m_ecran->format,
+			&(couleurPixel.r), &(couleurPixel.g), &(couleurPixel.b));
+
+	bool comparaison = false;
+	int i = 0;
+	for ( ; i<9; i++) {
+		if (couleurPixel.r==m_couleurs[i]->r
+		 && couleurPixel.g==m_couleurs[i]->g
+		 && couleurPixel.b==m_couleurs[i]->b) {
+			comparaison = true;
+			break;
+		}
+	}
+
+	if (false==comparaison) {
+		throw ExceptionGenerale(
+				"La couleur trouvee ne fait pas partie de la liste de couleurs");
+	}
+
+	return (Couleur)i;
+}
+
+/**
  * Met à jour le score d'un joueur
  * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
  * sur un autre écran lancera une exception.

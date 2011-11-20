@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 #include <map>
 #include <vector>
+#include <iostream>
 #include "texte.h"
 #include "option.h"
 #include "couleurs.h"
@@ -189,7 +190,7 @@ public:
 	/**
 	 * Renvoie la couleur des pixels d'une position donnee
 	 */
-	//Couleur donnerCouleurs(const SDL_Rect& position);
+	Couleur donnerCouleur(const SDL_Rect& position);
 
 	/**
 	 * Met à jour le score d'un joueur
