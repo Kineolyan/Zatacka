@@ -11,7 +11,7 @@
 
 enum Couleur {
 	BLANC=6, JAUNE=1, BLEU=5, ROUGE=0, VERT=3, VIOLET=4, ORANGE=2,
-	NOIR=7
+	NOIR=7, GRIS=8
 };
 
 #endif /* COULEURS_H_ */
