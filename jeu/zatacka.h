@@ -91,7 +91,7 @@ private:
 	/**
 	 * Tableau des joueurs
 	 */
-	Serpent m_joueurs[6];
+	//Serpent m_joueurs[6];
 
 	/**
 	 * Instancie les polices en chargeant le fichier et définit la taille

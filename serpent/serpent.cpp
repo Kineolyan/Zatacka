@@ -7,11 +7,11 @@
 using namespace std;
 
 Serpent::Serpent(int ecranX, int ecranY, int positionX, int positionY, double direction,
-		double vitesse, Regles reglesDirection, Regles reglesCollision):
+		double vitesse/*, Regles reglesDirection, Regles reglesCollision*/):
     m_grilleX(ecranX), m_grilleY(ecranY),
     m_position({positionX, positionY}),
-    m_direction(direction), m_vitesse(vitesse),
-    m_reglesDirection(reglesDirection), m_reglesCollision(reglesCollision)  {
+    m_direction(direction), m_vitesse(vitesse)/*,
+    m_reglesDirection(reglesDirection), m_reglesCollision(reglesCollision)*/ {
 }
 
 void Serpent::position(int posX, int posY) {
@@ -40,16 +40,16 @@ void Serpent::vitesse(double vitesse){
 // ChangeRegles ???
 
 bool Serpent::vaMourir(){
-
+	return false;
 }
 
 void Serpent::avance(){
   if (!vaMourir()){
     int nouvellePosX;
     int nouvellePosY;
-    nouvellePosX = m_posX + vitesse * cmath::cos(direction);
-    nouvellePosY = m_posY + vitesse * cmath::sin(direction);
-    traceSerpent(m_posX, m_posY, nouvellePosX, nouvellePosY);
+    nouvellePosX = m_position.x + m_vitesse * cos(m_direction);
+    nouvellePosY = m_position.y + m_vitesse * sin(m_direction);
+    traceSerpent(m_position.x, m_position.y, nouvellePosX, nouvellePosY);
     position(nouvellePosX, nouvellePosY);
   }
 }
@@ -58,8 +58,8 @@ void Serpent::traceSerpent(int posX, int posY, int nouvellePosX, int nouvellePos
 
 }
 
-pair <int,int> Serpent::getPixel(int posX, int posY){
-  pair <int,int> result;
+pair<int,int> Serpent::getPixel(int posX, int posY){
+  pair<int,int> result;
   result.first = posX/100;
   result.second = posY/100;
   return result;

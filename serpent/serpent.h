@@ -24,12 +24,12 @@ private:
   /**
    * Taille de la grille en abscisses
    */
-  int grilleX;
+  int m_grilleX;
 
   /**
    * Taille de la grille en ordonnées
    */
-  int grilleY;
+  int m_grilleY;
 
 	/**
  	 * Position de la tête
@@ -54,19 +54,19 @@ private:
   /**
    * Règles de direction
    */
-  Regles m_reglesDirection;
+  //Regles m_reglesDirection;
 
   /**
    * Règles de collision
    */
-  Regles m_reglesCollision;
+  //Regles m_reglesCollision;
 
 
 public:
 	/**
 	 * Constructeur
 	 */
-	Serpent(int ecranX, int ecranY, int posX, int posY, double direction, double vitesse, Regles reglesDirection, Regles reglesCollision);
+	Serpent(int ecranX, int ecranY, int posX, int posY, double direction, double vitesse/*, Regles reglesDirection, Regles reglesCollision*/);
 
 	/**
 	 * Destructeur
@@ -97,7 +97,7 @@ public:
    *    - nomRegles : peut prendre les valeurs "direction" et "collision"
    *    - regles : un set de règles correspondant
    */
-  void regles(string nomRegles, Regles regles);
+  //void regles(string nomRegles, Regles regles);
 
   /**
    * Détermine si le serpent meurt à cette itération
@@ -117,7 +117,7 @@ public:
   /**
    * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)
    */
-  pair <int,int> getPixel(int posX, int posY);
+  std::pair<int,int> getPixel(int posX, int posY);
 };
 
 #endif /* SERPENT_H_ */
