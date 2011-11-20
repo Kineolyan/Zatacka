@@ -38,6 +38,7 @@ OBJS = $(OBJ)/itemEcran.o \
 	$(OBJ)/option.o \
 	$(OBJ)/zatacka.o \
 	$(OBJ)/jeu.o \
+	$(OBJ)/serpent.o \
 	$(OBJ)/main.o
 
 $(OBJ)/SDL_prim.o: $(SRC)/SDL_lib/SDL_prim.c
