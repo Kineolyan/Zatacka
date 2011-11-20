@@ -36,9 +36,9 @@ OBJS = $(OBJ)/itemEcran.o \
 	$(OBJ)/exception.o \
 	$(OBJ)/texte.o \
 	$(OBJ)/option.o \
-	$(OBJ)/zatacka.o \
-	$(OBJ)/jeu.o \
 	$(OBJ)/serpent.o \
+	$(OBJ)/jeu.o \
+	$(OBJ)/zatacka.o \
 	$(OBJ)/main.o
 
 $(OBJ)/SDL_prim.o: $(SRC)/SDL_lib/SDL_prim.c
