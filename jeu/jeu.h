@@ -9,11 +9,11 @@
 #define JEU_H_
 
 #include <SDL/SDL.h>
+#include <vector>
 
 #include "itemEcran.h"
 #include "texte.h"
 #include "couleurs.h"
-#include "zatacka.h"
 #include "../serpent/serpent.h"
 
 class Jeu: public ItemEcran {
@@ -29,11 +29,6 @@ private:
 	SDL_Rect m_positionScores;
 
 	/**
-	 * Ecran principal du jeu
-	 */
-	Zatacka& m_ecranPrincipal;
-
-	/**
 	 * Ecran de jeu contenant les serpents
 	 */
 	SDL_Surface* m_ecranJeu;
@@ -46,32 +41,38 @@ private:
 	/**
 	 * Motifs de base pour le trace des serpents
 	 */
-	SDL_Surface* m_points[6];
+	std::vector<SDL_Surface*> m_points;
 
 	/**
 	 * Tableau des textes affichant les scores sur l'écran
 	 * de jeu
 	 */
-	TexteSDL m_scores[6];
+	std::vector<TexteSDL> m_scores;
 
 	/**
 	 * Tableau des serpents des joueurs
 	 */
-	Serpent* m_joueurs;
+	std::vector<Serpent>* m_joueurs;
 
 	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
 	void initialiserPoints();
 
+	void colorer(SDL_Surface* ecran, SDL_Color* couleur,
+			SDL_PixelFormat *format);
+
+public:
+	Jeu(int largeur, int hauteur, int largeurScore=100);
+	~Jeu();
+
+	void colorerElements(const std::vector<SDL_Color*>& couleurs,
+			SDL_PixelFormat *format);
+
 	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
-	void initialiserScores();
-
-public:
-	Jeu(Zatacka& ecranPrincipal, int largeurScore=100);
-	~Jeu();
+	void initialiserScores(TTF_Font* police);
 
 	virtual void afficher(SDL_Surface* ecran);
 	void afficherJeu(SDL_Surface* ecran);
