@@ -59,7 +59,7 @@ void Jeu::chargerPolices() {
 
 void Jeu::initialiserCouleurs() {
 	m_couleurs["blanc"] = new SDL_Color({255, 255, 255});
-    m_couleurs["jaune"] = new SDL_Color({250, 225, 0 });
+  m_couleurs["jaune"] = new SDL_Color({250, 225, 0 });
 	m_couleurs["bleu"] = new SDL_Color({0, 191, 249});
 	m_couleurs["rouge"] = new SDL_Color({254, 1, 1});
 	m_couleurs["vert"] = new SDL_Color({1, 236, 8});
