@@ -7,6 +7,7 @@
 #include "texte.h"
 #include "option.h"
 #include "couleurs.h"
+#include "jeu.h"
 #include "../exceptions/exception.h"
 #include "../serpent/serpent.h"
 
@@ -44,12 +45,7 @@ private:
 	/**
 	 * Ecran de jeu contenant les serpents
 	 */
-	SDL_Surface* m_ecranJeu;
-
-	/**
-	 * Ecran affichant les scores
-	 */
-	SDL_Surface* m_ecranScores;
+	Jeu m_ecranJeu;
 
 	/**
 	 * Motifs de base pour le trace des serpents
@@ -108,9 +104,9 @@ private:
 	void initialiserCouleurs();
 
 	/**
-	 * Donne à chaque score une couleur, une police et une position
+	 *
 	 */
-	void initialiserScores();
+	void initialiserJeu();
 
 	/**
 	 * Créer les options du menu principal et leur assigne une position à
@@ -145,6 +141,7 @@ private:
 
 	/**
 	 * Afficher l'écran demandé
+	 *
 	 * @param ecran: nom de l'écran à afficher
 	 */
 	void afficher(NomEcran ecran);
