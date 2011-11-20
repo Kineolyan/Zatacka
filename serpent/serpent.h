@@ -32,14 +32,9 @@ private:
   int grilleY;
 
 	/**
- 	 * Abscisse de la tête
+ 	 * Position de la tête
 	 */
-	int m_posX;
-
-	/**
-	 * Ordonnée de la tête
-	 */
-	int m_posY;
+	SDL_Rect m_position;
 
 	/**
 	 * Direction, en radians [0;2Pi[
@@ -68,6 +63,15 @@ private:
 
 
 public:
+	/**
+	 * Constructeur
+	 */
+	Serpent(int ecranX, int ecranY, int posX, int posY, double direction, double vitesse, Regles reglesDirection, Regles reglesCollision);
+
+	/**
+	 * Destructeur
+	 */
+	~Serpent();
 
   /**
    * Change de direction - appelée à chaque itération pour déterminer la nouvelle direction du serpent
@@ -75,25 +79,25 @@ public:
    *     - avec un argument pour définir une nouvelle direction
    *     - sans argument pour calculer une éventuelle nouvelle direction, et la modifier le cas échéant
    */
-  void changeDirection(double direction);
-  void changeDirection();
+  void direction(double direction);
+  void direction();
 
   /**
    * Change la position
    */
-  void changePosition(int posX, int posY);
+  void position(int posX, int posY);
 
   /**
    * Change la vitesse
    */
-  void changeVitesse(double vitesse);
+  void vitesse(double vitesse);
 
   /**
    * Change les règles :
    *    - nomRegles : peut prendre les valeurs "direction" et "collision"
    *    - regles : un set de règles correspondant
    */
-  void changeRegles(string nomRegles, Regles regles);
+  void regles(string nomRegles, Regles regles);
 
   /**
    * Détermine si le serpent meurt à cette itération
@@ -114,16 +118,6 @@ public:
    * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)
    */
   pair <int,int> getPixel(int posX, int posY);
-
-	/**
-	 * Constructeur
-	 */
-	Serpent(int ecranX, int ecranY, int posX, int posY, double direction, double vitesse, Regles reglesDirection, Regles reglesCollision);
-
-	/**
-	 * Destructeur
-	 */
-	~Serpent();
 };
 
 #endif /* SERPENT_H_ */

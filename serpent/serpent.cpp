@@ -6,24 +6,24 @@
 
 using namespace std;
 
-Serpent::Serpent(int posX, int posY, double direction, double vitesse, Regles reglesDirection, Regles reglesCollision):
-    m_posX(posX), m_posY(posY), m_direction(direction), m_vitesse(vitesse),
+Serpent::Serpent(int ecranX, int ecranY, int positionX, int positionY, double direction,
+		double vitesse, Regles reglesDirection, Regles reglesCollision):
+    m_grilleX(ecranX), m_grilleY(ecranY),
+    m_position({positionX, positionY}),
+    m_direction(direction), m_vitesse(vitesse),
     m_reglesDirection(reglesDirection), m_reglesCollision(reglesCollision)  {
-
 }
 
-void Serpent::changePosition(int posX, int posY) {
-  m_posX(posX);
-  m_posY(posY);
-  return 0;
+void Serpent::position(int posX, int posY) {
+  m_position.x = posX;
+  m_position.y = posY;
 }
 
-void Serpent::changeDirection(double direction) {
+void Serpent::direction(double direction) {
   m_direction = direction;
-  return 0;
 }
 
-void Serpent::changeDirection() {
+void Serpent::direction() {
 //  Une touche correspondant à ce serpent est-elle enfoncée ?
 //  Le cas échéant :
 //  if (turnLeft) {
@@ -33,7 +33,7 @@ void Serpent::changeDirection() {
 //  }
 }
 
-void Serpent::changeVitesse(double vitesse){
+void Serpent::vitesse(double vitesse){
   m_vitesse = vitesse;
 }
 
@@ -50,7 +50,7 @@ void Serpent::avance(){
     nouvellePosX = m_posX + vitesse * cmath::cos(direction);
     nouvellePosY = m_posY + vitesse * cmath::sin(direction);
     traceSerpent(m_posX, m_posY, nouvellePosX, nouvellePosY);
-    changePosition(nouvellePosX, nouvellePosY);
+    position(nouvellePosX, nouvellePosY);
   }
 }
 
