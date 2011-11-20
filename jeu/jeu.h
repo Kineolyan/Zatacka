@@ -39,6 +39,16 @@ private:
 	SDL_Surface* m_ecranScores;
 
 	/**
+	 * Bloc pour effacer un score
+	 */
+	SDL_Surface* m_blocEffaceur;
+
+	/**
+	 * Tableau des couleurs rgb à utiliser
+	 */
+	std::vector<SDL_Color*>* m_couleurs;
+
+	/**
 	 * Motifs de base pour le trace des serpents
 	 */
 	std::vector<SDL_Surface*> m_points;
@@ -59,15 +69,13 @@ private:
 	 */
 	void initialiserPoints();
 
-	void colorer(SDL_Surface* ecran, SDL_Color* couleur,
-			SDL_PixelFormat *format);
+	void colorer(SDL_Surface* ecran, Couleur couleur);
 
 public:
-	Jeu(int largeur, int hauteur, int largeurScore=100);
+	Jeu(int largeur, int hauteur, int largeurScore);
 	~Jeu();
 
-	void colorerElements(const std::vector<SDL_Color*>& couleurs,
-			SDL_PixelFormat *format);
+	void colorerElements(std::vector<SDL_Color*>* couleurs);
 
 	/**
 	 * Donne à chaque score une couleur, une police et une position

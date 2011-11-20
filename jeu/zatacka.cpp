@@ -5,7 +5,7 @@ using namespace std;
 Zatacka::Zatacka(int largeur, int hauteur):
 		m_largeur(largeur), m_hauteur(hauteur),
 		m_largeurScores(100), m_ecran(NULL),
-		m_ecranJeu(largeur, hauteur), m_points(8),
+		m_ecranJeu(largeur, hauteur, 100), m_points(8),
 		m_policeCalligraphiee(NULL), m_policeBasique(NULL),
 		m_couleurs(8), m_optionJoueurs(6), m_options() {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
@@ -71,7 +71,7 @@ void Zatacka::initialiserCouleurs() {
 }
 
 void Zatacka::initialiserJeu() {
-    m_ecranJeu.colorerElements(m_couleurs, m_ecran->format);
+    m_ecranJeu.colorerElements(&m_couleurs);
     m_ecranJeu.initialiserScores(m_policeCalligraphiee);
 }
 

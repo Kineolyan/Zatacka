@@ -5,8 +5,13 @@ using namespace std;
 Jeu::Jeu(int largeur, int hauteur, int largeurScores):
 		ItemEcran(largeur, hauteur),
 		m_largeurScores(largeurScores),
-		m_ecranJeu(NULL), m_ecranScores(NULL),
-		m_points(7), m_scores(6), m_joueurs(NULL) {
+		m_ecranJeu(NULL),
+		m_ecranScores(NULL),
+		m_blocEffaceur(NULL),
+		m_couleurs(NULL),
+		m_points(7),
+		m_scores(6),
+		m_joueurs(NULL) {
 	m_ecranJeu = SDL_CreateRGBSurface(SDL_HWSURFACE,
 			m_largeur - m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
 	m_ecranScores = SDL_CreateRGBSurface(SDL_HWSURFACE,
@@ -68,30 +73,34 @@ void Jeu::initialiserScores(TTF_Font* police) {
 /**
  * Remplit une surface de la couleur demandee
  */
-void Jeu::colorer(SDL_Surface* ecran, SDL_Color* couleur,
-		SDL_PixelFormat *format) {
+void Jeu::colorer(SDL_Surface* ecran, Couleur couleur) {
 	SDL_FillRect(ecran, NULL,
-		SDL_MapRGB(format, couleur->r,	couleur->g, couleur->b)
+		SDL_MapRGB(m_ecranJeu->format,
+			(*m_couleurs)[couleur]->r,
+			(*m_couleurs)[couleur]->g,
+			(*m_couleurs)[couleur]->b
+		)
 	);
 }
 
-void Jeu::colorerElements(const vector<SDL_Color*>& couleurs,
-		SDL_PixelFormat *format) {
-	m_scores[0].couleur(couleurs[ROUGE]);
-	m_scores[1].couleur(couleurs[JAUNE]);
-	m_scores[2].couleur(couleurs[ORANGE]);
-	m_scores[3].couleur(couleurs[VERT]);
-	m_scores[4].couleur(couleurs[VIOLET]);
-	m_scores[5].couleur(couleurs[BLEU]);
+void Jeu::colorerElements(vector<SDL_Color*>* couleurs) {
+	m_couleurs = couleurs;
 
-	colorer(m_ecranScores, couleurs[GRIS], format);
-	colorer(m_points[0], couleurs[ROUGE], format);
-	colorer(m_points[1], couleurs[JAUNE], format);
-	colorer(m_points[2], couleurs[ORANGE], format);
-	colorer(m_points[3], couleurs[VERT], format);
-	colorer(m_points[4], couleurs[VIOLET], format);
-	colorer(m_points[5], couleurs[BLEU], format);
-	colorer(m_points[6], couleurs[NOIR], format);
+	m_scores[0].couleur((*m_couleurs)[ROUGE]);
+	m_scores[1].couleur((*m_couleurs)[JAUNE]);
+	m_scores[2].couleur((*m_couleurs)[ORANGE]);
+	m_scores[3].couleur((*m_couleurs)[VERT]);
+	m_scores[4].couleur((*m_couleurs)[VIOLET]);
+	m_scores[5].couleur((*m_couleurs)[BLEU]);
+
+	colorer(m_ecranScores, GRIS);
+	colorer(m_points[0], ROUGE);
+	colorer(m_points[1], JAUNE);
+	colorer(m_points[2], ORANGE);
+	colorer(m_points[3], VERT);
+	colorer(m_points[4], VIOLET);
+	colorer(m_points[5], BLEU);
+	colorer(m_points[6], NOIR);
 }
 
 void Jeu::afficher(SDL_Surface* ecran) {
