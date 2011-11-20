@@ -54,7 +54,7 @@ void Jeu::initialiserPoints() {
 }
 
 void Jeu::initialiserScores(TTF_Font* police) {
-    SDL_Rect position = {m_largeur - m_largeurScores +10, 10};
+    SDL_Rect position = {10, 10};
     int pas = (m_hauteur-20)/6;
     for (int i=0; i<6; i++) {
     	m_scores[i].contenu("0");
@@ -103,12 +103,11 @@ void Jeu::afficherJeu(SDL_Surface* ecran) {
 }
 
 void Jeu::afficherScores(SDL_Surface* ecran) {
-	SDL_BlitSurface(m_ecranScores, NULL, ecran, &m_positionScores);
-
 	for (vector<TexteSDL>::iterator it = m_scores.begin(),
 		end = m_scores.end() ; it!=end; it++) {
-		it->afficher(ecran);
+		it->afficher(m_ecranScores);
 	}
+	SDL_BlitSurface(m_ecranScores, NULL, ecran, &m_positionScores);
 }
 
 /**
@@ -122,5 +121,13 @@ void Jeu::afficherScores(SDL_Surface* ecran) {
  * @throw TraceImpossible
  */
 void Jeu::tracerPoint(SDL_Rect* position, Couleur couleur) {
+	if (position->x <0 || position->x >m_ecranJeu->w) {
+		throw TraceImpossible("La position est hors du cadre.");
+	}
+
+	if (position->y <0 || position->x >m_hauteur) {
+		throw TraceImpossible("La position est hors du cadre.");
+	}
+
 	SDL_BlitSurface(m_points[couleur], NULL, m_ecranJeu, position);
 }
