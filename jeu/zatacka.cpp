@@ -351,11 +351,11 @@ void Zatacka::afficherJeu() {
 	m_ecranJeu.afficher(m_ecran);
 	SDL_Flip(m_ecran);
 
-	/*SDL_Rect positionSerpent = {100, 100};
+	SDL_Rect positionSerpent = {100, 100};
 	for (int i=0; i<10; i++) {
 		positionSerpent.x+= 3;
 		tracerPoint(&positionSerpent, JAUNE);
-	}*/
+	}
 
 	SDL_Event event;
 	bool boucler = true;
