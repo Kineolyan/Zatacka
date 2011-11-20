@@ -55,6 +55,7 @@ void Jeu::initialiserPoints() {
 
 void Jeu::initialiserScores(TTF_Font* police) {
     SDL_Rect position = {10, 10};
+
     int pas = (m_hauteur-20)/6;
     for (int i=0; i<6; i++) {
     	m_scores[i].contenu("0");
