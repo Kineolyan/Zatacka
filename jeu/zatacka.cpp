@@ -270,18 +270,18 @@ void Zatacka::creerMenuOptions() {
 			m_policeBasique, m_couleurs[BLANC]),
 			*option2 = new Option("jouer par equipe (E)", "oui", "non",
 					m_policeBasique, m_couleurs[BLANC]),
-			*info = new Option("jouer par equipe (T)", "oui", "non",
+			*option3 = new Option("jouer par equipe (T)", "oui", "non",
 					m_policeBasique, m_couleurs[BLANC]);
 	SDL_Rect position = {100, 50};
 	option1->position(position);
 	position.y+= 50;
 	option2->position(position);
 	position.y+= 50;
-	info->position(position);
+	option3->position(position);
 
 	m_options.push_back(option1);
 	m_options.push_back(option2);
-	m_options.push_back(info);
+	m_options.push_back(option3);
 }
 
 void Zatacka::afficherMenuOptions() {
