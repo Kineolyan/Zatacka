@@ -19,12 +19,12 @@ LIBS = `sdl-config --libs` -lSDL_ttf
 BIN = /usr/bin
 DEST = /usr/local/games/zatac
 else
-ifeq ($(OS), unix)
-PROGNAME = zatacka
-LIBS = `sdl-config --libs` -lSDL_ttf
-BIN = /usr/bin
-DEST = /usr/local/games/zatacka
-endif
+	ifeq ($(OS), unix)
+	PROGNAME = zatacka
+	LIBS = `sdl-config --libs` -lSDL_ttf
+	BIN = /usr/bin
+	DEST = /usr/local/games/zatacka
+	endif
 endif
 
 
@@ -32,18 +32,15 @@ DEBUG = -ggdb
 DEFINES = $(INCLUDES) $(DEFS) -DSYS_UNIX=1 $(DEBUG)
 CFLAGS = $(DEFINES) `sdl-config --cflags` -Wall
 
-OBJS = $(OBJ)/itemEcran.o \
-	$(OBJ)/exception.o \
+OBJS = $(OBJ)/exception.o \
+	$(OBJ)/itemEcran.o \
+	$(OBJ)/ecran.o \
 	$(OBJ)/texte.o \
 	$(OBJ)/option.o \
 	$(OBJ)/serpent.o \
 	$(OBJ)/jeu.o \
 	$(OBJ)/zatacka.o \
 	$(OBJ)/main.o
-
-$(OBJ)/SDL_prim.o: $(SRC)/SDL_lib/SDL_prim.c
-	$(CC) $(CFLAGS) -c $(SRC)/SDL_lib/SDL_prim.c
-	mv $*.o $(OBJ)
 
 $(OBJ)/%.o: %.cpp
 	$(CC) $(CFLAGS) -c $*.cpp
