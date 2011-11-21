@@ -53,7 +53,6 @@ void TexteSDL::couleur(SDL_Color* couleur) {
 
 void TexteSDL::position(const SDL_Rect& position) {
 	ItemEcran::position(position);
-	m_surfaceAJour = false;
 }
 
 int TexteSDL::largeur() {
