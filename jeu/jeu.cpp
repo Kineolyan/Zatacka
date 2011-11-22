@@ -2,45 +2,31 @@
 
 using namespace std;
 
-Jeu::Jeu(int largeur, int hauteur, int largeurScores):
-		ItemEcran(largeur, hauteur),
+Jeu::Jeu(int largeurJeu, int largeurScores, int hauteur):
+		ItemEcran(largeurJeu, hauteur),
 		m_largeurScores(largeurScores),
-		m_ecranJeu(NULL),
-		m_ecranScores(NULL),
-		m_blocEffaceur(NULL),
+		m_ecranJeu(largeurJeu, hauteur),
+		m_ecranScores(largeurScores, hauteur),
 		m_couleurs(NULL),
 		m_points(7),
 		m_scores(6),
 		m_joueurs(NULL) {
-	m_ecranJeu = SDL_CreateRGBSurface(SDL_HWSURFACE,
-			m_largeur - m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
-	m_ecranScores = SDL_CreateRGBSurface(SDL_HWSURFACE,
-			m_largeurScores, m_hauteur, 32, 0, 0, 0, 0);
-
-	m_positionScores.x = m_largeur - m_largeurScores;
+	m_positionScores.x = m_largeur;
 	m_positionScores.y = 0;
+
+	m_ecranJeu.position(m_position);
+	m_ecranScores.position(m_positionScores);
 
 	for (vector<SDL_Surface*>::iterator it = m_points.begin(),
 		end = m_points.end() ; it!=end; it++) {
 		*it = NULL;
 	}
 
-	if (NULL==m_ecranJeu) {
-		throw InstanceManquante("Impossible de creer l'ecran de jeu");
-	}
-	if (NULL==m_ecranScores) {
-		throw InstanceManquante(
-				"Impossible de creer le panneau des scores");
-	}
-
 	initialiserPoints();
 }
 
 Jeu::~Jeu() {
-    SDL_FreeSurface(m_ecranJeu);
-    SDL_FreeSurface(m_ecranScores);
-
-	for (vector<SDL_Surface*>::iterator it = m_points.begin(),
+    for (vector<SDL_Surface*>::iterator it = m_points.begin(),
 		end = m_points.end() ; it!=end; it++) {
 		SDL_FreeSurface(*it);
 	}
@@ -70,12 +56,15 @@ void Jeu::initialiserScores(TTF_Font* police) {
     }
 }
 
+int Jeu::largeur()
+{   return m_largeur + m_largeurScores; }
+
 /**
  * Remplit une surface de la couleur demandee
  */
 void Jeu::colorer(SDL_Surface* ecran, Couleur couleur) {
 	SDL_FillRect(ecran, NULL,
-		SDL_MapRGB(m_ecranJeu->format,
+		SDL_MapRGB(m_ecranJeu.format(),
 			(*m_couleurs)[couleur]->r,
 			(*m_couleurs)[couleur]->g,
 			(*m_couleurs)[couleur]->b
@@ -86,6 +75,8 @@ void Jeu::colorer(SDL_Surface* ecran, Couleur couleur) {
 void Jeu::colorerElements(vector<SDL_Color*>* couleurs) {
 	m_couleurs = couleurs;
 
+	m_ecranScores.couleur((*m_couleurs)[GRIS]);
+
 	m_scores[0].couleur((*m_couleurs)[ROUGE]);
 	m_scores[1].couleur((*m_couleurs)[JAUNE]);
 	m_scores[2].couleur((*m_couleurs)[ORANGE]);
@@ -93,7 +84,6 @@ void Jeu::colorerElements(vector<SDL_Color*>* couleurs) {
 	m_scores[4].couleur((*m_couleurs)[VIOLET]);
 	m_scores[5].couleur((*m_couleurs)[BLEU]);
 
-	colorer(m_ecranScores, GRIS);
 	colorer(m_points[0], ROUGE);
 	colorer(m_points[1], JAUNE);
 	colorer(m_points[2], ORANGE);
@@ -109,15 +99,17 @@ void Jeu::afficher(SDL_Surface* ecran) {
 }
 
 void Jeu::afficherJeu(SDL_Surface* ecran) {
-	SDL_BlitSurface(m_ecranJeu, NULL, ecran, &m_position);
+	m_ecranJeu.afficher(ecran);
 }
 
 void Jeu::afficherScores(SDL_Surface* ecran) {
+    m_ecranScores.effacer();
+
 	for (vector<TexteSDL>::iterator it = m_scores.begin(),
 		end = m_scores.end() ; it!=end; it++) {
-		it->afficher(m_ecranScores);
+		it->afficher(m_ecranScores.ecran());
 	}
-	SDL_BlitSurface(m_ecranScores, NULL, ecran, &m_positionScores);
+	m_ecranScores.afficher(ecran);
 }
 
 /**
@@ -131,7 +123,7 @@ void Jeu::afficherScores(SDL_Surface* ecran) {
  * @throw TraceImpossible
  */
 void Jeu::tracerPoint(SDL_Surface* ecran, SDL_Rect* position, Couleur couleur) {
-	if (position->x <0 || position->x >m_ecranJeu->w) {
+	if (position->x <0 || position->x >m_largeur) {
 		throw TraceImpossible("La position est hors du cadre.");
 	}
 
@@ -140,4 +132,21 @@ void Jeu::tracerPoint(SDL_Surface* ecran, SDL_Rect* position, Couleur couleur) {
 	}
 
 	SDL_BlitSurface(m_points[couleur], NULL, ecran, position);
+}
+
+/**
+ * Met à jour le score d'un joueur
+ * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
+ * sur un autre écran lancera une exception.
+ *
+ * @param joueurId: Id du joueur dont le score change. Cela correspond
+ * 	a l'index du texte de score dans le vecteur m_scores
+ * @param score: le nouveau score à afficher
+ *
+ * @throw TraceImpossible
+ */
+void Jeu::changerScore(int joueurId, int score) {
+    stringstream convertisseur;
+    convertisseur << score;
+    m_scores[joueurId].contenu(convertisseur.str());
 }

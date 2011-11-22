@@ -33,6 +33,12 @@ Ecran::~Ecran() {
 	SDL_FreeSurface(m_ecran);
 }
 
+SDL_PixelFormat* Ecran::format()
+{   return m_ecran->format; }
+
+SDL_Surface* Ecran::ecran()
+{   return m_ecran; }
+
 void Ecran::colorer() {
 	SDL_FillRect(m_ecran, NULL,
 		SDL_MapRGB(m_ecran->format,

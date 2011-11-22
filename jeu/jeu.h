@@ -10,8 +10,10 @@
 
 #include <SDL/SDL.h>
 #include <vector>
+#include <sstream>
 
 #include "itemEcran.h"
+#include "ecran.h"
 #include "texte.h"
 #include "couleurs.h"
 #include "../serpent/serpent.h"
@@ -31,17 +33,12 @@ private:
 	/**
 	 * Ecran de jeu contenant les serpents
 	 */
-	SDL_Surface* m_ecranJeu;
+	Ecran m_ecranJeu;
 
 	/**
 	 * Ecran affichant les scores
 	 */
-	SDL_Surface* m_ecranScores;
-
-	/**
-	 * Bloc pour effacer un score
-	 */
-	SDL_Surface* m_blocEffaceur;
+	Ecran m_ecranScores;
 
 	/**
 	 * Tableau des couleurs rgb à utiliser
@@ -72,9 +69,10 @@ private:
 	void colorer(SDL_Surface* ecran, Couleur couleur);
 
 public:
-	Jeu(int largeur, int hauteur, int largeurScore);
+	Jeu(int largeurJeu, int largeurScore, int hauteur);
 	~Jeu();
 
+    int largeur();
 	void colorerElements(std::vector<SDL_Color*>* couleurs);
 
 	/**

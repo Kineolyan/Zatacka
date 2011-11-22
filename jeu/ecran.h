@@ -26,6 +26,8 @@ public:
 	Ecran(int largeur, int hauteur, SDL_Color* couleur);
 	~Ecran();
 
+    SDL_PixelFormat* format();
+    SDL_Surface* ecran();
 	void couleur(SDL_Color* couleur);
 	virtual void afficher(SDL_Surface* ecran);
 	void effacer();
