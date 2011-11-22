@@ -1,4 +1,5 @@
 #include "jeu.h"
+#include <iostream>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ Jeu::~Jeu() {
 void Jeu::initialiserPoints() {
 	for (int i=0; i<7; i++) {
 		m_points[i] = SDL_CreateRGBSurface(SDL_HWSURFACE,
-			4, 4, 32, 0, 0, 0, 0);
+			3, 3, 32, 0, 0, 0, 0);
 
 		if (NULL==m_points[i]) {
 			throw InstanceManquante(
@@ -128,7 +129,7 @@ void Jeu::tracerPoint(SDL_Surface* ecran, SDL_Rect* position, Couleur couleur) {
 	}
 
 	if (position->y <0 || position->y >m_hauteur) {
-		throw TraceImpossible("La position est hors du cadre.");
+		throw TraceImpossible("La position (hauteur) est hors du cadre.");
 	}
 
 	SDL_BlitSurface(m_points[couleur], NULL, ecran, position);

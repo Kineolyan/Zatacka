@@ -13,6 +13,9 @@
 #include <vector>
 #include <cmath>
 #include "../exceptions/exception.h"
+#include "../jeu/couleurs.h"
+
+class Zatacka;
 
 /**
  * Serpent, ça gère le serpent (1 par joueur).
@@ -22,29 +25,29 @@ class Serpent {
 private:
 
   /**
-   * Taille de la grille en abscisses
+   * Couleur du serpent
    */
-  int m_grilleX;
-
-  /**
-   * Taille de la grille en ordonnées
-   */
-  int m_grilleY;
+  Couleur m_couleur;
 
 	/**
- 	 * Position de la tête
+ 	 * Abscisse de la tête
 	 */
-	SDL_Rect m_position;
+	int m_positionX;
 
 	/**
-	 * Direction, en radians [0;2Pi[
+ 	 * Ordonnée de la tête
+	 */
+	int m_positionY;
+
+	/**
+	 * Direction, en radians (sur IR)
 	 */
 	double m_direction;
 
 	/**
-	 * Vitesse, en cases/iteration - attention, il y a une feinte quand le serpent ne se déplace pas horizontalement ou verticalement, mais nous y reviendrons :)
+	 * Vitesse, en pixels/iteration
 	 */
-	double m_vitesse;
+	int m_vitesse;
 
 	/**
 	 * Score du serpent (en fait du joueur, mais on confond les deux)
@@ -61,12 +64,17 @@ private:
    */
   //Regles m_reglesCollision;
 
+  /**
+   * Gestionnaire de l'écran de jeu
+   */
+  Zatacka* m_ecranJeu;
 
 public:
 	/**
-	 * Constructeur
+	 * Constructeur :
+	 * - posX et posY sont les coordonnées de la tête du serpent en PIXELS
 	 */
-	Serpent(int ecranX, int ecranY, int posX, int posY, double direction, double vitesse/*, Regles reglesDirection, Regles reglesCollision*/);
+	Serpent(Couleur couleur, int posX, int posY, double direction, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka* ecranJeu);
 
 	/**
 	 * Destructeur
@@ -90,7 +98,7 @@ public:
   /**
    * Change la vitesse
    */
-  void vitesse(double vitesse);
+  void vitesse(int vitesse);
 
   /**
    * Change les règles :
@@ -117,7 +125,7 @@ public:
   /**
    * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)
    */
-  std::pair<int,int> getPixel(int posX, int posY);
+  int getPixel(int pos);
 };
 
 #endif /* SERPENT_H_ */
