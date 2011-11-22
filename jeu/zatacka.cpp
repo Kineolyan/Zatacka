@@ -1,5 +1,6 @@
 #include "zatacka.h"
 
+
 using namespace std;
 
 Zatacka::Zatacka(int largeur, int hauteur):
@@ -8,7 +9,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
 		m_ecranJeu(largeur, hauteur), m_points(8),
 		m_policeCalligraphiee(NULL), m_policeBasique(NULL),
 		m_couleurs(8), m_optionJoueurs(6), m_options() {
-	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
+	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
 	if (NULL==m_ecran) {
 		throw InstanceManquante("Impossible de creer l'ecran");
 	}
@@ -351,11 +352,27 @@ void Zatacka::afficherJeu() {
 	m_ecranJeu.afficher(m_ecran);
 	SDL_Flip(m_ecran);
 
-	SDL_Rect positionSerpent = {100, 100};
-	for (int i=0; i<10; i++) {
-		positionSerpent.x+= 3;
-		tracerPoint(&positionSerpent, JAUNE);
+	Serpent serpent1(VERT, 100, 100, -0.3, 1, this);
+	Serpent serpent2(JAUNE, 200, 100, -1.3, 1, this);
+	Serpent serpent3(ROUGE, 300, 100, -1.3, 1, this);
+	Serpent serpent4(BLEU, 100, 300, -3.3, 1, this);
+	Serpent serpent5(VIOLET, 200, 300, -6.3, 1, this);
+	Serpent serpent6(ORANGE, 300, 300, -7.3, 1, this);
+	for (int i=0 ; i<180 ; i++) {
+	  serpent1.avance();
+	  serpent2.avance();
+	  serpent3.avance();
+	  serpent4.avance();
+	  serpent5.avance();
+	  serpent6.avance();
+	  SDL_Delay(5);
 	}
+
+//  SDL_Rect positionSerpent = {100, 100};
+//	for (int i=0; i<10; i++) {
+//		positionSerpent.x+= 3;
+//		tracerPoint(&positionSerpent, JAUNE);
+//	}
 
 	SDL_Event event;
 	bool boucler = true;
@@ -492,8 +509,7 @@ void Zatacka::tracerPoint(SDL_Rect* position, Couleur couleur) {
 		throw TraceImpossible("impossible de tracer un point hors de l'écran de jeu");
 	}
 
-	m_ecranJeu.tracerPoint(position, couleur);
-	m_ecranJeu.afficher(m_ecran);
+	m_ecranJeu.tracerPoint(m_ecran, position, couleur);
 	SDL_Flip(m_ecran);
 }
 
