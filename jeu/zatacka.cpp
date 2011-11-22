@@ -117,7 +117,7 @@ void Zatacka::creerMenuPrincipal() {
 				m_couleurs[JAUNE]);
 	m_optionJoueurs[2] = new Option("(, ;)", "READY", "", m_policeBasique,
 				m_couleurs[ORANGE]);
-	m_optionJoueurs[3] = new Option("(L.Arrow D.Arrow)", "READY", "", m_policeBasique,
+	m_optionJoueurs[3] = new Option("(L.Arrow R.Arrow)", "READY", "", m_policeBasique,
 				m_couleurs[VERT]);
 	m_optionJoueurs[4] = new Option("(/ *)", "READY", "", m_policeBasique,
 				m_couleurs[VIOLET]);
@@ -349,8 +349,7 @@ void Zatacka::afficherMenuOptions() {
 
 void Zatacka::afficherJeu() {
 	effacer();
-
-	m_ecranJeu.afficher(m_ecran);
+	m_ecranJeu.demarrerPartie(m_ecran);
 	SDL_Flip(m_ecran);
 
 	SDL_Rect positionSerpent = {100, 100};
@@ -358,19 +357,11 @@ void Zatacka::afficherJeu() {
 		positionSerpent.x+= 3;
 		tracerPoint(&positionSerpent, JAUNE);
 	}
-
-	m_ecranJeu.changerScore(0, 1);
-	m_ecranJeu.changerScore(1, 2);
-	m_ecranJeu.changerScore(2, 3);
-	m_ecranJeu.changerScore(3, 4);
-	m_ecranJeu.changerScore(4, 17);
-	m_ecranJeu.changerScore(5, 42);
-	m_ecranJeu.afficherScores(m_ecran);
 	SDL_Flip(m_ecran);
 
 	SDL_Event event;
+	int score = 0, utilisationRetour = 0;
 	bool boucler = true;
-	int utilisationRetour = 0;
 	while (boucler) {
 		SDL_PollEvent(&event);
 		switch (event.type) {
@@ -387,8 +378,15 @@ void Zatacka::afficherJeu() {
 				break;
 
 			case SDLK_SPACE:
-				m_ecranAAfficher = JEU;
-				boucler = false;
+                m_ecranJeu.changerScore(0, ++score);
+                m_ecranJeu.changerScore(1, ++score);
+                m_ecranJeu.changerScore(2, ++score);
+                m_ecranJeu.changerScore(3, ++score);
+                m_ecranJeu.changerScore(4, ++score);
+                m_ecranJeu.changerScore(5, ++score);
+                m_ecranJeu.afficherScores(m_ecran);
+                m_ecranJeu.demarrerManche(m_ecran);
+                SDL_Flip(m_ecran);
 				break;
 
 			case SDLK_AMPERSAND:

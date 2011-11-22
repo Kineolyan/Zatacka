@@ -150,3 +150,17 @@ void Jeu::changerScore(int joueurId, int score) {
     convertisseur << score;
     m_scores[joueurId].contenu(convertisseur.str());
 }
+
+void Jeu::demarrerPartie(SDL_Surface* ecran) {
+    afficherJeu(ecran);
+
+    int i = 0, end = m_scores.size();
+    for ( ; i<end; i++) {
+		changerScore(i, 0);
+	}
+	afficherScores(ecran);
+}
+
+void Jeu::demarrerManche(SDL_Surface* ecran) {
+    afficherJeu(ecran);
+}
