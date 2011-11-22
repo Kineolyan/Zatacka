@@ -8,16 +8,15 @@
 #ifndef OPTION_H_
 #define OPTION_H_
 
-#include "itemEcran.h"
+#include "ecran.h"
 #include "texte.h"
 #include <string>
 
-class Option: public ItemEcran {
+class Option: public Ecran {
 protected:
 	TexteSDL m_texte;
 	TexteSDL m_optionActive;
 	TexteSDL m_optionInactive;
-	SDL_Surface* m_blocEffaceur;
 	bool m_active;
 	int m_offset;
 

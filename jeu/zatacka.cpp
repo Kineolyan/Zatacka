@@ -6,7 +6,7 @@ using namespace std;
 Zatacka::Zatacka(int largeur, int hauteur):
 		m_largeur(largeur), m_hauteur(hauteur),
 		m_largeurScores(100), m_ecran(NULL),
-		m_ecranJeu(largeur, hauteur), m_points(8),
+		m_ecranJeu(largeur, hauteur, 100), m_points(8),
 		m_policeCalligraphiee(NULL), m_policeBasique(NULL),
 		m_couleurs(8), m_optionJoueurs(6), m_options() {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
@@ -72,7 +72,7 @@ void Zatacka::initialiserCouleurs() {
 }
 
 void Zatacka::initialiserJeu() {
-    m_ecranJeu.colorerElements(m_couleurs, m_ecran->format);
+    m_ecranJeu.colorerElements(&m_couleurs);
     m_ecranJeu.initialiserScores(m_policeCalligraphiee);
 }
 
@@ -271,18 +271,18 @@ void Zatacka::creerMenuOptions() {
 			m_policeBasique, m_couleurs[BLANC]),
 			*option2 = new Option("jouer par equipe (E)", "oui", "non",
 					m_policeBasique, m_couleurs[BLANC]),
-			*info = new Option("jouer par equipe (T)", "oui", "non",
+			*option3 = new Option("jouer par equipe (T)", "oui", "non",
 					m_policeBasique, m_couleurs[BLANC]);
 	SDL_Rect position = {100, 50};
 	option1->position(position);
 	position.y+= 50;
 	option2->position(position);
 	position.y+= 50;
-	info->position(position);
+	option3->position(position);
 
 	m_options.push_back(option1);
 	m_options.push_back(option2);
-	m_options.push_back(info);
+	m_options.push_back(option3);
 }
 
 void Zatacka::afficherMenuOptions() {
@@ -511,6 +511,35 @@ void Zatacka::tracerPoint(SDL_Rect* position, Couleur couleur) {
 
 	m_ecranJeu.tracerPoint(m_ecran, position, couleur);
 	SDL_Flip(m_ecran);
+}
+
+/**
+ * Renvoie la couleur des pixels d'une position donnee
+ */
+Couleur Zatacka::donnerCouleur(const SDL_Rect& position) {
+	Uint32 pixel = ((Uint32*)m_ecran->pixels)[position.y * m_ecran->w + position.x];
+
+	SDL_Color couleurPixel = {0, 0, 0};
+	SDL_GetRGB(pixel, m_ecran->format,
+			&(couleurPixel.r), &(couleurPixel.g), &(couleurPixel.b));
+
+	bool comparaison = false;
+	int i = 0;
+	for ( ; i<9; i++) {
+		if (couleurPixel.r==m_couleurs[i]->r
+		 && couleurPixel.g==m_couleurs[i]->g
+		 && couleurPixel.b==m_couleurs[i]->b) {
+			comparaison = true;
+			break;
+		}
+	}
+
+	if (false==comparaison) {
+		throw ExceptionGenerale(
+				"La couleur trouvee ne fait pas partie de la liste de couleurs");
+	}
+
+	return (Couleur)i;
 }
 
 /**
