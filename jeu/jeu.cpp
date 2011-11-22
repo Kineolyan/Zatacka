@@ -130,14 +130,14 @@ void Jeu::afficherScores(SDL_Surface* ecran) {
  *
  * @throw TraceImpossible
  */
-void Jeu::tracerPoint(SDL_Rect* position, Couleur couleur) {
+void Jeu::tracerPoint(SDL_Surface* ecran, SDL_Rect* position, Couleur couleur) {
 	if (position->x <0 || position->x >m_ecranJeu->w) {
 		throw TraceImpossible("La position est hors du cadre.");
 	}
 
-	if (position->y <0 || position->x >m_hauteur) {
+	if (position->y <0 || position->y >m_hauteur) {
 		throw TraceImpossible("La position est hors du cadre.");
 	}
 
-	SDL_BlitSurface(m_points[couleur], NULL, m_ecranJeu, position);
+	SDL_BlitSurface(m_points[couleur], NULL, ecran, position);
 }

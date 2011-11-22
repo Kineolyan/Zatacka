@@ -97,7 +97,7 @@ public:
 	 *
 	 * @throw TraceImpossible
 	 */
-	void tracerPoint(SDL_Rect* position, Couleur couleur);
+	void tracerPoint(SDL_Surface* ecran, SDL_Rect* position, Couleur couleur);
 
 	/**
 	 * Renvoie la couleur des pixels d'une position donnee

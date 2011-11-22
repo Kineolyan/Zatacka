@@ -492,8 +492,7 @@ void Zatacka::tracerPoint(SDL_Rect* position, Couleur couleur) {
 		throw TraceImpossible("impossible de tracer un point hors de l'écran de jeu");
 	}
 
-	m_ecranJeu.tracerPoint(position, couleur);
-	m_ecranJeu.afficher(m_ecran);
+	m_ecranJeu.tracerPoint(m_ecran, position, couleur);
 	SDL_Flip(m_ecran);
 }
 
