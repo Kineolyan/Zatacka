@@ -10,6 +10,7 @@ Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 		m_largeurScores(largeurScores),
 		m_ecranJeu(largeurJeu, hauteur),
 		m_ecranScores(largeurScores, hauteur),
+		m_joueurs(6),
 		m_points(7),
 		m_scores(6) {
 	m_positionScores.x = m_largeur;
@@ -23,6 +24,11 @@ Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 		*it = NULL;
 	}
 
+	for (vector<Serpent*>::iterator it = m_joueurs.begin(),
+			end = m_joueurs.end() ; it!=end; it++) {
+		*it = NULL;
+	}
+
 	initialiserPoints();
 }
 
@@ -31,17 +37,38 @@ Jeu::~Jeu() {
 		end = m_points.end() ; it!=end; it++) {
 		SDL_FreeSurface(*it);
 	}
+
+	for (vector<Serpent*>::iterator it = m_joueurs.begin(),
+			end = m_joueurs.end() ; it!=end; it++) {
+		delete *it;
+	}
 }
 
 void Jeu::initialiserPoints() throw(InstanceManquante) {
-	for (int i=0; i<7; i++) {
-		m_points[i] = SDL_CreateRGBSurface(SDL_HWSURFACE,
+	for (vector<SDL_Surface*>::iterator it = m_points.begin(),
+			end = m_points.end() ; it!=end; it++) {
+		*it = SDL_CreateRGBSurface(SDL_HWSURFACE,
 			3, 3, 32, 0, 0, 0, 0);
 
-		if (NULL==m_points[i]) {
+		if (NULL==*it) {
 			throw InstanceManquante(
 					"Impossible de creer un motif de trace");
 		}
+	}
+}
+
+void Jeu::initialiserJoueurs() throw(InstanceManquante) {
+	int index = 0;
+	for (vector<Serpent*>::iterator it = m_joueurs.begin(),
+			end = m_joueurs.end(); it!=end; it++) {
+		*it = new Serpent((Couleur)index, 220 + 25*index, 350 - index*28 , -0.3, 1, m_jeu);;
+
+		if (NULL==*it) {
+			throw InstanceManquante(
+					"Impossible de creer un motif de trace");
+		}
+
+		index++;
 	}
 }
 
@@ -60,6 +87,9 @@ void Jeu::initialiserScores() throw() {
 
 int Jeu::largeur() const throw()
 {   return m_largeur + m_largeurScores; }
+
+Serpent* Jeu::joueur(int i) throw()
+{   return m_joueurs[i]; }
 
 /**
  * Remplit une surface de la couleur demandee

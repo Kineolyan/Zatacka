@@ -47,6 +47,11 @@ private:
 	/**
 	 * Motifs de base pour le trace des serpents
 	 */
+	std::vector<Serpent*> m_joueurs;
+
+	/**
+	 * Motifs de base pour le trace des serpents
+	 */
 	std::vector<SDL_Surface*> m_points;
 
 	/**
@@ -68,7 +73,11 @@ public:
 	~Jeu();
 
     int largeur() const throw();
+    Serpent* joueur(int i) throw();
+
 	void colorerElements() throw();
+
+	void initialiserJoueurs() throw(InstanceManquante);
 
 	/**
 	 * Donne à chaque score une couleur, une police et une position
