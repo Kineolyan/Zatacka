@@ -12,8 +12,8 @@
 #include <map>
 #include <vector>
 #include <cmath>
-#include "../exceptions/exception.h"
-#include "../jeu/couleurs.h"
+#include "../util/exception.h"
+#include "../util/keywords.h"
 
 class Zatacka;
 

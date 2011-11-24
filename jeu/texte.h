@@ -12,7 +12,7 @@
 #include <SDL/SDL_ttf.h>
 #include <string>
 #include "itemEcran.h"
-#include "../exceptions/exception.h"
+#include "../util/exception.h"
 
 class TexteSDL: public ItemEcran {
 protected:

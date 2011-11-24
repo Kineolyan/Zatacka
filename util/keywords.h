@@ -5,8 +5,8 @@
  *      Author: oliv
  */
 
-#ifndef COULEURS_H_
-#define COULEURS_H_
+#ifndef KEYWORDS_H_
+#define KEYWORDS_H_
 
 
 enum Couleur {
@@ -14,4 +14,8 @@ enum Couleur {
 	NOIR=7, GRIS=8
 };
 
-#endif /* COULEURS_H_ */
+enum Direction {
+	TOUT_DROIT, GAUCHE, DROITE
+};
+
+#endif /* KEYWORDS_H_ */

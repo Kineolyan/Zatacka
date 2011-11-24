@@ -7,9 +7,9 @@
 #include <iostream>
 #include "texte.h"
 #include "option.h"
-#include "couleurs.h"
+#include "../util/keywords.h"
 #include "jeu.h"
-#include "../exceptions/exception.h"
+#include "../util/exception.h"
 #include "../serpent/serpent.h"
 
 /**

@@ -10,7 +10,7 @@
 
 #include <SDL/SDL.h>
 
-#include "../exceptions/exception.h"
+#include "../util/exception.h"
 #include "itemEcran.h"
 
 class Ecran: public ItemEcran {

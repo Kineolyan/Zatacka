@@ -54,8 +54,8 @@ $(OBJ)/%.o: $(SRC)/serpent/%.cpp
 	$(CC) $(CFLAGS) -c $(SRC)/serpent/$*.cpp
 	mv $*.o $(OBJ)
 
-$(OBJ)/%.o: $(SRC)/exceptions/%.cpp
-	$(CC) $(CFLAGS) -c $(SRC)/exceptions/$*.cpp
+$(OBJ)/%.o: $(SRC)/util/%.cpp
+	$(CC) $(CFLAGS) -c $(SRC)/util/$*.cpp
 	mv $*.o $(OBJ)
 	
 # Règles de dépendance
@@ -66,9 +66,9 @@ $(OBJ)/%.o: $(SRC)/exceptions/%.cpp
 #$(OBJ)/option.o : $(SRC)/jeu/option.h $(SRC)/jeu/texte.h
 #$(OBJ)/exception.o : $(SRC)/exceptions/exception.h
 
-all: $(PROGNAME)
+# Commandes executables
 
-$(PROGNAME) : $(OBJS)
+all: $(OBJS)
 	$(CC) $(CFLAGS) -o $(PROGNAME) $(OBJS) $(LIBS)
 
 prepare:
@@ -79,4 +79,6 @@ clean:
 	rm -f $(PROGNAME)
 
 install: prepare all
+
+reset: clean all
 

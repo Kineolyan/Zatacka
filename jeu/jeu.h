@@ -15,7 +15,7 @@
 #include "itemEcran.h"
 #include "ecran.h"
 #include "texte.h"
-#include "couleurs.h"
+#include "../util/keywords.h"
 #include "../serpent/serpent.h"
 
 class Serpent;
