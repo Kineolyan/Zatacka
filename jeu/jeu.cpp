@@ -162,6 +162,73 @@ void Jeu::demarrerPartie(SDL_Surface* ecran) {
 	afficherScores(ecran);
 }
 
-void Jeu::demarrerManche(SDL_Surface* ecran) {
+bool Jeu::jouerManche(SDL_Surface* ecran) {
     afficherJeu(ecran);
+
+    SDL_Event eventJeu;
+    bool bouclerManche = true;
+    while (bouclerManche) {
+		SDL_PollEvent(&eventJeu);
+		switch (eventJeu.type) {
+		case SDL_KEYDOWN:
+			switch (eventJeu.key.keysym.unicode) {
+			case SDLK_ESCAPE:
+				return false;
+
+			case SDLK_BACKSPACE:
+				bouclerManche = false;
+				break;
+
+			case SDLK_AMPERSAND:
+			case SDLK_a:
+				//m_joueurs[0].joueur(event);
+				break;
+
+			case SDLK_x:
+			case SDLK_c:
+				//m_joueurs[1].joueur(event);
+				break;
+
+			case SDLK_COMMA:
+			case SDLK_SEMICOLON:
+				//m_joueurs[2].joueur(event);
+				break;
+
+			case SDLK_SLASH:
+			case SDLK_ASTERISK:
+				//m_joueurs[4].joueur(event);
+				break;
+
+			default:
+				break;
+			}
+
+			switch (eventJeu.key.keysym.sym) {
+			case SDLK_LEFT:
+			case SDLK_DOWN:
+				//m_joueurs[3].joueur(event);
+				break;
+
+			default:
+				break;
+			}
+			break;
+
+		case SDL_MOUSEBUTTONDOWN:
+			switch (eventJeu.button.button) {
+			case SDL_BUTTON_LEFT:
+			case SDL_BUTTON_RIGHT:
+				//m_joueurs[5].joueur(event);
+				break;
+
+			default:
+				break;
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+    return true;
 }

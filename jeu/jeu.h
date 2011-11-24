@@ -86,7 +86,7 @@ public:
 	void afficherJeu(SDL_Surface* ecran);
 	void afficherScores(SDL_Surface* ecran);
 	void demarrerPartie(SDL_Surface* ecran);
-	void demarrerManche(SDL_Surface* ecran);
+	bool jouerManche(SDL_Surface* ecran);
 
 	/**
 	 * Dessine un point d'une couleur donnée sur l'écran de jeu.
