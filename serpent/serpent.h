@@ -67,19 +67,30 @@ private:
   /**
    * Gestionnaire de l'écran de jeu
    */
-  Zatacka* m_ecranJeu;
+  Zatacka& m_ecranJeu;
 
 public:
 	/**
 	 * Constructeur :
 	 * - posX et posY sont les coordonnées de la tête du serpent en PIXELS
 	 */
-	Serpent(Couleur couleur, int posX, int posY, double direction, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka* ecranJeu);
+	Serpent(Couleur couleur, int posX, int posY, double direction, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu);
 
 	/**
 	 * Destructeur
 	 */
 	~Serpent();
+
+	/**
+	 * Fait avancer le serpent dans la direction donnée
+	 * Le serpent calcule sa direction à partir de l'ordre donné, puis
+	 * vérifie s'il n'entre pas en collision, et se déplace à l'écran.
+	 *
+	 * @param direction: la direction demandée
+	 *
+	 * @return: true si le serpent entre en collision
+	 */
+	bool jouer(Direction direction);
 
   /**
    * Change de direction - appelée à chaque itération pour déterminer la nouvelle direction du serpent

@@ -9,7 +9,7 @@
 using namespace std;
 
 Serpent::Serpent(Couleur couleur, int positionX, int positionY, double direction,
-		int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka* ecranJeu):
+		int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu):
     m_couleur(couleur), m_positionX(positionX*10000), m_positionY(positionY*10000),        // la position du serpent est 100 fois plus précise que la position d'un pixel.
     m_direction(direction), m_vitesse(vitesse*10000), m_ecranJeu(ecranJeu)/*,
     m_reglesDirection(reglesDirection), m_reglesCollision(reglesCollision)*/ {
@@ -26,6 +26,19 @@ void Serpent::position(int posX, int posY) {
 
 void Serpent::direction(double direction) {
   m_direction = direction;
+}
+
+/**
+ * Fait avancer le serpent dans la direction donnée
+ * Le serpent calcule sa direction à partir de l'ordre donné, puis
+ * vérifie s'il n'entre pas en collision, et se déplace à l'écran.
+ *
+ * @param direction: la direction demandée
+ *
+ * @return: true si le serpent entre en collision
+ */
+bool Serpent::jouer(Direction direction) {
+	return false;
 }
 
 void Serpent::direction() {  //ATTENTION, la grosse feinte : les ordonnées étant croissantes vers le bas, on compte les angles positivement dans le SENS ANTI-TRIGONOMÉTRIQUE
@@ -73,7 +86,7 @@ void Serpent::traceSerpent(int posX, int posY, int nouvellePosX, int nouvellePos
   pixelY = getPixel(nouvellePosY);
   SDL_Rect position = {pixelX, pixelY};
 //  cout << pixelX << " " << pixelY << " " << m_positionX << " " << m_positionY << endl;
-  m_ecranJeu->tracerPoint(&position, m_couleur);
+  m_ecranJeu.tracerPoint(&position, m_couleur);
 }
 
 int Serpent::getPixel(int pos){   // à recoder avec un couple en entrée
