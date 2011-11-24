@@ -6,7 +6,7 @@ using namespace std;
 Zatacka::Zatacka(int largeur, int hauteur):
 		m_largeur(largeur), m_hauteur(hauteur),
 		m_largeurScores(100), m_ecran(NULL),
-		m_ecranJeu(largeur - m_largeurScores, m_largeurScores, hauteur),
+		m_ecranJeu(*this, largeur - m_largeurScores, m_largeurScores, hauteur),
 		m_points(8),
 		m_policeCalligraphiee(NULL),
 		m_policeBasique(NULL),
@@ -75,8 +75,8 @@ void Zatacka::initialiserCouleurs() {
 }
 
 void Zatacka::initialiserJeu() {
-    m_ecranJeu.colorerElements(&m_couleurs);
-    m_ecranJeu.initialiserScores(m_policeCalligraphiee);
+    m_ecranJeu.colorerElements();
+    m_ecranJeu.initialiserScores();
 }
 
 void Zatacka::afficherEcranPrincipal() {
@@ -355,7 +355,7 @@ void Zatacka::afficherJeu() {
     reglerRepetition(10);
 	effacer();
 
-	m_ecranJeu.demarrerPartie(m_ecran);
+	m_ecranJeu.demarrerPartie();
 	SDL_Flip(m_ecran);
 
     Serpent serpent1(VERT, 100, 100, -0.3, 1, this);
@@ -378,7 +378,7 @@ void Zatacka::afficherJeu() {
 	int score = 0;
 	bool bouclerPartie = true, attendre;
 	while (bouclerPartie) {
-		if (false==m_ecranJeu.jouerManche(m_ecran)) {
+		if (false==m_ecranJeu.jouerManche()) {
 			return;
 		}
 		m_ecranJeu.changerScore(0, ++score);
@@ -464,6 +464,9 @@ TTF_Font* Zatacka::policeCalligraphiee()
 
 TTF_Font* Zatacka::policeBasique()
 {	return m_policeBasique;	}
+
+SDL_Surface* Zatacka::ecran()
+{	return m_ecran;	}
 
 /**
  * Dessine un point d'une couleur donnée sur l'écran de jeu.

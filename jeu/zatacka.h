@@ -178,6 +178,7 @@ public:
 	SDL_Color* couleur(Couleur couleur);
 	TTF_Font* policeCalligraphiee();
 	TTF_Font* policeBasique();
+	SDL_Surface* ecran();
 
 	/**
 	 * Remplit une surface de la couleur demandee

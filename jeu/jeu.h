@@ -22,6 +22,8 @@ class Serpent;
 
 class Jeu: public ItemEcran {
 private:
+	Zatacka& m_jeu;
+
 	/**
 	 * Largeur du panneau des scores
 	 */
@@ -43,11 +45,6 @@ private:
 	Ecran m_ecranScores;
 
 	/**
-	 * Tableau des couleurs rgb à utiliser
-	 */
-	std::vector<SDL_Color*>* m_couleurs;
-
-	/**
 	 * Motifs de base pour le trace des serpents
 	 */
 	std::vector<SDL_Surface*> m_points;
@@ -59,11 +56,6 @@ private:
 	std::vector<TexteSDL> m_scores;
 
 	/**
-	 * Tableau des serpents des joueurs
-	 */
-	std::vector<Serpent>* m_joueurs;
-
-	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
 	void initialiserPoints() throw(InstanceManquante);
@@ -71,17 +63,17 @@ private:
 	void colorer(SDL_Surface* ecran, Couleur couleur) throw();
 
 public:
-	Jeu(int largeurJeu, int largeurScore, int hauteur)
+	Jeu(Zatacka& jeu, int largeurJeu, int largeurScore, int hauteur)
 		throw(InstanceManquante);
 	~Jeu();
 
     int largeur() const throw();
-	void colorerElements(std::vector<SDL_Color*>* couleurs) throw();
+	void colorerElements() throw();
 
 	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
-	void initialiserScores(TTF_Font* police) throw();
+	void initialiserScores() throw();
 
 	virtual void afficher(SDL_Surface* ecran);
 	void afficherJeu(SDL_Surface* ecran);
@@ -94,8 +86,8 @@ public:
 	 *
 	 * @param ecran: écran sur lequel on affiche la partie
 	 */
-	void demarrerPartie(SDL_Surface* ecran);
-	bool jouerManche(SDL_Surface* ecran);
+	void demarrerPartie();
+	bool jouerManche();
 
 	/**
 	 * Dessine un point d'une couleur donnée sur l'écran de jeu.

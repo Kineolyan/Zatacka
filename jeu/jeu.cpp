@@ -1,18 +1,17 @@
 #include "jeu.h"
-#include <iostream>
+#include "zatacka.h"
 
 using namespace std;
 
-Jeu::Jeu(int largeurJeu, int largeurScores, int hauteur)
+Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 	throw(InstanceManquante):
 		ItemEcran(largeurJeu, hauteur),
+		m_jeu(jeu),
 		m_largeurScores(largeurScores),
 		m_ecranJeu(largeurJeu, hauteur),
 		m_ecranScores(largeurScores, hauteur),
-		m_couleurs(NULL),
 		m_points(7),
-		m_scores(6),
-		m_joueurs(NULL) {
+		m_scores(6) {
 	m_positionScores.x = m_largeur;
 	m_positionScores.y = 0;
 
@@ -46,8 +45,9 @@ void Jeu::initialiserPoints() throw(InstanceManquante) {
 	}
 }
 
-void Jeu::initialiserScores(TTF_Font* police) throw() {
+void Jeu::initialiserScores() throw() {
     SDL_Rect position = {10, 10};
+    TTF_Font* police = m_jeu.policeCalligraphiee();
 
     int pas = (m_hauteur-20)/6;
     for (int i=0; i<6; i++) {
@@ -67,24 +67,22 @@ int Jeu::largeur() const throw()
 void Jeu::colorer(SDL_Surface* ecran, Couleur couleur) throw() {
 	SDL_FillRect(ecran, NULL,
 		SDL_MapRGB(m_ecranJeu.format(),
-			(*m_couleurs)[couleur]->r,
-			(*m_couleurs)[couleur]->g,
-			(*m_couleurs)[couleur]->b
+			m_jeu.couleur(couleur)->r,
+			m_jeu.couleur(couleur)->g,
+			m_jeu.couleur(couleur)->b
 		)
 	);
 }
 
-void Jeu::colorerElements(vector<SDL_Color*>* couleurs) throw() {
-	m_couleurs = couleurs;
+void Jeu::colorerElements() throw() {
+	m_ecranScores.couleur(m_jeu.couleur(GRIS));
 
-	m_ecranScores.couleur((*m_couleurs)[GRIS]);
-
-	m_scores[0].couleur((*m_couleurs)[ROUGE]);
-	m_scores[1].couleur((*m_couleurs)[JAUNE]);
-	m_scores[2].couleur((*m_couleurs)[ORANGE]);
-	m_scores[3].couleur((*m_couleurs)[VERT]);
-	m_scores[4].couleur((*m_couleurs)[VIOLET]);
-	m_scores[5].couleur((*m_couleurs)[BLEU]);
+	m_scores[0].couleur(m_jeu.couleur(ROUGE));
+	m_scores[1].couleur(m_jeu.couleur(JAUNE));
+	m_scores[2].couleur(m_jeu.couleur(ORANGE));
+	m_scores[3].couleur(m_jeu.couleur(VERT));
+	m_scores[4].couleur(m_jeu.couleur(VIOLET));
+	m_scores[5].couleur(m_jeu.couleur(BLEU));
 
 	colorer(m_points[0], ROUGE);
 	colorer(m_points[1], JAUNE);
@@ -160,18 +158,18 @@ void Jeu::changerScore(int joueurId, int score) throw() {
  *
  * @param ecran: écran sur lequel on affiche la partie
  */
-void Jeu::demarrerPartie(SDL_Surface* ecran) {
-    afficherJeu(ecran);
+void Jeu::demarrerPartie() {
+    afficherJeu(m_jeu.ecran());
 
     int i = 0, end = m_scores.size();
     for ( ; i<end; i++) {
 		changerScore(i, 0);
 	}
-	afficherScores(ecran);
+	afficherScores(m_jeu.ecran());
 }
 
-bool Jeu::jouerManche(SDL_Surface* ecran) {
-    afficherJeu(ecran);
+bool Jeu::jouerManche() {
+    afficherJeu(m_jeu.ecran());
 
     SDL_Event eventJeu;
     bool bouclerManche = true;
