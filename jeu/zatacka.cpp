@@ -1,5 +1,5 @@
 #include "zatacka.h"
-
+#include <iostream>
 
 using namespace std;
 
@@ -11,7 +11,8 @@ Zatacka::Zatacka(int largeur, int hauteur):
 		m_policeCalligraphiee(NULL),
 		m_policeBasique(NULL),
 		m_couleurs(8), m_optionJoueurs(6), m_options() {
-	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32, SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32,
+			SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
 	if (NULL==m_ecran) {
 		throw InstanceManquante("Impossible de creer l'ecran");
 	}
@@ -79,6 +80,7 @@ void Zatacka::initialiserJeu() {
 }
 
 void Zatacka::afficherEcranPrincipal() {
+	reglerRepetition(2000);
 	effacer();
 
 	TexteSDL texte("Achtung, die Kurve !", m_policeCalligraphiee, m_couleurs[BLANC]);
@@ -146,6 +148,7 @@ void Zatacka::creerMenuPrincipal() {
 }
 
 void Zatacka::afficherMenuPrincipal() {
+	reglerRepetition(2000);
 	effacer();
 
 	TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
@@ -349,11 +352,13 @@ void Zatacka::afficherMenuOptions() {
 }
 
 void Zatacka::afficherJeu() {
+    reglerRepetition(10);
 	effacer();
+
 	m_ecranJeu.demarrerPartie(m_ecran);
 	SDL_Flip(m_ecran);
 
-	Serpent serpent1(VERT, 100, 100, -0.3, 1, this);
+    Serpent serpent1(VERT, 100, 100, -0.3, 1, this);
 	Serpent serpent2(JAUNE, 200, 100, -1.3, 1, this);
 	Serpent serpent3(ROUGE, 300, 100, -1.3, 1, this);
 	Serpent serpent4(BLEU, 100, 300, -3.3, 1, this);
@@ -368,93 +373,50 @@ void Zatacka::afficherJeu() {
 	  serpent6.avance();
 	  SDL_Delay(5);
 	}
-	SDL_Flip(m_ecran);
 
-//  SDL_Rect positionSerpent = {100, 100};
-//	for (int i=0; i<10; i++) {
-//		positionSerpent.x+= 3;
-//		tracerPoint(&positionSerpent, JAUNE);
-//	}
+	SDL_Event eventManche;
+	int score = 0;
+	bool bouclerPartie = true, attendre;
+	while (bouclerPartie) {
+		if (false==m_ecranJeu.jouerManche(m_ecran)) {
+			return;
+		}
+		m_ecranJeu.changerScore(0, ++score);
+		m_ecranJeu.changerScore(1, ++score);
+		m_ecranJeu.changerScore(2, ++score);
+		m_ecranJeu.changerScore(3, ++score);
+		m_ecranJeu.changerScore(4, ++score);
+		m_ecranJeu.changerScore(5, ++score);
+		m_ecranJeu.afficherScores(m_ecran);
+		SDL_Flip(m_ecran);
+		SDL_Delay(1000);
 
-	SDL_Event event;
-	int score = 0, utilisationRetour = 0;
-	bool boucler = true;
-	while (boucler) {
-		SDL_PollEvent(&event);
-		switch (event.type) {
-		case SDL_KEYDOWN:
-			switch (event.key.keysym.unicode) {
-			case SDLK_ESCAPE:
-				return;
+		attendre = true;
+		while (attendre) {
+			SDL_WaitEvent(&eventManche);
+			switch (eventManche.type) {
+			case SDL_KEYDOWN:
+				switch (eventManche.key.keysym.unicode) {
+				case SDLK_ESCAPE:
+					return;
 
-			case SDLK_BACKSPACE:
-				if (++utilisationRetour>2) {
-					boucler = false;
-					m_ecranAAfficher = ACCUEIL;
+				case SDLK_BACKSPACE:
+						m_ecranAAfficher = ACCUEIL;
+						bouclerPartie = false;
+						attendre = false;
+					break;
+
+				case SDLK_SPACE:
+					attendre = false;
+					break;
+
+				default:
+					break;
 				}
-				break;
-
-			case SDLK_SPACE:
-                m_ecranJeu.changerScore(0, ++score);
-                m_ecranJeu.changerScore(1, ++score);
-                m_ecranJeu.changerScore(2, ++score);
-                m_ecranJeu.changerScore(3, ++score);
-                m_ecranJeu.changerScore(4, ++score);
-                m_ecranJeu.changerScore(5, ++score);
-                m_ecranJeu.afficherScores(m_ecran);
-                m_ecranJeu.demarrerManche(m_ecran);
-                SDL_Flip(m_ecran);
-				break;
-
-			case SDLK_AMPERSAND:
-			case SDLK_a:
-				//m_joueurs[0].joueur(event);
-				break;
-
-			case SDLK_x:
-			case SDLK_c:
-				//m_joueurs[1].joueur(event);
-				break;
-
-			case SDLK_COMMA:
-			case SDLK_SEMICOLON:
-				//m_joueurs[2].joueur(event);
-				break;
-
-			case SDLK_SLASH:
-			case SDLK_ASTERISK:
-				//m_joueurs[4].joueur(event);
-				break;
 
 			default:
 				break;
 			}
-
-			switch (event.key.keysym.sym) {
-			case SDLK_LEFT:
-			case SDLK_DOWN:
-				//m_joueurs[3].joueur(event);
-				break;
-
-			default:
-				break;
-			}
-			break;
-
-		case SDL_MOUSEBUTTONDOWN:
-			switch (event.button.button) {
-			case SDL_BUTTON_LEFT:
-			case SDL_BUTTON_RIGHT:
-				//m_joueurs[5].joueur(event);
-				break;
-
-			default:
-				break;
-			}
-			break;
-
-		default:
-			break;
 		}
 	}
 	afficher(m_ecranAAfficher);
@@ -563,5 +525,12 @@ Couleur Zatacka::donnerCouleur(const SDL_Rect& position) {
  * @throw TraceImpossible
  */
 void Zatacka::changerScore(int joueurId, int score) {
+	m_ecranJeu.changerScore(joueurId, score);
+}
 
+void Zatacka::reglerRepetition(int t) {
+	if (t<1) {
+		t = 1;
+	}
+	SDL_EnableKeyRepeat(t, t);
 }

@@ -152,6 +152,15 @@ private:
 	 */
 	void effacer();
 
+	/**
+	 * Regle les temps de répétition des touches
+	 * Lorsqu'une touche reste enfoncée, on regénère un événement au bout de
+	 * t millisecondes.
+	 *
+	 * @param t: temps d'écart entre deux répétitions
+	 */
+	void reglerRepetition(int t);
+
 public:
 	/**
 	 * Constructeur
