@@ -26,12 +26,14 @@ public:
 			SDL_Color* couleur);
 	~Option();
 
-	void position(const SDL_Rect& position);
+	void position(const SDL_Rect& position)
+			throw(InstanceManquante);
 	void position(const SDL_Rect& positionOption,
-			const SDL_Rect& positionEtat);
-	void activer();
-	void desactiver();
-	void echanger();
+			const SDL_Rect& positionEtat)
+			throw(InstanceManquante);
+	void activer() throw();
+	void desactiver() throw();
+	void echanger() throw();
 
 	virtual void afficher(SDL_Surface* ecran);
 };

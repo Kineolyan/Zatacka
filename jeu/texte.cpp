@@ -36,40 +36,40 @@ TexteSDL::~TexteSDL() {
 	}
 }
 
-void TexteSDL::contenu(string contenu) {
+void TexteSDL::contenu(string contenu) throw() {
 	m_contenu = contenu;
 	m_surfaceAJour = false;
 }
 
-void TexteSDL::police(TTF_Font* police) {
+void TexteSDL::police(TTF_Font* police) throw() {
 	m_police = police;
 	m_surfaceAJour = false;
 }
 
-void TexteSDL::couleur(SDL_Color* couleur) {
+void TexteSDL::couleur(SDL_Color* couleur) throw() {
 	m_couleur = couleur;
 	m_surfaceAJour = false;
 }
 
-void TexteSDL::position(const SDL_Rect& position) {
+void TexteSDL::position(const SDL_Rect& position) throw() {
 	ItemEcran::position(position);
 }
 
-int TexteSDL::largeur() {
+int TexteSDL::largeur() throw(InstanceManquante) {
 	if (false==m_surfaceAJour) {
 		texte();
 	}
 	return m_largeur;
 }
 
-int TexteSDL::hauteur() {
+int TexteSDL::hauteur() throw(InstanceManquante) {
 	if (false==m_surfaceAJour) {
 		texte();
 	}
 	return m_hauteur;
 }
 
-SDL_Surface* TexteSDL::texte() {
+SDL_Surface* TexteSDL::texte() throw(InstanceManquante) {
 	if (NULL==m_police) {
 		throw InstanceManquante(string("La police du texte '")
 			+ m_contenu +"' n'est pas chargee");

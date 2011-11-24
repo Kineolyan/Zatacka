@@ -3,7 +3,8 @@
 
 using namespace std;
 
-Jeu::Jeu(int largeurJeu, int largeurScores, int hauteur):
+Jeu::Jeu(int largeurJeu, int largeurScores, int hauteur)
+	throw(InstanceManquante):
 		ItemEcran(largeurJeu, hauteur),
 		m_largeurScores(largeurScores),
 		m_ecranJeu(largeurJeu, hauteur),
@@ -33,7 +34,7 @@ Jeu::~Jeu() {
 	}
 }
 
-void Jeu::initialiserPoints() {
+void Jeu::initialiserPoints() throw(InstanceManquante) {
 	for (int i=0; i<7; i++) {
 		m_points[i] = SDL_CreateRGBSurface(SDL_HWSURFACE,
 			3, 3, 32, 0, 0, 0, 0);
@@ -45,7 +46,7 @@ void Jeu::initialiserPoints() {
 	}
 }
 
-void Jeu::initialiserScores(TTF_Font* police) {
+void Jeu::initialiserScores(TTF_Font* police) throw() {
     SDL_Rect position = {10, 10};
 
     int pas = (m_hauteur-20)/6;
@@ -57,13 +58,13 @@ void Jeu::initialiserScores(TTF_Font* police) {
     }
 }
 
-int Jeu::largeur()
+int Jeu::largeur() const throw()
 {   return m_largeur + m_largeurScores; }
 
 /**
  * Remplit une surface de la couleur demandee
  */
-void Jeu::colorer(SDL_Surface* ecran, Couleur couleur) {
+void Jeu::colorer(SDL_Surface* ecran, Couleur couleur) throw() {
 	SDL_FillRect(ecran, NULL,
 		SDL_MapRGB(m_ecranJeu.format(),
 			(*m_couleurs)[couleur]->r,
@@ -73,7 +74,7 @@ void Jeu::colorer(SDL_Surface* ecran, Couleur couleur) {
 	);
 }
 
-void Jeu::colorerElements(vector<SDL_Color*>* couleurs) {
+void Jeu::colorerElements(vector<SDL_Color*>* couleurs) throw() {
 	m_couleurs = couleurs;
 
 	m_ecranScores.couleur((*m_couleurs)[GRIS]);
@@ -118,12 +119,14 @@ void Jeu::afficherScores(SDL_Surface* ecran) {
  * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
  * sur un autre écran lancera une exception.
  *
+ * @param ecran: ecran sur lequel on trace le point
  * @param position: position du point à tracer
  * @param couleur: nom de la couleur à utiliser
  *
  * @throw TraceImpossible
  */
-void Jeu::tracerPoint(SDL_Surface* ecran, SDL_Rect* position, Couleur couleur) {
+void Jeu::tracerPoint(SDL_Surface* ecran, SDL_Rect* position,
+		Couleur couleur) const throw(TraceImpossible) {
 	if (position->x <0 || position->x >m_largeur) {
 		throw TraceImpossible("La position est hors du cadre.");
 	}
@@ -143,15 +146,20 @@ void Jeu::tracerPoint(SDL_Surface* ecran, SDL_Rect* position, Couleur couleur) {
  * @param joueurId: Id du joueur dont le score change. Cela correspond
  * 	a l'index du texte de score dans le vecteur m_scores
  * @param score: le nouveau score à afficher
- *
- * @throw TraceImpossible
  */
-void Jeu::changerScore(int joueurId, int score) {
+void Jeu::changerScore(int joueurId, int score) throw() {
     stringstream convertisseur;
     convertisseur << score;
     m_scores[joueurId].contenu(convertisseur.str());
 }
 
+/**
+ * Démarre une partie de zatacka
+ * On affiche l'écran de jeu (vide) et on remet les scores à 0
+ * avant de les afficher.
+ *
+ * @param ecran: écran sur lequel on affiche la partie
+ */
 void Jeu::demarrerPartie(SDL_Surface* ecran) {
     afficherJeu(ecran);
 

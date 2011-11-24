@@ -25,16 +25,44 @@ protected:
 	SDL_Rect m_position;
 
 public:
+	/**
+	 * Constructeur par défaut
+	 */
 	ItemEcran();
+
+	/**
+	 * Constructeur
+	 *
+	 * @param largeur: largeur de l'écran
+	 * @param hauteur: hauteur de l'écran
+	 */
 	ItemEcran(int largeur, int hauteur);
+
+	/**
+	 * Constructeur
+	 *
+	 * @param position: position de l'écran
+	 */
 	ItemEcran(const SDL_Rect& position);
+
+	/**
+	 * Constructeur
+	 *
+	 * @param largeur: largeur de l'écran
+	 * @param hauteur: hauteur de l'écran
+	 * @param position: position de l'écran
+	 */
 	ItemEcran(int largeur, int hauteur, const SDL_Rect& position);
 
-	int hauteur();
-	int largeur();
-	SDL_Rect position();
-	void position(const SDL_Rect& position);
+	/* -- Accesseurs et mutateurs -- */
+	int hauteur() const throw();
+	int largeur() const throw();
+	SDL_Rect position() const throw();
+	void position(const SDL_Rect& position) throw();
 
+	/**
+	 * Affiche l'item sur l'écran de destination
+	 */
 	virtual void afficher(SDL_Surface* ecran)=0;
 };
 

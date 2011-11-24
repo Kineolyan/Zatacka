@@ -22,7 +22,7 @@ Option::Option(string texte, string optionActive, string optionInactive,
 Option::~Option()
 {}
 
-void Option::position(const SDL_Rect& position) {
+void Option::position(const SDL_Rect& position) throw(InstanceManquante) {
 	Ecran::position(position);
 
 	SDL_Rect positionTexte = {0, 0};
@@ -34,7 +34,7 @@ void Option::position(const SDL_Rect& position) {
 }
 
 void Option::position(const SDL_Rect& positionOption,
-		const SDL_Rect& positionEtat) {
+		const SDL_Rect& positionEtat) throw(InstanceManquante) {
 	Ecran::position(positionOption);
 
 	SDL_Rect positionTexte = {0, 0};
@@ -53,13 +53,13 @@ void Option::position(const SDL_Rect& positionOption,
 	redimensionner(m_largeur, m_hauteur);
 }
 
-void Option::activer()
+void Option::activer() throw()
 {	m_active = true;	}
 
-void Option::desactiver()
+void Option::desactiver() throw()
 {	m_active = false;	}
 
-void Option::echanger()
+void Option::echanger() throw()
 {	m_active = !m_active;	}
 
 void Option::afficher(SDL_Surface* ecran) {

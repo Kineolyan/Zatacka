@@ -33,20 +33,20 @@ Ecran::~Ecran() {
 	SDL_FreeSurface(m_ecran);
 }
 
-SDL_PixelFormat* Ecran::format()
+SDL_PixelFormat* Ecran::format() const throw()
 {   return m_ecran->format; }
 
-SDL_Surface* Ecran::ecran()
+SDL_Surface* Ecran::ecran() const throw()
 {   return m_ecran; }
 
-void Ecran::colorer() {
+void Ecran::colorer() throw() {
 	SDL_FillRect(m_ecran, NULL,
 		SDL_MapRGB(m_ecran->format,
 			m_couleur.r, m_couleur.g, m_couleur.b)
 	);
 }
 
-void Ecran::couleur(SDL_Color* couleur) {
+void Ecran::couleur(SDL_Color* couleur) throw() {
 	m_couleur.r = couleur->r;
 	m_couleur.g = couleur->g;
 	m_couleur.b = couleur->b;
@@ -54,15 +54,30 @@ void Ecran::couleur(SDL_Color* couleur) {
 	colorer();
 }
 
+/**
+ * Affiche l'écran sur l'écran de destination
+ *
+ * @param ecran: ecran sur lequel on affiche l'instance
+ */
 void Ecran::afficher(SDL_Surface* ecran) {
 	SDL_BlitSurface(m_ecran, NULL, ecran, &m_position);
 }
 
-void Ecran::effacer() {
+/**
+ * Efface l'écran en lui redonnant sa couleur d'origine
+ */
+void Ecran::effacer() throw() {
 	colorer();
 }
 
-void Ecran::redimensionner(int largeur, int hauteur) {
+/**
+ * Redimensionne l'écran aux nouvelles spécifications
+ * L'écran précédent est libéré et un nouveau est alloué
+ *
+ * @param largeur: nouvelle largeur
+ * @param hauteur: nouvelle hauteur
+ */
+void Ecran::redimensionner(int largeur, int hauteur) throw() {
 	m_largeur = largeur;
 	m_hauteur = hauteur;
 

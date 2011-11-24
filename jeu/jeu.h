@@ -66,25 +66,34 @@ private:
 	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
-	void initialiserPoints();
+	void initialiserPoints() throw(InstanceManquante);
 
-	void colorer(SDL_Surface* ecran, Couleur couleur);
+	void colorer(SDL_Surface* ecran, Couleur couleur) throw();
 
 public:
-	Jeu(int largeurJeu, int largeurScore, int hauteur);
+	Jeu(int largeurJeu, int largeurScore, int hauteur)
+		throw(InstanceManquante);
 	~Jeu();
 
-    int largeur();
-	void colorerElements(std::vector<SDL_Color*>* couleurs);
+    int largeur() const throw();
+	void colorerElements(std::vector<SDL_Color*>* couleurs) throw();
 
 	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
-	void initialiserScores(TTF_Font* police);
+	void initialiserScores(TTF_Font* police) throw();
 
 	virtual void afficher(SDL_Surface* ecran);
 	void afficherJeu(SDL_Surface* ecran);
 	void afficherScores(SDL_Surface* ecran);
+
+	/**
+	 * Démarre une partie de zatacka
+	 * On affiche l'écran de jeu (vide) et on remet les scores à 0
+	 * avant de les afficher.
+	 *
+	 * @param ecran: écran sur lequel on affiche la partie
+	 */
 	void demarrerPartie(SDL_Surface* ecran);
 	bool jouerManche(SDL_Surface* ecran);
 
@@ -93,12 +102,14 @@ public:
 	 * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
 	 * sur un autre écran lancera une exception.
 	 *
+	 * @param ecran: ecran sur lequel on trace le point
 	 * @param position: position du point à tracer
 	 * @param couleur: nom de la couleur à utiliser
 	 *
 	 * @throw TraceImpossible
 	 */
-	void tracerPoint(SDL_Surface* ecran, SDL_Rect* position, Couleur couleur);
+	void tracerPoint(SDL_Surface* ecran, SDL_Rect* position,
+			Couleur couleur) const throw(TraceImpossible);
 
 	/**
 	 * Renvoie la couleur des pixels d'une position donnee
@@ -113,10 +124,8 @@ public:
 	 * @param joueurId: Id du joueur dont le score change. Cela correspond
 	 * 	a l'index du texte de score dans le vecteur m_scores
 	 * @param score: le nouveau score à afficher
-	 *
-	 * @throw TraceImpossible
 	 */
-	void changerScore(int joueurId, int score);
+	void changerScore(int joueurId, int score) throw();
 };
 
 #endif /* JEU_H_ */

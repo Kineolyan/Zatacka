@@ -29,13 +29,13 @@ public:
 			SDL_Color* couleur, const SDL_Rect& position);
 	~TexteSDL();
 
-	int largeur();
-	int hauteur();
-	SDL_Surface* texte();
-	void contenu(std::string contenu);
-	void police(TTF_Font* police);
-	void couleur(SDL_Color* couleur);
-	void position(const SDL_Rect& position);
+	int largeur() throw(InstanceManquante);
+	int hauteur() throw(InstanceManquante);
+	SDL_Surface* texte() throw(InstanceManquante);
+	void contenu(std::string contenu) throw();
+	void police(TTF_Font* police) throw();
+	void couleur(SDL_Color* couleur) throw();
+	void position(const SDL_Rect& position) throw();
 
 	virtual void afficher(SDL_Surface* ecran);
 };
