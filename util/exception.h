@@ -13,10 +13,11 @@
 
 class ExceptionGenerale: public std::exception {
 protected:
+    std::string m_prefixe;
     std::string m_message;
 
 public:
-    ExceptionGenerale(std::string message) throw();
+    ExceptionGenerale(std::string message, std::string prefixe = "") throw();
     virtual ~ExceptionGenerale() throw();
 
     virtual const char* what() const throw();
@@ -26,16 +27,18 @@ class InstanceManquante: public ExceptionGenerale {
 public:
     InstanceManquante(std::string message) throw();
     virtual ~InstanceManquante() throw();
-
-    virtual const char* what() const throw();
 };
 
 class TraceImpossible: public ExceptionGenerale {
 public:
 	TraceImpossible(std::string message) throw();
     virtual ~TraceImpossible() throw();
+};
 
-    virtual const char* what() const throw();
+class HorsLimite: public ExceptionGenerale {
+public:
+	HorsLimite(std::string message) throw();
+    virtual ~HorsLimite() throw();
 };
 
 #endif /* EXCEPTION_H_ */
