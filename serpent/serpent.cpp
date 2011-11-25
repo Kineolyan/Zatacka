@@ -55,16 +55,32 @@ bool Serpent::vaMourir(){
 	return false;
 }
 
-void Serpent::avance(){
+void Serpent::seDirigeVers(Direction cote) {
+    switch(cote) {
+    case DROITE:
+        direction(1);
+        break;
+
+    case GAUCHE:
+        direction(-1);
+        break;
+
+    default:
+        break;
+    }
+}
+
+bool Serpent::avance(){
   if (!vaMourir()){
     int nouvellePosX;
     int nouvellePosY;
-    direction(1);
     nouvellePosX = m_positionX + m_vitesse * cos(m_direction);
     nouvellePosY = m_positionY + m_vitesse * sin(m_direction);
     traceSerpent(m_positionX, m_positionY, nouvellePosX, nouvellePosY);
     position(nouvellePosX, nouvellePosY);
   }
+
+  return true;
 }
 
 void Serpent::traceSerpent(int posX, int posY, int nouvellePosX, int nouvellePosY){

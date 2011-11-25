@@ -112,10 +112,12 @@ public:
    */
   bool vaMourir();
 
+  void seDirigeVers(Direction direction);
+
   /**
    * Fait avancer le serpent
    */
-  void avance();
+  bool avance();
 
   /**
    * Trace une nouvelle section de serpent
