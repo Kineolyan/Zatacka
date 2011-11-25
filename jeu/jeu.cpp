@@ -196,16 +196,6 @@ void Jeu::demarrerPartie() {
 }
 
 bool Jeu::jouerManche() {
-	for (int i=0 ; i<180 ; i++) {
-	  m_joueurs[0]->avance();
-	  m_joueurs[1]->avance();
-	  m_joueurs[2]->avance();
-	  m_joueurs[3]->avance();
-	  m_joueurs[4]->avance();
-	  m_joueurs[5]->avance();
-	  SDL_Delay(5);
-	}
-
     afficherJeu(m_jeu.ecran());
 
     SDL_Event eventJeu;
@@ -223,24 +213,32 @@ bool Jeu::jouerManche() {
 				break;
 
 			case SDLK_AMPERSAND:
+                m_joueurs[0]->seDirigeVers(GAUCHE);
+                break;
 			case SDLK_a:
-				//m_joueurs[0].joueur(event);
+				m_joueurs[0]->seDirigeVers(DROITE);
 				break;
 
 			case SDLK_x:
+                m_joueurs[1]->seDirigeVers(GAUCHE);
+                break;
 			case SDLK_c:
-				//m_joueurs[1].joueur(event);
+				m_joueurs[1]->seDirigeVers(DROITE);
 				break;
 
 			case SDLK_COMMA:
+                m_joueurs[2]->seDirigeVers(GAUCHE);
+                break;
 			case SDLK_SEMICOLON:
-				//m_joueurs[2].joueur(event);
-				break;
+                m_joueurs[2]->seDirigeVers(DROITE);
+                break;
 
 			case SDLK_SLASH:
+                m_joueurs[4]->seDirigeVers(GAUCHE);
+                break;
 			case SDLK_ASTERISK:
-				//m_joueurs[4].joueur(event);
-				break;
+                m_joueurs[4]->seDirigeVers(DROITE);
+                break;
 
 			default:
 				break;
@@ -248,9 +246,11 @@ bool Jeu::jouerManche() {
 
 			switch (eventJeu.key.keysym.sym) {
 			case SDLK_LEFT:
+                m_joueurs[3]->seDirigeVers(GAUCHE);
+                break;
 			case SDLK_DOWN:
-				//m_joueurs[3].joueur(event);
-				break;
+                m_joueurs[3]->seDirigeVers(DROITE);
+                break;
 
 			default:
 				break;
@@ -260,9 +260,11 @@ bool Jeu::jouerManche() {
 		case SDL_MOUSEBUTTONDOWN:
 			switch (eventJeu.button.button) {
 			case SDL_BUTTON_LEFT:
+                m_joueurs[5]->seDirigeVers(GAUCHE);
+                break;
 			case SDL_BUTTON_RIGHT:
-				//m_joueurs[5].joueur(event);
-				break;
+                m_joueurs[5]->seDirigeVers(DROITE);
+                break;
 
 			default:
 				break;
@@ -272,6 +274,14 @@ bool Jeu::jouerManche() {
 		default:
 			break;
 		}
+
+		m_joueurs[0]->avance();
+        m_joueurs[1]->avance();
+        m_joueurs[2]->avance();
+        m_joueurs[3]->avance();
+        m_joueurs[4]->avance();
+        m_joueurs[5]->avance();
+        SDL_Delay(5);
 	}
     return true;
 }
