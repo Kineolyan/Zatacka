@@ -44,6 +44,8 @@ private:
 	 */
 	Ecran m_ecranScores;
 
+	std::vector<Serpent*> m_joueurs;
+
 	/**
 	 * Motifs de base pour le trace des serpents
 	 */
@@ -69,6 +71,9 @@ public:
 
     int largeur() const throw();
 	void colorerElements() throw();
+	Serpent* joueur(int joueurId) throw();
+
+	void initialiserJoueurs() throw(InstanceManquante);
 
 	/**
 	 * Donne à chaque score une couleur, une police et une position

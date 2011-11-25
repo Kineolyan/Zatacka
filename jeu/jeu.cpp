@@ -10,6 +10,7 @@ Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 		m_largeurScores(largeurScores),
 		m_ecranJeu(largeurJeu, hauteur),
 		m_ecranScores(largeurScores, hauteur),
+		m_joueurs(6),
 		m_points(7),
 		m_scores(6) {
 	m_positionScores.x = m_largeur;
@@ -17,6 +18,11 @@ Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 
 	m_ecranJeu.position(m_position);
 	m_ecranScores.position(m_positionScores);
+
+	for (vector<Serpent*>::iterator it = m_joueurs.begin(),
+		end = m_joueurs.end() ; it!=end; it++) {
+		*it = NULL;
+	}
 
 	for (vector<SDL_Surface*>::iterator it = m_points.begin(),
 		end = m_points.end() ; it!=end; it++) {
@@ -27,18 +33,39 @@ Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 }
 
 Jeu::~Jeu() {
+    for (vector<Serpent*>::iterator it = m_joueurs.begin(),
+		end = m_joueurs.end() ; it!=end; it++) {
+		delete *it;
+	}
+
     for (vector<SDL_Surface*>::iterator it = m_points.begin(),
 		end = m_points.end() ; it!=end; it++) {
 		SDL_FreeSurface(*it);
 	}
 }
 
+void Jeu::initialiserJoueurs() throw(InstanceManquante) {
+    int index = 0;
+	for (vector<Serpent*>::iterator it = m_joueurs.begin(),
+		end = m_joueurs.end() ; it!=end; it++) {
+		*it = new Serpent((Couleur)index, 100 + index*20,
+                    100 + index*10, -0.3, 1, m_jeu);
+
+		if (NULL==*it) {
+			throw InstanceManquante(
+					"Impossible de creer un motif de trace");
+		}
+		++index;
+	}
+}
+
 void Jeu::initialiserPoints() throw(InstanceManquante) {
-	for (int i=0; i<7; i++) {
-		m_points[i] = SDL_CreateRGBSurface(SDL_HWSURFACE,
+	for (vector<SDL_Surface*>::iterator it = m_points.begin(),
+		end = m_points.end() ; it!=end; it++) {
+		*it = SDL_CreateRGBSurface(SDL_HWSURFACE,
 			3, 3, 32, 0, 0, 0, 0);
 
-		if (NULL==m_points[i]) {
+		if (NULL==*it) {
 			throw InstanceManquante(
 					"Impossible de creer un motif de trace");
 		}
@@ -169,6 +196,16 @@ void Jeu::demarrerPartie() {
 }
 
 bool Jeu::jouerManche() {
+	for (int i=0 ; i<180 ; i++) {
+	  m_joueurs[0]->avance();
+	  m_joueurs[1]->avance();
+	  m_joueurs[2]->avance();
+	  m_joueurs[3]->avance();
+	  m_joueurs[4]->avance();
+	  m_joueurs[5]->avance();
+	  SDL_Delay(5);
+	}
+
     afficherJeu(m_jeu.ecran());
 
     SDL_Event eventJeu;

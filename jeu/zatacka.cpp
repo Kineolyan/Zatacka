@@ -76,6 +76,7 @@ void Zatacka::initialiserCouleurs() {
 
 void Zatacka::initialiserJeu() {
     m_ecranJeu.colorerElements();
+    m_ecranJeu.initialiserJoueurs();
     m_ecranJeu.initialiserScores();
 }
 
@@ -357,22 +358,6 @@ void Zatacka::afficherJeu() {
 
 	m_ecranJeu.demarrerPartie();
 	SDL_Flip(m_ecran);
-
-    Serpent serpent1(VERT, 100, 100, -0.3, 1, this);
-	Serpent serpent2(JAUNE, 200, 100, -1.3, 1, this);
-	Serpent serpent3(ROUGE, 300, 100, -1.3, 1, this);
-	Serpent serpent4(BLEU, 100, 300, -3.3, 1, this);
-	Serpent serpent5(VIOLET, 200, 300, -6.3, 1, this);
-	Serpent serpent6(ORANGE, 300, 300, -7.3, 1, this);
-	for (int i=0 ; i<180 ; i++) {
-	  serpent1.avance();
-	  serpent2.avance();
-	  serpent3.avance();
-	  serpent4.avance();
-	  serpent5.avance();
-	  serpent6.avance();
-	  SDL_Delay(5);
-	}
 
 	SDL_Event eventManche;
 	int score = 0;

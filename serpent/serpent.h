@@ -67,14 +67,14 @@ private:
   /**
    * Gestionnaire de l'écran de jeu
    */
-  Zatacka* m_ecranJeu;
+  Zatacka& m_ecranJeu;
 
 public:
 	/**
 	 * Constructeur :
 	 * - posX et posY sont les coordonnées de la tête du serpent en PIXELS
 	 */
-	Serpent(Couleur couleur, int posX, int posY, double direction, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka* ecranJeu);
+	Serpent(Couleur couleur, int posX, int posY, double direction, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu);
 
 	/**
 	 * Destructeur
@@ -88,7 +88,7 @@ public:
    *     - sans argument pour calculer une éventuelle nouvelle direction, et la modifier le cas échéant
    */
   void direction(double direction);
-  void direction();
+  void direction(int multiplicateur);
 
   /**
    * Change la position
