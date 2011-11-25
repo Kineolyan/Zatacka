@@ -23,6 +23,10 @@ class Zatacka;
  */
 class Serpent {
 private:
+    struct Coordonnees {
+        int x;
+        int y;
+    };
 
   /**
    * Couleur du serpent
@@ -30,14 +34,19 @@ private:
   Couleur m_couleur;
 
 	/**
- 	 * Abscisse de la tête
+ 	 * Cordonnées du serpent sur sa grille virtuelle
 	 */
-	int m_positionX;
+	Coordonnees m_position;
 
 	/**
- 	 * Ordonnée de la tête
+ 	 * Coordonnées du pixel à l'écran
 	 */
-	int m_positionY;
+	Coordonnees m_pixel;
+
+	/**
+ 	 * Coordonnées du pixel du bas de l'écran
+	 */
+	Coordonnees m_limites;
 
 	/**
 	 * Direction, en radians (sur IR)
@@ -48,6 +57,8 @@ private:
 	 * Vitesse, en pixels/iteration
 	 */
 	int m_vitesse;
+
+	bool m_vivant;
 
 	/**
 	 * Score du serpent (en fait du joueur, mais on confond les deux)
@@ -67,7 +78,7 @@ private:
   /**
    * Gestionnaire de l'écran de jeu
    */
-  Zatacka& m_ecranJeu;
+  Zatacka& m_jeu;
 
 public:
 	/**
@@ -94,6 +105,7 @@ public:
    * Change la position
    */
   void position(int posX, int posY);
+  void pixel(int pixelX, int pixelY);
 
   /**
    * Change la vitesse
@@ -107,22 +119,26 @@ public:
    */
   //void regles(string nomRegles, Regles regles);
 
+    bool collision(int positionX, int positionY)
+        const throw(HorsLimite);
+
   /**
    * Détermine si le serpent meurt à cette itération
    */
-  bool vaMourir();
+  bool vaMourir(int positionX, int positionY)
+        const throw(HorsLimite);
 
   void seDirigeVers(Direction direction);
 
   /**
    * Fait avancer le serpent
    */
-  bool avance();
+  bool avance() throw(HorsLimite, TraceImpossible);
 
   /**
    * Trace une nouvelle section de serpent
    */
-  void traceSerpent(int posX, int posY, int nouvellePosX, int nouvellePosY);
+  void trace(int nouvellePosX, int nouvellePosY);
 
   /**
    * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)

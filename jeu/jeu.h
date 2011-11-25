@@ -8,6 +8,9 @@
 #ifndef JEU_H_
 #define JEU_H_
 
+#define TAILLE_SERPENT 3
+#define ECART 1
+
 #include <SDL/SDL.h>
 #include <vector>
 #include <sstream>

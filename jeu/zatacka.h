@@ -179,8 +179,10 @@ public:
 	 */
 	~Zatacka();
 
-	int hauteur();
-	int largeur();
+	int hauteur() const throw();
+	int largeur() const throw();
+	int hauteurJeu() const throw();
+	int largeurJeu() const throw();
 	SDL_Color* couleur(Couleur couleur);
 	TTF_Font* policeCalligraphiee();
 	TTF_Font* policeBasique();
@@ -206,7 +208,7 @@ public:
 	/**
 	 * Renvoie la couleur des pixels d'une position donnee
 	 */
-	Couleur donnerCouleur(const SDL_Rect& position);
+	Couleur donnerCouleur(const SDL_Rect& position) const throw(HorsLimite);
 
 	/**
 	 * Met à jour le score d'un joueur

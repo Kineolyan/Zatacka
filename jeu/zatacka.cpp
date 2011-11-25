@@ -372,7 +372,7 @@ void Zatacka::afficherMenuOptions() {
 }
 
 void Zatacka::afficherJeu() {
-    reglerRepetition(10);
+    reglerRepetition(100);
 	effacer();
 
 	m_ecranJeu.demarrerPartie();
@@ -454,11 +454,17 @@ void Zatacka::effacer() {
 		SDL_MapRGB(m_ecran->format, 0, 0, 0));
 }
 
-int Zatacka::hauteur()
+int Zatacka::hauteur() const throw()
 {	return m_hauteur;	}
 
-int Zatacka::largeur()
+int Zatacka::largeur() const throw()
 {	return m_largeur;	}
+
+int Zatacka::hauteurJeu() const throw()
+{	return m_hauteur;	}
+
+int Zatacka::largeurJeu() const throw()
+{	return m_largeur - m_largeurScores;	}
 
 SDL_Color* Zatacka::couleur(Couleur couleur)
 {	return m_couleurs[couleur];	}
@@ -494,7 +500,16 @@ void Zatacka::tracerPoint(SDL_Rect* position, Couleur couleur) {
 /**
  * Renvoie la couleur des pixels d'une position donnee
  */
-Couleur Zatacka::donnerCouleur(const SDL_Rect& position) {
+Couleur Zatacka::donnerCouleur(const SDL_Rect& position)
+        const throw(HorsLimite){
+    if (position.x <0 || position.x >m_largeur) {
+		throw HorsLimite("Acces a une position hors de l'ecran (largeur)");
+	}
+
+	if (position.y <0 || position.y >m_hauteur) {
+		throw HorsLimite("Acces a une position hors de l'ecran (hauteur)");
+	}
+
 	Uint32 pixel = ((Uint32*)m_ecran->pixels)[position.y * m_ecran->w + position.x];
 
 	SDL_Color couleurPixel = {0, 0, 0};

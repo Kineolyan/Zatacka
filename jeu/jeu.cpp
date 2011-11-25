@@ -1,5 +1,6 @@
 #include "jeu.h"
 #include "zatacka.h"
+#include <iostream>
 
 using namespace std;
 
@@ -63,7 +64,7 @@ void Jeu::initialiserPoints() throw(InstanceManquante) {
 	for (vector<SDL_Surface*>::iterator it = m_points.begin(),
 		end = m_points.end() ; it!=end; it++) {
 		*it = SDL_CreateRGBSurface(SDL_HWSURFACE,
-			3, 3, 32, 0, 0, 0, 0);
+			TAILLE_SERPENT, TAILLE_SERPENT, 32, 0, 0, 0, 0);
 
 		if (NULL==*it) {
 			throw InstanceManquante(
@@ -152,11 +153,13 @@ void Jeu::afficherScores(SDL_Surface* ecran) {
  */
 void Jeu::tracerPoint(SDL_Surface* ecran, SDL_Rect* position,
 		Couleur couleur) const throw(TraceImpossible) {
-	if (position->x <0 || position->x >m_largeur) {
-		throw TraceImpossible("La position est hors du cadre.");
+	if (position->x <0 || position->x >m_largeur - TAILLE_SERPENT) {
+        cerr << position->x << " - " << position->y << endl;
+		throw TraceImpossible("La position (largeur) est hors du cadre.");
 	}
 
-	if (position->y <0 || position->y >m_hauteur) {
+	if (position->y <0 || position->y >m_hauteur - TAILLE_SERPENT) {
+		cerr << position->x << " - " << position->y << endl;
 		throw TraceImpossible("La position (hauteur) est hors du cadre.");
 	}
 

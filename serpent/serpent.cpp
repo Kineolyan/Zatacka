@@ -10,9 +10,18 @@ using namespace std;
 
 Serpent::Serpent(Couleur couleur, int positionX, int positionY, double direction,
 		int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu):
-    m_couleur(couleur), m_positionX(positionX*10000), m_positionY(positionY*10000),        // la position du serpent est 100 fois plus précise que la position d'un pixel.
-    m_direction(direction), m_vitesse(vitesse*10000), m_ecranJeu(ecranJeu)/*,
-    m_reglesDirection(reglesDirection), m_reglesCollision(reglesCollision)*/ {
+    m_couleur(couleur),
+    m_position({positionX*10000, positionY*10000}),
+    m_pixel({positionX, positionY}),
+    m_direction(direction),
+    m_vitesse(vitesse*10000),
+    m_vivant(true),
+    m_score(0),
+    m_jeu(ecranJeu)/*,
+    m_reglesDirection(reglesDirection),
+    m_reglesCollision(reglesCollision)*/ {
+    m_limites.x = m_jeu.largeurJeu() - ECART;
+    m_limites.y = m_jeu.hauteurJeu() - ECART;
 }
 
 Serpent::~Serpent(){
@@ -20,8 +29,13 @@ Serpent::~Serpent(){
 }
 
 void Serpent::position(int posX, int posY) {
-  m_positionX = posX;
-  m_positionY = posY;
+  m_position.x = posX;
+  m_position.y = posY;
+}
+
+void Serpent::pixel(int pixelX, int pixelY) {
+  m_pixel.x = pixelX;
+  m_pixel.y = pixelY;
 }
 
 void Serpent::direction(double direction) {
@@ -49,10 +63,40 @@ void Serpent::vitesse(int vitesse){
   m_vitesse = vitesse;
 }
 
-// ChangeRegles ???
+/**
+ * Teste de la couleur des cases adjacentes
+ */
+bool Serpent::collision(int pixelX, int pixelY)
+        const throw(HorsLimite) {
+    return false;
+    int ecartX = pixelX - m_pixel.x,
+        ecartY = pixelY - m_pixel.y;
+    bool testCouleur = false;
+    SDL_Rect positionPixel;
 
-bool Serpent::vaMourir(){
-	return false;
+    positionPixel.y = pixelY + ecartY;
+    for (int e = -ecartX, end = ecartX; e<=end; ++e) {
+        positionPixel.x = pixelX + e;
+        testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+    }
+
+    positionPixel.x = pixelX + ecartX;
+    for (int e = -ecartY, end = ecartY; e<end; ++e) {
+        positionPixel.y = pixelY + e;
+        testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+    }
+
+    return testCouleur;
+}
+
+bool Serpent::vaMourir(int positionX, int positionY)
+        const throw(HorsLimite) {
+	if (ECART<=positionX && m_limites.x>positionX) {
+        if (ECART<=positionY && m_limites.y>positionY) {
+            return collision(positionX, positionY);
+        }
+	}
+	return true;
 }
 
 void Serpent::seDirigeVers(Direction cote) {
@@ -70,26 +114,31 @@ void Serpent::seDirigeVers(Direction cote) {
     }
 }
 
-bool Serpent::avance(){
-  if (!vaMourir()){
-    int nouvellePosX;
-    int nouvellePosY;
-    nouvellePosX = m_positionX + m_vitesse * cos(m_direction);
-    nouvellePosY = m_positionY + m_vitesse * sin(m_direction);
-    traceSerpent(m_positionX, m_positionY, nouvellePosX, nouvellePosY);
-    position(nouvellePosX, nouvellePosY);
-  }
+bool Serpent::avance() throw(HorsLimite, TraceImpossible) {
+    if (m_vivant) {
+        int nouvellePosX = m_position.x + m_vitesse * cos(m_direction),
+            nouvellePosY = m_position.y + m_vitesse * sin(m_direction),
+            nouveauPixelX = getPixel(nouvellePosX),
+            nouveauPixelY = getPixel(nouvellePosY);
 
-  return true;
+        if (!vaMourir(nouveauPixelX, nouveauPixelY)) {
+            trace(nouveauPixelX, nouveauPixelY);
+            position(nouvellePosX, nouvellePosY);
+            pixel(nouveauPixelX, nouveauPixelY);
+            return true;
+        }
+        else {
+            m_vivant = false;
+        }
+    }
+
+    return false;
 }
 
-void Serpent::traceSerpent(int posX, int posY, int nouvellePosX, int nouvellePosY){
-  int pixelX, pixelY;
-  pixelX = getPixel(nouvellePosX);              // /!\ bricolage temporaire
-  pixelY = getPixel(nouvellePosY);
-  SDL_Rect position = {pixelX, pixelY};
-//  cout << pixelX << " " << pixelY << " " << m_positionX << " " << m_positionY << endl;
-  m_ecranJeu.tracerPoint(&position, m_couleur);
+void Serpent::trace(int nouvellePosX, int nouvellePosY){
+    SDL_Rect position = {nouvellePosX - ECART, nouvellePosY - ECART};
+    //cout << nouvellePosX << " " << nouvellePosY << endl;
+    m_jeu.tracerPoint(&position, m_couleur);
 }
 
 int Serpent::getPixel(int pos){   // à recoder avec un couple en entrée
