@@ -62,16 +62,35 @@ void Zatacka::chargerPolices() {
 	}
 }
 
+/**
+ * Crée une couleur
+ * Le but de cette méthode est d'éviter le warning du compilateur
+ *
+ * @param r: composante rouge de la couleur
+ * @param g: composante verte de la couleur
+ * @param b: composante bleue de la couleur
+ *
+ * @return: la couleur demandée
+ */
+SDL_Color* Zatacka::creerCouleur(Uint8 r, Uint8 g, Uint8 b) throw() {
+    SDL_Color* couleur = new SDL_Color;
+    couleur->r = r;
+    couleur->g = g;
+    couleur->b = b;
+
+    return couleur;
+}
+
 void Zatacka::initialiserCouleurs() {
-	m_couleurs[BLANC] = new SDL_Color({255, 255, 255});
-    m_couleurs[JAUNE] = new SDL_Color({250, 225, 0 });
-	m_couleurs[BLEU] = new SDL_Color({0, 191, 249});
-	m_couleurs[ROUGE] = new SDL_Color({254, 1, 1});
-	m_couleurs[VERT] = new SDL_Color({1, 236, 8});
-	m_couleurs[VIOLET] = new SDL_Color({254, 47, 254});
-	m_couleurs[ORANGE] = new SDL_Color({254, 151, 16});
-	m_couleurs[NOIR] = new SDL_Color({0, 0, 0});
-	m_couleurs[GRIS] = new SDL_Color({128, 128, 128});
+	m_couleurs[BLANC] = creerCouleur(255, 255, 255);
+    m_couleurs[JAUNE] = creerCouleur(250, 225, 0);
+	m_couleurs[BLEU] = creerCouleur(0, 191, 249);
+	m_couleurs[ROUGE] = creerCouleur(254, 1, 1);
+	m_couleurs[VERT] = creerCouleur(1, 236, 8);
+	m_couleurs[VIOLET] = creerCouleur(254, 47, 254);
+	m_couleurs[ORANGE] = creerCouleur(254, 151, 16);
+	m_couleurs[NOIR] = creerCouleur(0, 0, 0);
+	m_couleurs[GRIS] = creerCouleur(128, 128, 128);
 }
 
 void Zatacka::initialiserJeu() {

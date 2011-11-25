@@ -110,6 +110,12 @@ private:
 	void initialiserJeu();
 
 	/**
+     * Crée une couleur
+     * Le but de cette méthode est d'éviter le warning du compilateur
+     */
+    SDL_Color* creerCouleur(Uint8 r, Uint8 g, Uint8 b) throw();
+
+	/**
 	 * Créer les options du menu principal et leur assigne une position à
 	 * l'écran
 	 */
