@@ -26,7 +26,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
 	creerMenuPrincipal();
 	creerMenuOptions();
 
-	afficherEcranPrincipal();
+	afficherAccueil();
 }
 
 Zatacka::~Zatacka() {
@@ -99,7 +99,7 @@ void Zatacka::initialiserJeu() {
     m_ecranJeu.initialiserScores();
 }
 
-void Zatacka::afficherEcranPrincipal() {
+void Zatacka::afficherAccueil() {
 	reglerRepetition(2000);
 	effacer();
 
@@ -175,6 +175,7 @@ void Zatacka::afficherMenuPrincipal() {
 			m_couleurs[BLANC]);
 	SDL_Rect position = {50, 400};
 	options.position(position);
+
 
 	m_optionJoueurs[0]->afficher(m_ecran);
 	m_optionJoueurs[1]->afficher(m_ecran);
@@ -375,7 +376,20 @@ void Zatacka::afficherJeu() {
     reglerRepetition(100);
 	effacer();
 
-	m_ecranJeu.demarrerPartie();
+	int indexJoueur = 0, nombreJoueursDansPartie = 0;
+	for (vector<Option*>::iterator option = m_optionJoueurs.begin(),
+			end = m_optionJoueurs.end(); option!=end; ++option) {
+		if ((*option)->active()) {
+			m_ecranJeu.joueur(indexJoueur)->activer(true);
+			++nombreJoueursDansPartie;
+		}
+		else {
+			m_ecranJeu.joueur(indexJoueur)->activer(false);
+		}
+		++indexJoueur;
+	}
+
+	m_ecranJeu.demarrerPartie(nombreJoueursDansPartie);
 
 	SDL_Event eventManche;
 	int score = 0;
@@ -420,7 +434,9 @@ void Zatacka::afficherJeu() {
 void Zatacka::afficher(NomEcran ecran) {
 	switch(ecran) {
 	case ACCUEIL:
-		afficherEcranPrincipal();
+		resetOptions();
+		resetOptionJoueurs();
+		afficherAccueil();
 		break;
 
 	case MENU_PRINCIPAL:
@@ -549,4 +565,19 @@ void Zatacka::reglerRepetition(int t) {
 void Zatacka::afficherScores() throw() {
 	m_ecranJeu.afficherScores(m_ecran);
 	SDL_Flip(m_ecran);
+}
+
+void Zatacka::resetOptions() throw() {
+	vector<Option*>::iterator it = m_options.begin(),
+			end = m_options.end();
+	for ( ; it!=end; it++) {
+		(*it)->desactiver();
+	}
+}
+
+void Zatacka::resetOptionJoueurs() throw() {
+	for (vector<Option*>::iterator option = m_optionJoueurs.begin(),
+			end = m_optionJoueurs.end(); option!=end; ++option) {
+		(*option)->desactiver();
+	}
 }

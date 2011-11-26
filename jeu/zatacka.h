@@ -129,7 +129,7 @@ private:
 	/**
 	 * Affiche l'écran d'accueil
 	 */
-	void afficherEcranPrincipal();
+	void afficherAccueil();
 
 	/**
 	 * Affiche le menu principal
@@ -166,6 +166,10 @@ private:
 	 * @param t: temps d'écart entre deux répétitions
 	 */
 	void reglerRepetition(int t);
+
+	void resetOptions() throw();
+
+	void resetOptionJoueurs() throw();
 
 public:
 	/**

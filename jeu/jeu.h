@@ -64,6 +64,11 @@ private:
 	std::vector<TexteSDL> m_scores;
 
 	/**
+	 * Nombre de joueurs participant à la partie
+	 */
+	int m_nbJoueursActifs;
+
+	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
 	void initialiserPoints() throw(InstanceManquante);
@@ -96,9 +101,9 @@ public:
 	 * On affiche l'écran de jeu (vide) et on remet les scores à 0
 	 * avant de les afficher.
 	 *
-	 * @param ecran: écran sur lequel on affiche la partie
+	 * @param nombreJoueurs: nombre de joueurs qui vont jouer la partie
 	 */
-	void demarrerPartie();
+	void demarrerPartie(int nombreJoueurs);
 	bool jouerManche();
 
 	/**
