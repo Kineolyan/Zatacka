@@ -27,6 +27,7 @@ private:
 		int x;
 		int y;
 	};
+	bool m_actif;
 
 	/**
 	 * Couleur du serpent
@@ -82,6 +83,32 @@ private:
 
 	void clignoter();
 
+	/**
+	 * Change les règles :
+	 *    - nomRegles : peut prendre les valeurs "direction" et "collision"
+	 *    - regles : un set de règles correspondant
+	 */
+	//void regles(string nomRegles, Regles regles);
+
+	bool collision(int positionX, int positionY)
+		const throw(HorsLimite);
+
+	/**
+	 * Détermine si le serpent meurt à cette itération
+	 */
+	bool vaMourir(int positionX, int positionY)
+	const throw(HorsLimite);
+
+	/**
+	 * Trace une nouvelle section de serpent
+	 */
+	void trace(int nouvellePosX, int nouvellePosY);
+
+	/**
+	 * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)
+	 */
+	int getPixel(int pos) const throw();
+
 public:
 	/**
 	 * Constructeur :
@@ -111,35 +138,22 @@ public:
 	 *     - avec un argument pour définir une nouvelle direction
 	 *     - sans argument pour calculer une éventuelle nouvelle direction, et la modifier le cas échéant
 	 */
-	void direction(double direction);
-	void direction(int multiplicateur);
+	void direction(double direction) throw();
+	void direction(int multiplicateur) throw();
+
+	bool actif() const throw();
+	void activer(bool actif) throw();
 
 	/**
 	 * Change la position
 	 */
-	void position(int posX, int posY);
-	void pixel(int pixelX, int pixelY);
+	void position(int posX, int posY) throw();
+	void pixel(int pixelX, int pixelY) throw();
 
 	/**
 	 * Change la vitesse
 	 */
-	void vitesse(int vitesse);
-
-	/**
-	 * Change les règles :
-	 *    - nomRegles : peut prendre les valeurs "direction" et "collision"
-	 *    - regles : un set de règles correspondant
-	 */
-	//void regles(string nomRegles, Regles regles);
-
-	bool collision(int positionX, int positionY)
-	const throw(HorsLimite);
-
-	/**
-	 * Détermine si le serpent meurt à cette itération
-	 */
-	bool vaMourir(int positionX, int positionY)
-	const throw(HorsLimite);
+	void vitesse(int vitesse) throw();
 
 	void seDirigeVers(Direction direction);
 
@@ -148,21 +162,11 @@ public:
 	 */
 	bool avance() throw(HorsLimite, TraceImpossible);
 
-	/**
-	 * Trace une nouvelle section de serpent
-	 */
-	void trace(int nouvellePosX, int nouvellePosY);
+	void gagneUnPoint(Couleur couleurPerdant) throw();
 
 	/**
-	 * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)
-	 */
-	int getPixel(int pos);
-
-	void gagneUnPoint(Couleur couleurPerdant);
-
-	/**
-	 * Place le serpent aléatoirement sur la grille et lui donne une
-	 * nouvelle direction initiale
+	 * Réssucite, puis place le serpent aléatoirement sur la grille et lui donne
+	 * une nouvelle direction initiale
 	 */
 	void placer();
 

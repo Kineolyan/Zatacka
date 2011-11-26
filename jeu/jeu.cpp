@@ -13,7 +13,8 @@ Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 		m_ecranScores(largeurScores, hauteur),
 		m_joueurs(6),
 		m_points(7),
-		m_scores(6) {
+		m_scores(6),
+		m_nbJoueursActifs(0) {
 	m_positionScores.x = m_largeur;
 	m_positionScores.y = 0;
 
@@ -135,9 +136,13 @@ void Jeu::afficherJeu(SDL_Surface* ecran) {
 void Jeu::afficherScores(SDL_Surface* ecran) {
     m_ecranScores.effacer();
 
+    int indexJoueur = 0;
 	for (vector<TexteSDL>::iterator it = m_scores.begin(),
 		end = m_scores.end() ; it!=end; it++) {
-		it->afficher(m_ecranScores.ecran());
+		if (m_joueurs[indexJoueur]->actif()) {
+			it->afficher(m_ecranScores.ecran());
+		}
+		++indexJoueur;
 	}
 	m_ecranScores.afficher(ecran);
 }
@@ -188,9 +193,11 @@ void Jeu::changerScore(Couleur couleurJoueur, int score) throw() {
  * On affiche l'écran de jeu (vide) et on remet les scores à 0
  * avant de les afficher.
  *
- * @param ecran: écran sur lequel on affiche la partie
+ * @param nombreJoueurs: nombre de joueurs qui vont jouer la partie
  */
-void Jeu::demarrerPartie() {
+void Jeu::demarrerPartie(int nombreJoueurs) {
+	m_nbJoueursActifs = nombreJoueurs;
+
     afficherJeu(m_jeu.ecran());
 
     for (vector<Serpent*>::iterator joueur = m_joueurs.begin(),
@@ -210,7 +217,8 @@ bool Jeu::jouerManche() {
 
     SDL_Event eventJeu;
     bool bouclerManche = true;
-    int nombreJoueursVivants = 6, tempsActuel, tempsPrecedent = 0;
+    int nombreJoueursVivants = m_nbJoueursActifs,
+    	tempsActuel, tempsPrecedent = 0;
     while (bouclerManche) {
 		SDL_PollEvent(&eventJeu);
 		switch (eventJeu.type) {
