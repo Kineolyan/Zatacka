@@ -10,8 +10,15 @@
 
 
 enum Couleur {
-	BLANC=6, JAUNE=1, BLEU=5, ROUGE=0, VERT=3, VIOLET=4, ORANGE=2,
-	NOIR=7, GRIS=8
+	ROUGE = 0,
+	JAUNE = 1,
+	ORANGE = 2,
+	VERT = 3,
+	VIOLET = 4,
+	BLEU = 5,
+	NOIR = 6,
+	BLANC = 7,
+	GRIS = 8
 };
 
 enum Direction {
