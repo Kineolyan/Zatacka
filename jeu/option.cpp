@@ -22,6 +22,9 @@ Option::Option(string texte, string optionActive, string optionInactive,
 Option::~Option()
 {}
 
+bool Option::active()
+{	return m_active;	}
+
 void Option::position(const SDL_Rect& position) throw(InstanceManquante) {
 	Ecran::position(position);
 

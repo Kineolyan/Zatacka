@@ -26,6 +26,7 @@ public:
 			SDL_Color* couleur);
 	~Option();
 
+	bool active();
 	void position(const SDL_Rect& position)
 			throw(InstanceManquante);
 	void position(const SDL_Rect& positionOption,
