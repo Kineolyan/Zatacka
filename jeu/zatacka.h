@@ -110,6 +110,12 @@ private:
 	void initialiserJeu();
 
 	/**
+     * Crée une couleur
+     * Le but de cette méthode est d'éviter le warning du compilateur
+     */
+    SDL_Color* creerCouleur(Uint8 r, Uint8 g, Uint8 b) throw();
+
+	/**
 	 * Créer les options du menu principal et leur assigne une position à
 	 * l'écran
 	 */
@@ -173,8 +179,10 @@ public:
 	 */
 	~Zatacka();
 
-	int hauteur();
-	int largeur();
+	int hauteur() const throw();
+	int largeur() const throw();
+	int hauteurJeu() const throw();
+	int largeurJeu() const throw();
 	SDL_Color* couleur(Couleur couleur);
 	TTF_Font* policeCalligraphiee();
 	TTF_Font* policeBasique();
@@ -200,20 +208,20 @@ public:
 	/**
 	 * Renvoie la couleur des pixels d'une position donnee
 	 */
-	Couleur donnerCouleur(const SDL_Rect& position);
+	Couleur donnerCouleur(const SDL_Rect& position) const throw(HorsLimite);
 
 	/**
 	 * Met à jour le score d'un joueur
 	 * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
 	 * sur un autre écran lancera une exception.
 	 *
-	 * @param joueurId: Id du joueur dont le score change. Cela correspond
-	 * 	a l'index du texte de score dans le vecteur m_scores
+	 * @param couleurJoueur: Couleur du joueur dont le score change. Cela
+	 * 	correspond à l'index du texte de score dans le vecteur m_scores
 	 * @param score: le nouveau score à afficher
-	 *
-	 * @throw TraceImpossible
 	 */
-	void changerScore(int joueurId, int score);
+	void changerScore(Couleur couleurJoueur, int score) throw();
+
+	void afficherScores() throw();
 };
 
 #endif /* ZATACKA_H_ */

@@ -8,6 +8,9 @@
 #ifndef JEU_H_
 #define JEU_H_
 
+#define TAILLE_SERPENT 3
+#define ECART 1
+
 #include <SDL/SDL.h>
 #include <vector>
 #include <sstream>
@@ -73,9 +76,9 @@ public:
 	~Jeu();
 
     int largeur() const throw();
-    Serpent* joueur(int i) throw();
 
 	void colorerElements() throw();
+	Serpent* joueur(int joueurId) throw();
 
 	void initialiserJoueurs() throw(InstanceManquante);
 
@@ -122,11 +125,13 @@ public:
 	 * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
 	 * sur un autre écran lancera une exception.
 	 *
-	 * @param joueurId: Id du joueur dont le score change. Cela correspond
-	 * 	a l'index du texte de score dans le vecteur m_scores
+	 * @param couleurJoueur: Couleur du joueur dont le score change. Cela
+	 * 	correspond à l'index du texte de score dans le vecteur m_scores
 	 * @param score: le nouveau score à afficher
 	 */
-	void changerScore(int joueurId, int score) throw();
+	void changerScore(Couleur couleurJoueur, int score) throw();
+
+	void actualiserScores(int indexJoueurPerdant);
 };
 
 #endif /* JEU_H_ */

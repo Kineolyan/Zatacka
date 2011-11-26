@@ -62,16 +62,35 @@ void Zatacka::chargerPolices() {
 	}
 }
 
+/**
+ * Crée une couleur
+ * Le but de cette méthode est d'éviter le warning du compilateur
+ *
+ * @param r: composante rouge de la couleur
+ * @param g: composante verte de la couleur
+ * @param b: composante bleue de la couleur
+ *
+ * @return: la couleur demandée
+ */
+SDL_Color* Zatacka::creerCouleur(Uint8 r, Uint8 g, Uint8 b) throw() {
+    SDL_Color* couleur = new SDL_Color;
+    couleur->r = r;
+    couleur->g = g;
+    couleur->b = b;
+
+    return couleur;
+}
+
 void Zatacka::initialiserCouleurs() {
-	m_couleurs[BLANC] = new SDL_Color({255, 255, 255});
-    m_couleurs[JAUNE] = new SDL_Color({250, 225, 0 });
-	m_couleurs[BLEU] = new SDL_Color({0, 191, 249});
-	m_couleurs[ROUGE] = new SDL_Color({254, 1, 1});
-	m_couleurs[VERT] = new SDL_Color({1, 236, 8});
-	m_couleurs[VIOLET] = new SDL_Color({254, 47, 254});
-	m_couleurs[ORANGE] = new SDL_Color({254, 151, 16});
-	m_couleurs[NOIR] = new SDL_Color({0, 0, 0});
-	m_couleurs[GRIS] = new SDL_Color({128, 128, 128});
+	m_couleurs[BLANC] = creerCouleur(255, 255, 255);
+    m_couleurs[JAUNE] = creerCouleur(250, 225, 0);
+	m_couleurs[BLEU] = creerCouleur(0, 191, 249);
+	m_couleurs[ROUGE] = creerCouleur(254, 1, 1);
+	m_couleurs[VERT] = creerCouleur(1, 236, 8);
+	m_couleurs[VIOLET] = creerCouleur(254, 47, 254);
+	m_couleurs[ORANGE] = creerCouleur(254, 151, 16);
+	m_couleurs[NOIR] = creerCouleur(0, 0, 0);
+	m_couleurs[GRIS] = creerCouleur(128, 128, 128);
 }
 
 void Zatacka::initialiserJeu() {
@@ -353,21 +372,10 @@ void Zatacka::afficherMenuOptions() {
 }
 
 void Zatacka::afficherJeu() {
-    reglerRepetition(10);
+    reglerRepetition(100);
 	effacer();
 
 	m_ecranJeu.demarrerPartie();
-	SDL_Flip(m_ecran);
-
-	for (int i=0 ; i<180 ; i++) {
-	  m_ecranJeu.joueur(0)->avance();
-	  m_ecranJeu.joueur(1)->avance();
-	  m_ecranJeu.joueur(2)->avance();
-	  m_ecranJeu.joueur(3)->avance();
-	  m_ecranJeu.joueur(4)->avance();
-	  m_ecranJeu.joueur(5)->avance();
-	  SDL_Delay(5);
-	}
 
 	SDL_Event eventManche;
 	int score = 0;
@@ -376,15 +384,7 @@ void Zatacka::afficherJeu() {
 		if (false==m_ecranJeu.jouerManche()) {
 			return;
 		}
-		m_ecranJeu.changerScore(0, ++score);
-		m_ecranJeu.changerScore(1, ++score);
-		m_ecranJeu.changerScore(2, ++score);
-		m_ecranJeu.changerScore(3, ++score);
-		m_ecranJeu.changerScore(4, ++score);
-		m_ecranJeu.changerScore(5, ++score);
-		m_ecranJeu.afficherScores(m_ecran);
-		SDL_Flip(m_ecran);
-		SDL_Delay(1000);
+		SDL_Delay(500);
 
 		attendre = true;
 		while (attendre) {
@@ -445,11 +445,17 @@ void Zatacka::effacer() {
 		SDL_MapRGB(m_ecran->format, 0, 0, 0));
 }
 
-int Zatacka::hauteur()
+int Zatacka::hauteur() const throw()
 {	return m_hauteur;	}
 
-int Zatacka::largeur()
+int Zatacka::largeur() const throw()
 {	return m_largeur;	}
+
+int Zatacka::hauteurJeu() const throw()
+{	return m_hauteur;	}
+
+int Zatacka::largeurJeu() const throw()
+{	return m_largeur - m_largeurScores;	}
 
 SDL_Color* Zatacka::couleur(Couleur couleur)
 {	return m_couleurs[couleur];	}
@@ -485,7 +491,16 @@ void Zatacka::tracerPoint(SDL_Rect* position, Couleur couleur) {
 /**
  * Renvoie la couleur des pixels d'une position donnee
  */
-Couleur Zatacka::donnerCouleur(const SDL_Rect& position) {
+Couleur Zatacka::donnerCouleur(const SDL_Rect& position)
+        const throw(HorsLimite){
+    if (position.x <0 || position.x >m_largeur) {
+		throw HorsLimite("Acces a une position hors de l'ecran (largeur)");
+	}
+
+	if (position.y <0 || position.y >m_hauteur) {
+		throw HorsLimite("Acces a une position hors de l'ecran (hauteur)");
+	}
+
 	Uint32 pixel = ((Uint32*)m_ecran->pixels)[position.y * m_ecran->w + position.x];
 
 	SDL_Color couleurPixel = {0, 0, 0};
@@ -516,14 +531,12 @@ Couleur Zatacka::donnerCouleur(const SDL_Rect& position) {
  * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
  * sur un autre écran lancera une exception.
  *
- * @param joueurId: Id du joueur dont le score change. Cela correspond
- * 	a l'index du texte de score dans le vecteur m_scores
+ * @param couleurJoueur: Couleur du joueur dont le score change. Cela
+ * 	correspond à l'index du texte de score dans le vecteur m_scores
  * @param score: le nouveau score à afficher
- *
- * @throw TraceImpossible
  */
-void Zatacka::changerScore(int joueurId, int score) {
-	m_ecranJeu.changerScore(joueurId, score);
+void Zatacka::changerScore(Couleur couleurJoueur, int score) throw() {
+	m_ecranJeu.changerScore(couleurJoueur, score);
 }
 
 void Zatacka::reglerRepetition(int t) {
@@ -531,4 +544,9 @@ void Zatacka::reglerRepetition(int t) {
 		t = 1;
 	}
 	SDL_EnableKeyRepeat(t, t);
+}
+
+void Zatacka::afficherScores() throw() {
+	m_ecranJeu.afficherScores(m_ecran);
+	SDL_Flip(m_ecran);
 }

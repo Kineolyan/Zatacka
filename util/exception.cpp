@@ -2,39 +2,36 @@
 
 using namespace std;
 
-ExceptionGenerale::ExceptionGenerale(string message) throw():
-    m_message(message)
+ExceptionGenerale::ExceptionGenerale(string message, string prefixe) throw():
+    m_prefixe(prefixe), m_message(message)
 {}
 
 ExceptionGenerale::~ExceptionGenerale() throw()
 {}
 
 const char* ExceptionGenerale::what() const throw() {
-    return m_message.c_str();
+    string message = "[";
+    message+= m_prefixe + "] " + m_message;
+    return message.c_str();
 }
 
 InstanceManquante::InstanceManquante(string message) throw():
-    ExceptionGenerale(message)
+    ExceptionGenerale(message, "Instance manquante")
 {}
 
 InstanceManquante::~InstanceManquante() throw()
 {}
 
-const char* InstanceManquante::what() const throw() {
-    string explication = "[Instance manquante] ";
-    explication+= m_message;
-    return explication.c_str();
-}
-
 TraceImpossible::TraceImpossible(string message) throw():
-    ExceptionGenerale(message)
+    ExceptionGenerale(message, "Trace impossible")
 {}
 
 TraceImpossible::~TraceImpossible() throw()
 {}
 
-const char* TraceImpossible::what() const throw() {
-    string explication = "[Trace impossible] ";
-    explication+= m_message;
-    return explication.c_str();
-}
+HorsLimite::HorsLimite(string message) throw():
+    ExceptionGenerale(message, "Hors limite")
+{}
+
+HorsLimite::~HorsLimite() throw()
+{}

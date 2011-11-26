@@ -23,21 +23,30 @@ class Zatacka;
  */
 class Serpent {
 private:
-
-  /**
-   * Couleur du serpent
-   */
-  Couleur m_couleur;
-
-	/**
- 	 * Abscisse de la tête
-	 */
-	int m_positionX;
+	struct Coordonnees {
+		int x;
+		int y;
+	};
 
 	/**
- 	 * Ordonnée de la tête
+	 * Couleur du serpent
 	 */
-	int m_positionY;
+	Couleur m_couleur;
+
+	/**
+	 * Cordonnées du serpent sur sa grille virtuelle
+	 */
+	Coordonnees m_position;
+
+	/**
+	 * Coordonnées du pixel à l'écran
+	 */
+	Coordonnees m_pixel;
+
+	/**
+	 * Coordonnées du pixel du bas de l'écran
+	 */
+	Coordonnees m_limites;
 
 	/**
 	 * Direction, en radians (sur IR)
@@ -49,25 +58,27 @@ private:
 	 */
 	int m_vitesse;
 
+	bool m_vivant;
+
 	/**
 	 * Score du serpent (en fait du joueur, mais on confond les deux)
 	 */
-  int m_score;
+	int m_score;
 
-  /**
-   * Règles de direction
-   */
-  //Regles m_reglesDirection;
+	/**
+	 * Règles de direction
+	 */
+	//Regles m_reglesDirection;
 
-  /**
-   * Règles de collision
-   */
-  //Regles m_reglesCollision;
+	/**
+	 * Règles de collision
+	 */
+	//Regles m_reglesCollision;
 
-  /**
-   * Gestionnaire de l'écran de jeu
-   */
-  Zatacka& m_ecranJeu;
+	/**
+	 * Gestionnaire de l'écran de jeu
+	 */
+	Zatacka& m_jeu;
 
 public:
 	/**
@@ -92,51 +103,60 @@ public:
 	 */
 	bool jouer(Direction direction);
 
-  /**
-   * Change de direction - appelée à chaque itération pour déterminer la nouvelle direction du serpent
-   * Peut être appelé
-   *     - avec un argument pour définir une nouvelle direction
-   *     - sans argument pour calculer une éventuelle nouvelle direction, et la modifier le cas échéant
-   */
-  void direction(double direction);
-  void direction();
+	/**
+	 * Change de direction - appelée à chaque itération pour déterminer la nouvelle direction du serpent
+	 * Peut être appelé
+	 *     - avec un argument pour définir une nouvelle direction
+	 *     - sans argument pour calculer une éventuelle nouvelle direction, et la modifier le cas échéant
+	 */
+	void direction(double direction);
+	void direction(int multiplicateur);
 
-  /**
-   * Change la position
-   */
-  void position(int posX, int posY);
+	/**
+	 * Change la position
+	 */
+	void position(int posX, int posY);
+	void pixel(int pixelX, int pixelY);
 
-  /**
-   * Change la vitesse
-   */
-  void vitesse(int vitesse);
+	/**
+	 * Change la vitesse
+	 */
+	void vitesse(int vitesse);
 
-  /**
-   * Change les règles :
-   *    - nomRegles : peut prendre les valeurs "direction" et "collision"
-   *    - regles : un set de règles correspondant
-   */
-  //void regles(string nomRegles, Regles regles);
+	/**
+	 * Change les règles :
+	 *    - nomRegles : peut prendre les valeurs "direction" et "collision"
+	 *    - regles : un set de règles correspondant
+	 */
+	//void regles(string nomRegles, Regles regles);
 
-  /**
-   * Détermine si le serpent meurt à cette itération
-   */
-  bool vaMourir();
+	bool collision(int positionX, int positionY)
+	const throw(HorsLimite);
 
-  /**
-   * Fait avancer le serpent
-   */
-  void avance();
+	/**
+	 * Détermine si le serpent meurt à cette itération
+	 */
+	bool vaMourir(int positionX, int positionY)
+	const throw(HorsLimite);
 
-  /**
-   * Trace une nouvelle section de serpent
-   */
-  void traceSerpent(int posX, int posY, int nouvellePosX, int nouvellePosY);
+	void seDirigeVers(Direction direction);
 
-  /**
-   * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)
-   */
-  int getPixel(int pos);
+	/**
+	 * Fait avancer le serpent
+	 */
+	bool avance() throw(HorsLimite, TraceImpossible);
+
+	/**
+	 * Trace une nouvelle section de serpent
+	 */
+	void trace(int nouvellePosX, int nouvellePosY);
+
+	/**
+	 * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)
+	 */
+	int getPixel(int pos);
+
+	void gagneUnPoint(Couleur couleurPerdant);
 };
 
 #endif /* SERPENT_H_ */
