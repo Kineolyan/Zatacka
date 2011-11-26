@@ -24,9 +24,7 @@ Serpent::Serpent(Couleur couleur, int positionX, int positionY, double direction
     m_limites.y = m_jeu.hauteurJeu() - ECART;
 }
 
-Serpent::~Serpent(){
-
-}
+Serpent::~Serpent() {}
 
 void Serpent::position(int posX, int posY) {
   m_position.x = posX;
@@ -68,26 +66,43 @@ void Serpent::vitesse(int vitesse){
  * Teste de la couleur des cases adjacentes
  */
 bool Serpent::collision(int pixelX, int pixelY)
-        const throw(HorsLimite) {
-    return false;
-    int ecartX = pixelX - m_pixel.x,
-        ecartY = pixelY - m_pixel.y;
-    bool testCouleur = false;
-    SDL_Rect positionPixel;
+		const throw(HorsLimite) {
+//	if (m_couleur==0) {
+//		cout << "positionCourante : " << m_pixel.x << " " << m_pixel.y << endl;
+//		cout << "positionAVenir : " << pixelX << " " << pixelY << endl;
+//	}
+	bool testCouleur = false;
+	SDL_Rect positionPixel;
 
-    positionPixel.y = pixelY + ecartY;
-    for (int e = -ecartX, end = ecartX; e<=end; ++e) {
-        positionPixel.x = pixelX + e;
-        testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
-    }
+	if (0!=pixelX - m_pixel.x) {
+		positionPixel.x = 2*pixelX - m_pixel.x;
+		positionPixel.y = pixelY - ECART;
+		for (int e = -ECART, end = ECART; e<=end; ++e) {
+			++positionPixel.y;
+			testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+//			if (m_couleur==0) {
+//				cout << "testDplctX : " << positionPixel.x << " "
+//						<< positionPixel.y << "-" << boolalpha << testCouleur
+//						<< endl;
+//			}
+		}
+	}
 
-    positionPixel.x = pixelX + ecartX;
-    for (int e = -ecartY, end = ecartY; e<end; ++e) {
-        positionPixel.y = pixelY + e;
-        testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
-    }
+	if (0!=pixelY - m_pixel.y) {
+		positionPixel.x = pixelX - ECART;
+		positionPixel.y = 2*pixelY - m_pixel.y;
+		for (int e = -ECART, end = ECART; e<=end; ++e) {
+			++positionPixel.x;
+			testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+//			if (m_couleur==0) {
+//				cout << "testDplctY : " << positionPixel.x << " "
+//						<< positionPixel.y << "-" << boolalpha << testCouleur
+//						<< endl;
+//			}
+		}
+	}
 
-    return testCouleur;
+	return testCouleur;
 }
 
 bool Serpent::vaMourir(int positionX, int positionY)
