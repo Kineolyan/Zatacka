@@ -80,12 +80,14 @@ private:
 	 */
 	Zatacka& m_jeu;
 
+	void clignoter();
+
 public:
 	/**
 	 * Constructeur :
 	 * - posX et posY sont les coordonnées de la tête du serpent en PIXELS
 	 */
-	Serpent(Couleur couleur, int posX, int posY, double direction, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu);
+	Serpent(Couleur couleur, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu);
 
 	/**
 	 * Destructeur
@@ -157,6 +159,19 @@ public:
 	int getPixel(int pos);
 
 	void gagneUnPoint(Couleur couleurPerdant);
+
+	/**
+	 * Place le serpent aléatoirement sur la grille et lui donne une
+	 * nouvelle direction initiale
+	 */
+	void placer();
+
+	/**
+	 * Réinitialise le serpent.
+	 * Le score retourne à 0.
+	 */
+	void reset();
+
 };
 
 #endif /* SERPENT_H_ */

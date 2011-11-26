@@ -8,12 +8,8 @@
 
 using namespace std;
 
-Serpent::Serpent(Couleur couleur, int positionX, int positionY, double direction,
-		int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu):
+Serpent::Serpent(Couleur couleur, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu):
     m_couleur(couleur),
-    m_position({positionX*10000, positionY*10000}),
-    m_pixel({positionX, positionY}),
-    m_direction(direction),
     m_vitesse(vitesse*10000),
     m_vivant(true),
     m_score(0),
@@ -155,7 +151,7 @@ bool Serpent::avance() throw(HorsLimite, TraceImpossible) {
     }
 }
 
-void Serpent::trace(int nouvellePosX, int nouvellePosY){
+void Serpent::trace(int nouvellePosX, int nouvellePosY) {
     SDL_Rect position = {nouvellePosX - ECART, nouvellePosY - ECART};
     //cout << nouvellePosX << " " << nouvellePosY << endl;
     m_jeu.tracerPoint(&position, m_couleur);
@@ -170,4 +166,42 @@ void Serpent::gagneUnPoint(Couleur couleurPerdant) {
 		++m_score;
 		m_jeu.changerScore(m_couleur, m_score);
 	}
+}
+
+/**
+ * Réssucite, puis place le serpent aléatoirement sur la grille et lui donne
+ * une nouvelle direction initiale
+ */
+void Serpent::placer() {
+	m_vivant = true;
+	srand(time(NULL));
+	m_direction = M_PI * (rand()%1);
+	m_pixel.x = 10 + (rand()%(m_limites.x - 20));
+	m_pixel.y = 10 + (rand()%(m_limites.y - 20));
+	m_position.x = m_pixel.x * 10000;
+	m_position.y = m_pixel.y * 10000;
+
+	clignoter();
+}
+
+void Serpent::clignoter() {
+    SDL_Rect position = {m_pixel.x - ECART, m_pixel.y - ECART};
+    //cout << nouvellePosX << " " << nouvellePosY << endl;
+	for (int i = 0; i < 3; ++i) {
+		m_jeu.tracerPoint(&position, m_couleur);
+		SDL_Delay(100);
+		m_jeu.tracerPoint(&position, NOIR);
+		SDL_Delay(100);
+	}
+	m_jeu.tracerPoint(&position, m_couleur);
+}
+
+/**
+ * Réinitialise le serpent.
+ * Le score retourne à 0 et le serpent reprend vie.
+ */
+void Serpent::reset() {
+	m_score = 0;
+	m_vivant = true;
+	m_jeu.changerScore(m_couleur, m_score);
 }

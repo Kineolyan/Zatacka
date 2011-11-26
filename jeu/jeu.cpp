@@ -49,8 +49,7 @@ void Jeu::initialiserJoueurs() throw(InstanceManquante) {
     int index = 0;
 	for (vector<Serpent*>::iterator it = m_joueurs.begin(),
 		end = m_joueurs.end() ; it!=end; it++) {
-		*it = new Serpent((Couleur)index, 100 + index*20,
-                    100 + index*10, -0.3, 1, m_jeu);
+		*it = new Serpent((Couleur)index, 1, m_jeu);
 
 		if (NULL==*it) {
 			throw InstanceManquante(
@@ -115,13 +114,13 @@ void Jeu::colorerElements() throw() {
 	m_scores[VIOLET].couleur(m_jeu.couleur(VIOLET));
 	m_scores[BLEU].couleur(m_jeu.couleur(BLEU));
 
-	colorer(m_points[0], ROUGE);
-	colorer(m_points[1], JAUNE);
-	colorer(m_points[2], ORANGE);
-	colorer(m_points[3], VERT);
-	colorer(m_points[4], VIOLET);
-	colorer(m_points[5], BLEU);
-	colorer(m_points[6], NOIR);
+	colorer(m_points[ROUGE], ROUGE);
+	colorer(m_points[JAUNE], JAUNE);
+	colorer(m_points[ORANGE], ORANGE);
+	colorer(m_points[VERT], VERT);
+	colorer(m_points[VIOLET], VIOLET);
+	colorer(m_points[BLEU], BLEU);
+	colorer(m_points[NOIR], NOIR);
 }
 
 void Jeu::afficher(SDL_Surface* ecran) {
@@ -194,20 +193,24 @@ void Jeu::changerScore(Couleur couleurJoueur, int score) throw() {
 void Jeu::demarrerPartie() {
     afficherJeu(m_jeu.ecran());
 
-    int i = 0, end = m_scores.size();
-    for ( ; i<end; i++) {
-		changerScore((Couleur)i, 0);
+    for (vector<Serpent*>::iterator joueur = m_joueurs.begin(),
+			end = m_joueurs.end(); joueur<end; ++joueur) {
+		(*joueur)->reset();
 	}
 	m_jeu.afficherScores();
 }
 
 bool Jeu::jouerManche() {
     afficherJeu(m_jeu.ecran());
-    int tempsActuel, tempsPrecedent = 0;
+
+    for (vector<Serpent*>::iterator joueur = m_joueurs.begin(),
+    		end = m_joueurs.end(); joueur<end; ++joueur) {
+    	(*joueur)->placer();
+    }
 
     SDL_Event eventJeu;
     bool bouclerManche = true;
-    int nombreJoueursVivants = 6;
+    int nombreJoueursVivants = 6, tempsActuel, tempsPrecedent = 0;
     while (bouclerManche) {
 		SDL_PollEvent(&eventJeu);
 		switch (eventJeu.type) {
