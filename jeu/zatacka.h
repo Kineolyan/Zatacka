@@ -18,7 +18,7 @@
 class Zatacka {
 private:
 	enum NomEcran {
-		ACCUEIL, MENU_PRINCIPAL, MENU_OPTIONS, JEU
+		ACCUEIL, MENU_PRINCIPAL, MENU_OPTIONS, JEU, ECRAN_FINAL
 	};
 
 private:
@@ -84,15 +84,9 @@ private:
 	std::vector<Option*> m_options;
 
 	/**
-	 * Tableau des textes affichant les scores sur l'écran
-	 * de jeu
-	 */
-	TexteSDL m_scores[6];
-
-	/**
 	 * Tableau des joueurs
 	 */
-	//Serpent m_joueurs[6];
+	int m_nombreJoueurs;
 
 	/**
 	 * Instancie les polices en chargeant le fichier et définit la taille
@@ -145,6 +139,12 @@ private:
 	 * Affiche l'écran de jeu
 	 */
 	void afficherJeu();
+
+	/**
+	 * Affiche l'écran final du jeu
+	 * Affiche l'écran final du jeu, avec les scores de chacun.
+	 */
+	void afficherFin();
 
 	/**
 	 * Afficher l'écran demandé

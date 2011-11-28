@@ -152,6 +152,7 @@ public:
 	 */
 	void direction(double direction) throw();
 	void direction(int multiplicateur) throw();
+	int score() const throw();
 
 	bool actif() const throw();
 	void activer(bool actif) throw();

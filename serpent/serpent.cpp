@@ -1,7 +1,3 @@
-#ifndef M_PI
-   #define M_PI 3.14159265358979323846
-#endif
-
 #include "serpent.h"
 #include "../jeu/zatacka.h"
 #include <iostream>
@@ -25,6 +21,9 @@ Serpent::Serpent(Couleur couleur, int vitesse/*, Regles reglesDirection, Regles 
 }
 
 Serpent::~Serpent() {}
+
+int Serpent::score() const throw()
+{	return m_score;	}
 
 void Serpent::position(int posX, int posY) throw() {
   m_position.x = posX;
@@ -70,7 +69,6 @@ bool Serpent::collision(int pixelX, int pixelY)
 		positionPixel.x = 2*pixelX - m_pixel.x;
 		positionPixel.y = pixelY - ECART;
 		for (int e = -ECART, end = ECART; e<=end; ++e) {
-			++positionPixel.y;
 			testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
 			ss << m_jeu.donnerCouleur(positionPixel) << " ";
 //			if (m_couleur==0) {
@@ -78,6 +76,7 @@ bool Serpent::collision(int pixelX, int pixelY)
 //						<< positionPixel.y << "-" << boolalpha << testCouleur
 //						<< endl;
 //			}
+			++positionPixel.y;
 		}
 	}
 
@@ -85,7 +84,6 @@ bool Serpent::collision(int pixelX, int pixelY)
 		positionPixel.x = pixelX - ECART;
 		positionPixel.y = 2*pixelY - m_pixel.y;
 		for (int e = -ECART, end = ECART; e<=end; ++e) {
-			++positionPixel.x;
 			testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
 			ss << m_jeu.donnerCouleur(positionPixel) << " ";
 //			if (m_couleur==0) {
@@ -93,6 +91,7 @@ bool Serpent::collision(int pixelX, int pixelY)
 //						<< positionPixel.y << "-" << boolalpha << testCouleur
 //						<< endl;
 //			}
+			++positionPixel.x;
 		}
 	}
 
@@ -100,7 +99,7 @@ bool Serpent::collision(int pixelX, int pixelY)
 		cout << "Collision(" << m_couleur << ") : "
 			<< m_pixel.x << "-" << m_pixel.y << " | "
 			<< pixelX << "-" << pixelY
-			<< " [" << ss.str() << "]" << endl;
+			<< " [ " << ss.str() << "]" << endl;
 	}
 	return testCouleur;
 }

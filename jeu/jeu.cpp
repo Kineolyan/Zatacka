@@ -296,7 +296,8 @@ bool Jeu::jouerManche() {
 
 		tempsActuel = SDL_GetTicks();
 		if (tempsActuel - tempsPrecedent>=20) {
-			for (int indexJoueur = 0; indexJoueur <6; ++indexJoueur) {
+			for (int indexJoueur = 0, end = m_joueurs.size();
+					indexJoueur <end; ++indexJoueur) {
 				if (!m_joueurs[indexJoueur]->avance()) {
 					--nombreJoueursVivants;
 					actualiserScores(indexJoueur);

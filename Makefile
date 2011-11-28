@@ -29,7 +29,7 @@ endif
 
 
 DEBUG = -ggdb
-DEFINES = $(INCLUDES) $(DEFS) -DSYS_UNIX=1 $(DEBUG)
+DEFINES = $(INCLUDES) $(DEFS) $(DEBUG)
 CFLAGS = $(DEFINES) `sdl-config --cflags` -Wall
 
 OBJS = $(OBJ)/exception.o \

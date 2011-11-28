@@ -10,7 +10,8 @@ Zatacka::Zatacka(int largeur, int hauteur):
 		m_points(8),
 		m_policeCalligraphiee(NULL),
 		m_policeBasique(NULL),
-		m_couleurs(8), m_optionJoueurs(6), m_options() {
+		m_couleurs(8), m_optionJoueurs(6), m_options(),
+		m_nombreJoueurs(6) {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32,
 			SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
 	if (NULL==m_ecran) {
@@ -370,7 +371,7 @@ void Zatacka::afficherMenuOptions() {
 }
 
 void Zatacka::afficherJeu() {
-    reglerRepetition(100);
+    reglerRepetition(20);
 	effacer();
 
 	int indexJoueur = 0, nombreJoueursDansPartie = 0;
@@ -392,7 +393,7 @@ void Zatacka::afficherJeu() {
         m_ecranJeu.demarrerPartie(nombreJoueursDansPartie);
 
         SDL_Event eventManche;
-        int limiteScore = 10*(nombreJoueursDansPartie-1);
+        int limiteScore = 1*(nombreJoueursDansPartie-1);
         bool bouclerPartie = true, attendre;
         while (bouclerPartie) {
             if (false==m_ecranJeu.jouerManche()) {
@@ -401,6 +402,14 @@ void Zatacka::afficherJeu() {
             SDL_Delay(500);
 
             attendre = true;
+            for (int indexJoueur = 0; indexJoueur<m_nombreJoueurs; ++indexJoueur) {
+            	if (m_ecranJeu.joueur(indexJoueur)->score()>=limiteScore) {
+            		m_ecranAAfficher = ECRAN_FINAL;
+            		attendre = false;
+            		bouclerPartie = false;
+            		break;
+            	}
+            }
             while (attendre) {
                 SDL_WaitEvent(&eventManche);
                 switch (eventManche.type) {
@@ -432,6 +441,60 @@ void Zatacka::afficherJeu() {
 	afficher(m_ecranAAfficher);
 }
 
+void Zatacka::afficherFin() {
+	effacer();
+
+	TexteSDL scoreFinal;
+	Serpent* joueur;
+	SDL_Rect position = {250, 50};
+
+	scoreFinal.police(m_policeBasique);
+	for (int indexJoueur = 0; indexJoueur<m_nombreJoueurs; ++indexJoueur) {
+		joueur = m_ecranJeu.joueur(indexJoueur);
+		if (joueur->actif()) {
+			stringstream ss;
+			ss << joueur->score();
+			scoreFinal.contenu(ss.str());
+			scoreFinal.couleur(m_couleurs[indexJoueur]);
+			scoreFinal.position(position);
+			scoreFinal.afficher(m_ecran);
+
+			position.y+=50;
+		}
+	}
+	TexteSDL fin("Konek Hry", m_policeCalligraphiee, m_couleurs[BLANC]);
+	position.x = (m_largeur - fin.largeur())/2;
+	position.y = m_hauteur - 100;
+	fin.position(position);
+	fin.afficher(m_ecran);
+	SDL_Flip(m_ecran);
+
+	bool attendre = true;
+	SDL_Event event;
+	while (attendre) {
+		SDL_WaitEvent(&event);
+		switch (event.type) {
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.unicode) {
+			case SDLK_ESCAPE:
+				return;
+
+			case SDLK_SPACE:
+				m_ecranAAfficher = ACCUEIL;
+				attendre = false;
+				break;
+
+			default:
+				break;
+			}
+
+			default:
+				break;
+		}
+	}
+	afficher(m_ecranAAfficher);
+}
+
 void Zatacka::afficher(NomEcran ecran) {
 	switch(ecran) {
 	case ACCUEIL:
@@ -450,6 +513,10 @@ void Zatacka::afficher(NomEcran ecran) {
 
 	case JEU:
 		afficherJeu();
+		break;
+
+	case ECRAN_FINAL:
+		afficherFin();
 		break;
 
 	default:
@@ -548,8 +615,7 @@ Couleur Zatacka::donnerCouleur(const SDL_Rect& position)
  * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
  * sur un autre écran lancera une exception.
  *
- * @param couleurJoueur: Couleur du joueur dont le score change. Cela
- * 	correspond à l'index du texte de score dans le vecteur m_scores
+ * @param couleurJoueur: Couleur du joueur dont le score change.
  * @param score: le nouveau score à afficher
  */
 void Zatacka::changerScore(Couleur couleurJoueur, int score) throw() {
