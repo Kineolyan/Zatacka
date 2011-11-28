@@ -81,6 +81,11 @@ private:
 	 */
 	Zatacka& m_jeu;
 
+	/**
+	 * Nombre d'iterations avant le prochain trou du serpent
+	 */
+	int m_tempsAvantTrou;
+
 	void clignoter();
 
 	/**
@@ -102,12 +107,19 @@ private:
 	/**
 	 * Trace une nouvelle section de serpent
 	 */
-	void trace(int nouvellePosX, int nouvellePosY);
+	void trace(int nouvellePosX, int nouvellePosY, Couleur couleur);
+
+	/**
+	 * Trace une nouvelle section de serpent
+	 */
+	void traceTrou(int nouvellePosX, int nouvellePosY);
 
 	/**
 	 * Convertit des coordonnées de la grille en coordonnées dans l'écran de jeu (en pixels)
 	 */
 	int getPixel(int pos) const throw();
+
+	void donnerProchainTrou();
 
 public:
 	/**
@@ -162,7 +174,7 @@ public:
 	 */
 	bool avance() throw(HorsLimite, TraceImpossible);
 
-	void gagneUnPoint(Couleur couleurPerdant) throw();
+	void gagnePoints(int pointsGagnes) throw();
 
 	/**
 	 * Réssucite, puis place le serpent aléatoirement sur la grille et lui donne

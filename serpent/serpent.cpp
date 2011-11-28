@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include <ctime>
+#include <sstream>
 
 using namespace std;
 
@@ -40,20 +41,7 @@ void Serpent::direction(double direction) throw()
 
 void Serpent::direction(int multiplicateur) throw() {
 //ATTENTION, la grosse feinte : les ordonnées étant croissantes vers le bas, on compte les angles positivement dans le SENS ANTI-TRIGONOMÉTRIQUE
-//  Une touche correspondant à ce serpent est-elle enfoncée ?
-//  Le cas échéant :
-//  if (turnLeft) {
-//    m_direction = ( m_direction - M_PI/90 ) % ( 2*M_PI ); // Je rappelle qu'on a 180 directions possibles pour le serpent
-//  } else if (turnRight) {
     m_direction += multiplicateur*M_PI/90;
-
-//    while(m_direction < 0){
-//      m_direction += 2*M_PI;
-//    }
-//    while(m_direction >= 2*M_PI) {
-//      m_direction -= 2*M_PI;
-//    }
-//  }
 }
 
 bool Serpent::actif() const throw()
@@ -76,6 +64,7 @@ bool Serpent::collision(int pixelX, int pixelY)
 //	}
 	bool testCouleur = false;
 	SDL_Rect positionPixel;
+	stringstream ss;
 
 	if (0!=pixelX - m_pixel.x) {
 		positionPixel.x = 2*pixelX - m_pixel.x;
@@ -83,6 +72,7 @@ bool Serpent::collision(int pixelX, int pixelY)
 		for (int e = -ECART, end = ECART; e<=end; ++e) {
 			++positionPixel.y;
 			testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+			ss << m_jeu.donnerCouleur(positionPixel) << " ";
 //			if (m_couleur==0) {
 //				cout << "testDplctX : " << positionPixel.x << " "
 //						<< positionPixel.y << "-" << boolalpha << testCouleur
@@ -97,6 +87,7 @@ bool Serpent::collision(int pixelX, int pixelY)
 		for (int e = -ECART, end = ECART; e<=end; ++e) {
 			++positionPixel.x;
 			testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+			ss << m_jeu.donnerCouleur(positionPixel) << " ";
 //			if (m_couleur==0) {
 //				cout << "testDplctY : " << positionPixel.x << " "
 //						<< positionPixel.y << "-" << boolalpha << testCouleur
@@ -105,6 +96,12 @@ bool Serpent::collision(int pixelX, int pixelY)
 		}
 	}
 
+	if (testCouleur) {
+		cout << "Collision(" << m_couleur << ") : "
+			<< m_pixel.x << "-" << m_pixel.y << " | "
+			<< pixelX << "-" << pixelY
+			<< " [" << ss.str() << "]" << endl;
+	}
 	return testCouleur;
 }
 
@@ -119,18 +116,20 @@ bool Serpent::vaMourir(int positionX, int positionY)
 }
 
 void Serpent::seDirigeVers(Direction cote) {
-    switch(cote) {
-    case DROITE:
-        direction(1);
-        break;
+	if (m_actif) {
+		switch(cote) {
+		case DROITE:
+			direction(1);
+			break;
 
-    case GAUCHE:
-        direction(-1);
-        break;
+		case GAUCHE:
+			direction(-1);
+			break;
 
-    default:
-        break;
-    }
+		default:
+			break;
+		}
+	}
 }
 
 /**
@@ -144,7 +143,15 @@ bool Serpent::avance() throw(HorsLimite, TraceImpossible) {
             nouveauPixelY = getPixel(nouvellePosY);
 
         if (!vaMourir(nouveauPixelX, nouveauPixelY)) {
-            trace(nouveauPixelX, nouveauPixelY);
+        	if (--m_tempsAvantTrou < 10) {
+        		traceTrou(nouveauPixelX, nouveauPixelY);
+        		if (m_tempsAvantTrou==0) {
+        			donnerProchainTrou();
+        		}
+        	}
+            else {
+            	trace(nouveauPixelX, nouveauPixelY, m_couleur);
+            }
             position(nouvellePosX, nouvellePosY);
             pixel(nouveauPixelX, nouveauPixelY);
             return true;
@@ -159,17 +166,22 @@ bool Serpent::avance() throw(HorsLimite, TraceImpossible) {
     }
 }
 
-void Serpent::trace(int nouvellePosX, int nouvellePosY) {
+void Serpent::trace(int nouvellePosX, int nouvellePosY, Couleur couleur) {
     SDL_Rect position = {nouvellePosX - ECART, nouvellePosY - ECART};
-    m_jeu.tracerPoint(&position, m_couleur);
+    m_jeu.tracerPoint(&position, couleur);
+}
+
+void Serpent::traceTrou(int positionX, int positionY) {
+	trace(m_pixel.x, m_pixel.y, NOIR);
+	trace(positionX, positionY, m_couleur);
 }
 
 int Serpent::getPixel(int pos) const throw()
 {   return pos/10000;	}
 
-void Serpent::gagneUnPoint(Couleur couleurPerdant) throw() {
+void Serpent::gagnePoints(int pointsGagnes) throw() {
 	if (m_vivant) {
-		++m_score;
+		m_score+= pointsGagnes;
 		m_jeu.changerScore(m_couleur, m_score);
 	}
 }
@@ -181,10 +193,9 @@ void Serpent::gagneUnPoint(Couleur couleurPerdant) throw() {
 void Serpent::placer() {
 	if (m_actif) {
 		m_vivant = true;
-		srand(time(NULL));
-		m_direction = M_PI * (rand()%1);
-		m_pixel.x = 10 + (rand()%(m_limites.x - 20));
-		m_pixel.y = 10 + (rand()%(m_limites.y - 20));
+		m_direction = M_PI * 0.001*(rand()%2000);
+		m_pixel.x = 50 + (rand()%(m_limites.x - 100));
+		m_pixel.y = 50 + (rand()%(m_limites.y - 100));
 		m_position.x = m_pixel.x * 10000;
 		m_position.y = m_pixel.y * 10000;
 
@@ -213,8 +224,13 @@ void Serpent::reset() {
 		m_score = 0;
 		m_vivant = true;
 		m_jeu.changerScore(m_couleur, m_score);
+		donnerProchainTrou();
 	}
 	else {
 		m_vivant = false;
 	}
+}
+
+void Serpent::donnerProchainTrou() {
+	m_tempsAvantTrou = 150 + rand()%200;
 }

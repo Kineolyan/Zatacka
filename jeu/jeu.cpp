@@ -316,9 +316,10 @@ bool Jeu::jouerManche() {
 }
 
 void Jeu::actualiserScores(int indexPerdant) {
+	// Appel à la règle pour connaître le gain en points de chaque joueur
 	for (int i=0; i<6; ++i) {
 		if (i!=indexPerdant) {
-			m_joueurs[i]->gagneUnPoint((Couleur)indexPerdant);
+			m_joueurs[i]->gagnePoints(1);
 		}
 	}
 
