@@ -1,0 +1,40 @@
+/*
+ * regle.h
+ *
+ *  Created on: 22 nov. 2011
+ *      Author: Vince
+ */
+
+#ifndef OPTION_H_
+#define OPTION_H_
+
+#include <string>
+#include <vector>
+class Option
+{
+private:
+	/**
+	* Nom de l'option
+	*/
+	std::string m_nom;
+	/**
+	* vector des types de regles parmi deplacement, collision, position, direction et points
+	*/
+	std::vector<std::string> m_type; 
+	/**
+	* Pas encore d'options trop variables
+	*/
+	bool m_active;
+	
+public:
+	Option();
+	Option(std::string nom, std::string type);
+	bool estActive() const;
+	std::string nom() const;
+	std::<std::string> type() const;
+	void changeActive(); 
+	void changeValeur(int nouvelleValeur);
+
+}
+
+#endif /* OPTION_H_ */
