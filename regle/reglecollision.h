@@ -34,12 +34,12 @@ public:
 	/**
 	* vecteur designant si un serpent meurt au prochain deplacement
 	*/
-	bool collision(int numSerpent, std::vector<int> couleursRencontrees) const;
+	bool collision(int numSerpent, std::vector<int> joueursRencontres) const;
 	/**
 	* renvoie la valeur la case i,j de la matrice de gains 
 	*/
 	bool valeurCase(int i, int j) const;
-}
+};
 
 
 #endif /* REGLECOLLISION_H_ */

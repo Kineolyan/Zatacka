@@ -40,7 +40,7 @@ public:
 	*/
 	int valeurCase(int i, int j) const;
 	
-}
+};
 
 
 #endif /* REGLEPOINTS_H_ */

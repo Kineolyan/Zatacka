@@ -1,18 +1,18 @@
 #include "regle.h"
 
-Regle::Regle()
+Regle::Regle(Zatacka& jeu):m_jeu(jeu)
 {
-	m_regleCollision = RegleCollision();
-	m_regleInitialisation = RegleInitialisation();
-	m_reglePoints = ReglePoints();
+	RegleCollision m_regleCollision();
+	RegleInitialisation m_regleInitialisation(jeu);
+	ReglePoints m_reglePoints();
 }
 
-Regle::Regle(RegleCollision regleCollision, RegleInitialisation regleInitialisation, ReglePoints reglePoints):m_regleCollision(regleCollision),m_regleInitialisation(regleinitialisation),m_reglePoints(reglePoints)
+Regle::Regle(RegleCollision regleCollision, RegleInitialisation regleInitialisation, ReglePoints reglePoints,Zatacka& jeu):m_regleCollision(regleCollision),m_regleInitialisation(regleInitialisation),m_reglePoints(reglePoints), m_jeu(jeu)
 {
 
 }
 
-Regle::Regle(vector<Regle> regles)
+Regle::Regle(vector<Regle> regles, Zatacka& jeu):m_jeu(jeu)
 {
 	vector<RegleCollision> reglescoll(0);
 	vector<RegleInitialisation> reglesinit(0);
@@ -24,9 +24,9 @@ Regle::Regle(vector<Regle> regles)
 		reglespts.push_back(regles[i].getReglePts());
 	}
 	
-	m_regleCollision = RegleCollision(reglescoll);
-	m_regleInitialisation = RegleInitialisation(reglesinit);
-	m_reglePoints = ReglePoints(reglespts);
+	RegleCollision m_regleCollision(reglescoll);
+	RegleInitialisation m_regleInitialisation(reglesinit, Zatacka& jeu);
+	ReglePoints m_reglePoints(reglespts);
 }
 
 RegleCollision Regle::getRegleColl() const
@@ -44,6 +44,23 @@ ReglePoints Regle::getReglePts() const
 return m_reglePoints;
 }
 
+vector< pair<int,int> > Regle::positionsDepart() const
+{
+	return m_regleInitialisation.positionsDepart();
+}
 
+vector<double> Regle::directionsDepart() const
+{
+	return m_regleInitialisation.directionsDepart();
+}
 
+bool Regle::collision(int numSerpent, std::vector<int> joueursRencontres) const
+{
+	return m_reglesCollision.collision(int numSerpent, std::vector<int> joueursRencontres);
+}
+
+vector<int> attribuePointsA(int serpentMourrant) const
+{
+	return m_reglePoints.attribuePointsA(int serpentMourrant);
+}
 

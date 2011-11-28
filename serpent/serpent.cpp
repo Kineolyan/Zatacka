@@ -181,8 +181,7 @@ void Serpent::gagneUnPoint(Couleur couleurPerdant) throw() {
 void Serpent::placer() {
 	if (m_actif) {
 		m_vivant = true;
-		srand(time(NULL));
-		m_direction = M_PI * (rand()%1);
+		m_direction = M_PI * 0.001*(rand()%2000);
 		m_pixel.x = 10 + (rand()%(m_limites.x - 20));
 		m_pixel.y = 10 + (rand()%(m_limites.y - 20));
 		m_position.x = m_pixel.x * 10000;

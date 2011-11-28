@@ -9,7 +9,8 @@
 #define REGLEINITIALISATION_H_
 
 #include <vector>
-#include "../jeu/jeu.h"
+
+class Zatacka;
 
 class RegleInitialisation
 {
@@ -21,7 +22,7 @@ private:
 	/**
 	* active des positions fixes pour les serpents
 	*/
-	bool m_positionsFixes
+	bool m_positionsFixes;
 	/**
 	* vecteurs des directions possibles dans le cas de positions fixes
 	*/
@@ -29,7 +30,7 @@ private:
 	/**
 	* vecteur des positions possibles, l'indice est commun avec le precedent
 	*/
-	std::vector<std::pair<int,int>> m_positionsPossibles;
+	std::vector< std::pair<int,int> > m_positionsPossibles;
 	/**
 	* matrice de taille a definir en fonction de la taille du terrain de jeu
 	* remplie avec des 1 et 0 qui represente le terrain de jeu : 
@@ -37,35 +38,35 @@ private:
 	*/
 	int m_dimJ;
 	int m_dimI;
-	std::vector<std::vector<int>> m_positionsExclues;
+	std::vector< std::vector<int> > m_positionsExclues;
 	
-	Jeu m_jeu;
+	Zatacka& m_jeu;
 	
 public:
 	/**
 	* createur de la regle de jeu standard
 	*/
-	RegleInitialisation(Jeu jeu);
+	RegleInitialisation(Zatacka& jeu);
 	/**
 	* createur de regle avec positionsFixes
 	*/
-	RegleInitialisation(std::vector<double> directionsPossibles, std::vector<std::pair<int,int>> positionsPossibles, Jeu jeu);
+	RegleInitialisation(std::vector<double> directionsPossibles, std::vector< std::pair<int,int> > positionsPossibles, Zatacka& jeu);
 	/**
 	* createur de regle avec matrice d'exclusion
 	*/
-	RegleInitialisation(double distanceMin, std::vector<std::vector<int>> positionsExclues, int dimJ, int dimI, Jeu jeu);
+	RegleInitialisation(double distanceMin, std::vector< std::vector<int> > positionsExclues, int dimJ, int dimI, Zatacka& jeu);
 	/**
 	* createur qui fusionne 2 regles
 	*/
-	RegleInitialisation(std:vector<RegleInitialisation> regles, Jeu jeu);
+	RegleInitialisation(std::vector<RegleInitialisation> regles, Zatacka& jeu);
 	/**
 	* determination des positions de depart
 	*/
-	std::vector<std::pair<int,int>> positionsDepart(int nbrSerpents) const;
+	std::vector< std::pair<int,int> > positionsDepart() const;
 	/**
 	* determination des positions de depart
 	*/
-	std::vector<int> directionsDepart(int nbrSerpents) const;
+	std::vector<double> directionsDepart() const;
 	/**
 	* methodes de recuperation des parametres
 	*/
@@ -76,9 +77,9 @@ public:
 	int dimI() const;
 	double direction(int i) const;
 	std::pair<int,int> position(int i) const;
-	bool positionsFixes() const;
+
 	
-}
+};
 
 
 

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-vector<vector<int>> matriceGainsStandard()
+vector< vector<int> > matriceGainsStandard()
 {
 	vector<int> ligne(6,1);
 	vector< vector<int> > matrice(6,ligne);
@@ -50,10 +50,7 @@ int ReglePoints::valeurCase(int i,int j) const
 
 vector<int> ReglePoints::attribuePointsA(int numSerpentMourrant) const
 {
-	vector<int> attrib(0);
-	for (int i(0); i<6;++i)
-	{
-		attrib.push_back(m_matriceGains[numSerpentMourrant][i]);
-	}
-	return attrib;
+	return m_matriceGains[numSerpentMourrant];
 }
+
+
