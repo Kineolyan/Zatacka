@@ -120,6 +120,7 @@ private:
 	int getPixel(int pos) const throw();
 
 	void donnerProchainTrou();
+	void incrementeDirection(int multiplicateur) throw();
 
 public:
 	/**
@@ -151,7 +152,6 @@ public:
 	 *     - sans argument pour calculer une éventuelle nouvelle direction, et la modifier le cas échéant
 	 */
 	void direction(double direction) throw();
-	void direction(int multiplicateur) throw();
 	int score() const throw();
 
 	bool actif() const throw();

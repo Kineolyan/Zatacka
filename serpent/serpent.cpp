@@ -38,9 +38,9 @@ void Serpent::pixel(int pixelX, int pixelY) throw() {
 void Serpent::direction(double direction) throw()
 {	m_direction = direction;	}
 
-void Serpent::direction(int multiplicateur) throw() {
+void Serpent::incrementeDirection(int multiplicateur) throw() {
 //ATTENTION, la grosse feinte : les ordonnées étant croissantes vers le bas, on compte les angles positivement dans le SENS ANTI-TRIGONOMÉTRIQUE
-    m_direction += multiplicateur*M_PI/90;
+    m_direction += multiplicateur;
 }
 
 bool Serpent::actif() const throw()
@@ -65,7 +65,28 @@ bool Serpent::collision(int pixelX, int pixelY)
 	SDL_Rect positionPixel;
 	stringstream ss;
 
-	if (0!=pixelX - m_pixel.x) {
+	if (0!=pixelX - m_pixel.x && 0!=pixelY - m_pixel.y) {
+		int ecartX = pixelX - m_pixel.x,
+			ecartY = pixelY - m_pixel.y;
+		positionPixel.x = pixelX + ecartX;
+		positionPixel.y = pixelY;
+		testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+		ss << m_jeu.donnerCouleur(positionPixel) << " ";
+
+		positionPixel.y+= ecartY;
+		testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+		ss << m_jeu.donnerCouleur(positionPixel) << " ";
+
+		positionPixel.x-= ecartX;
+		testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
+		ss << m_jeu.donnerCouleur(positionPixel) << " ";
+//		if (m_couleur==0) {
+//			cout << "testDplctX : " << positionPixel.x << " "
+//					<< positionPixel.y << "-" << boolalpha << testCouleur
+//					<< endl;
+//		}
+	}
+	else if (0!=pixelX - m_pixel.x) {
 		positionPixel.x = 2*pixelX - m_pixel.x;
 		positionPixel.y = pixelY - ECART;
 		for (int e = -ECART, end = ECART; e<=end; ++e) {
@@ -79,8 +100,7 @@ bool Serpent::collision(int pixelX, int pixelY)
 			++positionPixel.y;
 		}
 	}
-
-	if (0!=pixelY - m_pixel.y) {
+	else if (0!=pixelY - m_pixel.y) {
 		positionPixel.x = pixelX - ECART;
 		positionPixel.y = 2*pixelY - m_pixel.y;
 		for (int e = -ECART, end = ECART; e<=end; ++e) {
@@ -118,11 +138,11 @@ void Serpent::seDirigeVers(Direction cote) {
 	if (m_actif) {
 		switch(cote) {
 		case DROITE:
-			direction(1);
+			incrementeDirection(1);
 			break;
 
 		case GAUCHE:
-			direction(-1);
+			incrementeDirection(-1);
 			break;
 
 		default:
@@ -136,14 +156,15 @@ void Serpent::seDirigeVers(Direction cote) {
  */
 bool Serpent::avance() throw(HorsLimite, TraceImpossible) {
     if (m_vivant) {
-        int nouvellePosX = m_position.x + m_vitesse * cos(m_direction),
-            nouvellePosY = m_position.y + m_vitesse * sin(m_direction),
+        int nouvellePosX = m_position.x + m_vitesse * cos(m_direction*M_PI/90),
+            nouvellePosY = m_position.y + m_vitesse * sin(m_direction*M_PI/90),
             nouveauPixelX = getPixel(nouvellePosX),
             nouveauPixelY = getPixel(nouvellePosY);
 
         if (!vaMourir(nouveauPixelX, nouveauPixelY)) {
         	if (--m_tempsAvantTrou < 10) {
-        		traceTrou(nouveauPixelX, nouveauPixelY);
+        		trace(nouveauPixelX, nouveauPixelY, m_couleur);
+//        		traceTrou(nouveauPixelX, nouveauPixelY);
         		if (m_tempsAvantTrou==0) {
         			donnerProchainTrou();
         		}
@@ -192,7 +213,7 @@ void Serpent::gagnePoints(int pointsGagnes) throw() {
 void Serpent::placer() {
 	if (m_actif) {
 		m_vivant = true;
-		m_direction = M_PI * 0.001*(rand()%2000);
+		m_direction = rand()%180;
 		m_pixel.x = 50 + (rand()%(m_limites.x - 100));
 		m_pixel.y = 50 + (rand()%(m_limites.y - 100));
 		m_position.x = m_pixel.x * 10000;

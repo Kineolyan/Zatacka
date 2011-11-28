@@ -393,7 +393,7 @@ void Zatacka::afficherJeu() {
         m_ecranJeu.demarrerPartie(nombreJoueursDansPartie);
 
         SDL_Event eventManche;
-        int limiteScore = 1*(nombreJoueursDansPartie-1);
+        int limiteScore = 10*(nombreJoueursDansPartie-1);
         bool bouclerPartie = true, attendre;
         while (bouclerPartie) {
             if (false==m_ecranJeu.jouerManche()) {
