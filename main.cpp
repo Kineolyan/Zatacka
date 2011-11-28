@@ -1,4 +1,4 @@
-#include "jeu/jeu.h"
+#include "jeu/zatacka.h"
 #include <iostream>
 
 using namespace std;
@@ -11,7 +11,7 @@ int main(int argc, char* argv[] ){
 	SDL_EnableUNICODE(1);
 
 	try {
-		Jeu jeu(800,600);
+		Zatacka jeu(640,480);
 	}
 	catch (const exception& e) {
 		cerr << e.what() << endl;

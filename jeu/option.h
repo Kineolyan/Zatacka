@@ -8,18 +8,15 @@
 #ifndef OPTION_H_
 #define OPTION_H_
 
+#include "ecran.h"
 #include "texte.h"
 #include <string>
 
-class Option {
+class Option: public Ecran {
 protected:
-	int m_largeur;
-	int m_hauteur;
 	TexteSDL m_texte;
 	TexteSDL m_optionActive;
 	TexteSDL m_optionInactive;
-	SDL_Surface* m_blocEffaceur;
-	SDL_Rect m_position;
 	bool m_active;
 	int m_offset;
 
@@ -29,16 +26,17 @@ public:
 			SDL_Color* couleur);
 	~Option();
 
-	int hauteur();
-	int largeur();
-	void position(const SDL_Rect& position);
+	bool active();
+	void position(const SDL_Rect& position)
+			throw(InstanceManquante);
 	void position(const SDL_Rect& positionOption,
-			const SDL_Rect& positionEtat);
-	void activer();
-	void desactiver();
-	void echanger();
+			const SDL_Rect& positionEtat)
+			throw(InstanceManquante);
+	void activer() throw();
+	void desactiver() throw();
+	void echanger() throw();
 
-	void afficher(SDL_Surface* ecran);
+	virtual void afficher(SDL_Surface* ecran);
 };
 
 #endif /* OPTION_H_ */

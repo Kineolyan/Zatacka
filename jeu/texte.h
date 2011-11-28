@@ -11,12 +11,11 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <string>
-#include "../exceptions/exception.h"
+#include "itemEcran.h"
+#include "../util/exception.h"
 
-class TexteSDL {
+class TexteSDL: public ItemEcran {
 protected:
-	int m_positionX;
-	int m_positionY;
 	std::string m_contenu;
 	TTF_Font* m_police;
 	SDL_Color* m_couleur;
@@ -24,21 +23,21 @@ protected:
 	bool m_surfaceAJour;
 
 public:
-	TexteSDL(std::string contenu ="", int positionX =0, int positionY =0);
+	TexteSDL();
 	TexteSDL(std::string contenu, TTF_Font* police, SDL_Color* couleur);
-	TexteSDL(std::string contenu, int positionX, int positionY,
-			TTF_Font* police, SDL_Color* couleur);
+	TexteSDL(std::string contenu, TTF_Font* police,
+			SDL_Color* couleur, const SDL_Rect& position);
 	~TexteSDL();
 
-	void contenu(std::string contenu);
-	void police(TTF_Font* police);
-	void couleur(SDL_Color* couleur);
-	void position(const SDL_Rect& position);
-	int largeur();
-	int hauteur();
-	SDL_Surface* texte();
+	int largeur() throw(InstanceManquante);
+	int hauteur() throw(InstanceManquante);
+	SDL_Surface* texte() throw(InstanceManquante);
+	void contenu(std::string contenu) throw();
+	void police(TTF_Font* police) throw();
+	void couleur(SDL_Color* couleur) throw();
+	void position(const SDL_Rect& position) throw();
 
-	void afficher(SDL_Surface* ecran);
+	virtual void afficher(SDL_Surface* ecran);
 };
 
 #endif /* TEXTE_H_ */

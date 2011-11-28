@@ -8,31 +8,24 @@
 #ifndef JEU_H_
 #define JEU_H_
 
+#define TAILLE_SERPENT 3
+#define ECART 1
+
 #include <SDL/SDL.h>
-#include <map>
 #include <vector>
+#include <sstream>
+
+#include "itemEcran.h"
+#include "ecran.h"
 #include "texte.h"
-#include "option.h"
-#include "../exceptions/exception.h"
+#include "../util/keywords.h"
+#include "../serpent/serpent.h"
 
-/**
- * Instance de jeu gerant les différents écrans, les serpents, les options
- */
-class Jeu {
+class Serpent;
+
+class Jeu: public ItemEcran {
 private:
-	enum NomEcran {
-		ACCUEIL, MENU_PRINCIPAL, MENU_OPTIONS, JEU
-	};
-
-	/**
-	 * Largeur de la fenetre de jeu
-	 */
-	int m_largeur;
-
-	/**
-	 * Hauteur de la fenetre
-	 */
-	int m_hauteur;
+	Zatacka& m_jeu;
 
 	/**
 	 * Largeur du panneau des scores
@@ -40,124 +33,110 @@ private:
 	int m_largeurScores;
 
 	/**
-	 * Ecran principal
+	 * Position des scores à l'écran
 	 */
-	SDL_Surface* m_ecran;
+	SDL_Rect m_positionScores;
 
 	/**
 	 * Ecran de jeu contenant les serpents
 	 */
-	SDL_Surface* m_ecranJeu;
+	Ecran m_ecranJeu;
 
 	/**
 	 * Ecran affichant les scores
 	 */
-	SDL_Surface* m_ecranScores;
+	Ecran m_ecranScores;
 
 	/**
-	 * Ecran à afficher
+	 * Motifs de base pour le trace des serpents
 	 */
-	NomEcran m_ecranAAfficher;
+	std::vector<Serpent*> m_joueurs;
 
 	/**
-	 * Police calligraphiee pour l'accueil et les scores
+	 * Motifs de base pour le trace des serpents
 	 */
-	TTF_Font* m_policeCalligraphiee;
-
-	/**
-	 * Police basique pour les textes de menu
-	 */
-	TTF_Font* m_policeBasique;
-
-	/**
-	 * Tableau des couleurs rgb à utiliser
-	 */
-	std::map<std::string, SDL_Color*> m_couleurs;
-
-	/**
-	 * Options pour activer ou pas un joueur
-	 */
-	std::vector<Option*> m_optionJoueurs;
-
-	/**
-	 * Options pour activer les différentes règles de jeu
-	 */
-	std::vector<Option*> m_options;
+	std::vector<SDL_Surface*> m_points;
 
 	/**
 	 * Tableau des textes affichant les scores sur l'écran
 	 * de jeu
 	 */
-	TexteSDL m_scores[6];
+	std::vector<TexteSDL> m_scores;
 
 	/**
-	 * Instancie les polices en chargeant le fichier et définit la taille
+	 * Nombre de joueurs participant à la partie
 	 */
-	void chargerPolices();
-
-	/**
-	 * Crée la liste des couleurs, en donnant les codes RGB
-	 */
-	void initialiserCouleurs();
+	int m_nbJoueursActifs;
 
 	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
-	void initialiserScores();
+	void initialiserPoints() throw(InstanceManquante);
 
-	/**
-	 * Créer les options du menu principal et leur assigne une position à
-	 * l'écran
-	 */
-	void creerMenuPrincipal();
-
-	/**
-	 * Crée les options du menu d'options et leur assigne une position.
-	 */
-	void creerMenuOptions();
-
-	/**
-	 * Affiche l'écran d'accueil
-	 */
-	void afficherEcranPrincipal();
-
-	/**
-	 * Affiche le menu principal
-	 */
-	void afficherMenuPrincipal();
-
-	/**
-	 * Affiche le menu des options
-	 */
-	void afficherMenuOptions();
-
-	/**
-	 * Affiche l'écran de jeu
-	 */
-	void afficherJeu();
-
-	/**
-	 * Afficher l'écran demandé
-	 * @param ecran: nom de l'écran à afficher
-	 */
-	void afficher(NomEcran ecran);
-
-	/**
-	 * Efface l'écran
-	 */
-	void effacer();
+	void colorer(SDL_Surface* ecran, Couleur couleur) throw();
 
 public:
-	/**
-	 * Constructeur
-	 * @param largeur: largeur de la fenetre
-	 * @param hauteur: hauteur de la fenetre
-	 */
-	Jeu(int largeur, int hauteur);
-	/**
-	 * Destructeur
-	 */
+	Jeu(Zatacka& jeu, int largeurJeu, int largeurScore, int hauteur)
+		throw(InstanceManquante);
 	~Jeu();
+
+    int largeur() const throw();
+
+	void colorerElements() throw();
+	Serpent* joueur(int joueurId) throw();
+
+	void initialiserJoueurs() throw(InstanceManquante);
+
+	/**
+	 * Donne à chaque score une couleur, une police et une position
+	 */
+	void initialiserScores() throw();
+
+	virtual void afficher(SDL_Surface* ecran);
+	void afficherJeu(SDL_Surface* ecran);
+	void afficherScores(SDL_Surface* ecran);
+
+	/**
+	 * Démarre une partie de zatacka
+	 * On affiche l'écran de jeu (vide) et on remet les scores à 0
+	 * avant de les afficher.
+	 *
+	 * @param nombreJoueurs: nombre de joueurs qui vont jouer la partie
+	 */
+	void demarrerPartie(int nombreJoueurs);
+	bool jouerManche();
+
+	/**
+	 * Dessine un point d'une couleur donnée sur l'écran de jeu.
+	 * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
+	 * sur un autre écran lancera une exception.
+	 *
+	 * @param ecran: ecran sur lequel on trace le point
+	 * @param position: position du point à tracer
+	 * @param couleur: nom de la couleur à utiliser
+	 *
+	 * @throw TraceImpossible
+	 */
+	void tracerPoint(SDL_Surface* ecran, SDL_Rect* position,
+			Couleur couleur) const throw(TraceImpossible);
+
+	/**
+	 * Renvoie la couleur des pixels d'une position donnee
+	 */
+	//Couleur donnerCouleurs(const SDL_Rect& position);
+
+	/**
+	 * Met à jour le score d'un joueur
+	 * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
+	 * sur un autre écran lancera une exception.
+	 *
+	 * @param couleurJoueur: Couleur du joueur dont le score change. Cela
+	 * 	correspond à l'index du texte de score dans le vecteur m_scores
+	 * @param score: le nouveau score à afficher
+	 */
+	void changerScore(Couleur couleurJoueur, int score) throw();
+
+	void actualiserScores(int indexJoueurPerdant);
 };
 
 #endif /* JEU_H_ */

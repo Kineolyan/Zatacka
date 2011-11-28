@@ -19,12 +19,12 @@ LIBS = `sdl-config --libs` -lSDL_ttf
 BIN = /usr/bin
 DEST = /usr/local/games/zatac
 else
-ifeq ($(OS), unix)
-PROGNAME = zatacka
-LIBS = `sdl-config --libs` -lSDL_ttf
-BIN = /usr/bin
-DEST = /usr/local/games/zatacka
-endif
+	ifeq ($(OS), unix)
+	PROGNAME = zatacka
+	LIBS = `sdl-config --libs` -lSDL_ttf
+	BIN = /usr/bin
+	DEST = /usr/local/games/zatacka
+	endif
 endif
 
 
@@ -32,11 +32,15 @@ DEBUG = -ggdb
 DEFINES = $(INCLUDES) $(DEFS) -DSYS_UNIX=1 $(DEBUG)
 CFLAGS = $(DEFINES) `sdl-config --cflags` -Wall
 
-OBJS = $(OBJ)/main.o $(OBJ)/jeu.o $(OBJ)/texte.o $(OBJ)/option.o $(OBJ)/exception.o
-
-$(OBJ)/SDL_prim.o: $(SRC)/SDL_lib/SDL_prim.c
-	$(CC) $(CFLAGS) -c $(SRC)/SDL_lib/SDL_prim.c
-	mv $*.o $(OBJ)
+OBJS = $(OBJ)/exception.o \
+	$(OBJ)/itemEcran.o \
+	$(OBJ)/ecran.o \
+	$(OBJ)/texte.o \
+	$(OBJ)/option.o \
+	$(OBJ)/serpent.o \
+	$(OBJ)/jeu.o \
+	$(OBJ)/zatacka.o \
+	$(OBJ)/main.o
 
 $(OBJ)/%.o: %.cpp
 	$(CC) $(CFLAGS) -c $*.cpp
@@ -50,8 +54,8 @@ $(OBJ)/%.o: $(SRC)/serpent/%.cpp
 	$(CC) $(CFLAGS) -c $(SRC)/serpent/$*.cpp
 	mv $*.o $(OBJ)
 
-$(OBJ)/%.o: $(SRC)/exceptions/%.cpp
-	$(CC) $(CFLAGS) -c $(SRC)/exceptions/$*.cpp
+$(OBJ)/%.o: $(SRC)/util/%.cpp
+	$(CC) $(CFLAGS) -c $(SRC)/util/$*.cpp
 	mv $*.o $(OBJ)
 	
 # Règles de dépendance
@@ -62,9 +66,9 @@ $(OBJ)/%.o: $(SRC)/exceptions/%.cpp
 #$(OBJ)/option.o : $(SRC)/jeu/option.h $(SRC)/jeu/texte.h
 #$(OBJ)/exception.o : $(SRC)/exceptions/exception.h
 
-all: $(PROGNAME)
+# Commandes executables
 
-$(PROGNAME) : $(OBJS)
+all: $(OBJS)
 	$(CC) $(CFLAGS) -o $(PROGNAME) $(OBJS) $(LIBS)
 
 prepare:
@@ -72,6 +76,9 @@ prepare:
 
 clean:
 	rm -f $(OBJ)/*.o
+	rm -f $(PROGNAME)
 
 install: prepare all
+
+reset: clean all
 
