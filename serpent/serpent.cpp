@@ -5,6 +5,8 @@
 #include "serpent.h"
 #include "../jeu/zatacka.h"
 #include <iostream>
+#include <cmath>
+#include <ctime>
 
 using namespace std;
 
@@ -149,6 +151,7 @@ bool Serpent::avance() throw(HorsLimite, TraceImpossible) {
         }
         else {
             m_vivant = false;
+            return false;
         }
     }
     else {
