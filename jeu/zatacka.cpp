@@ -176,13 +176,10 @@ void Zatacka::afficherMenuPrincipal() {
 	SDL_Rect position = {50, 400};
 	options.position(position);
 
-
-	m_optionJoueurs[0]->afficher(m_ecran);
-	m_optionJoueurs[1]->afficher(m_ecran);
-	m_optionJoueurs[2]->afficher(m_ecran);
-	m_optionJoueurs[3]->afficher(m_ecran);
-	m_optionJoueurs[4]->afficher(m_ecran);
-	m_optionJoueurs[5]->afficher(m_ecran);
+    for (vector<Option*>::iterator it = m_optionJoueurs.begin(),
+            end = m_optionJoueurs.end(); it!=end; it++) {
+    	(*it)->afficher(m_ecran);
+    }
 	options.afficher(m_ecran);
 	SDL_Flip(m_ecran);
 
@@ -388,45 +385,49 @@ void Zatacka::afficherJeu() {
 		}
 		++indexJoueur;
 	}
+	if (nombreJoueursDansPartie<2) {
+        m_ecranAAfficher = MENU_PRINCIPAL;
+	}
+	else {
+        m_ecranJeu.demarrerPartie(nombreJoueursDansPartie);
 
-	m_ecranJeu.demarrerPartie(nombreJoueursDansPartie);
+        SDL_Event eventManche;
+        int limiteScore = 10*(nombreJoueursDansPartie-1);
+        bool bouclerPartie = true, attendre;
+        while (bouclerPartie) {
+            if (false==m_ecranJeu.jouerManche()) {
+                return;
+            }
+            SDL_Delay(500);
 
-	SDL_Event eventManche;
-	int score = 0;
-	bool bouclerPartie = true, attendre;
-	while (bouclerPartie) {
-		if (false==m_ecranJeu.jouerManche()) {
-			return;
-		}
-		SDL_Delay(500);
+            attendre = true;
+            while (attendre) {
+                SDL_WaitEvent(&eventManche);
+                switch (eventManche.type) {
+                case SDL_KEYDOWN:
+                    switch (eventManche.key.keysym.unicode) {
+                    case SDLK_ESCAPE:
+                        return;
 
-		attendre = true;
-		while (attendre) {
-			SDL_WaitEvent(&eventManche);
-			switch (eventManche.type) {
-			case SDL_KEYDOWN:
-				switch (eventManche.key.keysym.unicode) {
-				case SDLK_ESCAPE:
-					return;
+                    case SDLK_BACKSPACE:
+                            m_ecranAAfficher = ACCUEIL;
+                            bouclerPartie = false;
+                            attendre = false;
+                        break;
 
-				case SDLK_BACKSPACE:
-						m_ecranAAfficher = ACCUEIL;
-						bouclerPartie = false;
-						attendre = false;
-					break;
+                    case SDLK_SPACE:
+                        attendre = false;
+                        break;
 
-				case SDLK_SPACE:
-					attendre = false;
-					break;
+                    default:
+                        break;
+                    }
 
-				default:
-					break;
-				}
-
-			default:
-				break;
-			}
-		}
+                default:
+                    break;
+                }
+            }
+        }
 	}
 	afficher(m_ecranAAfficher);
 }
