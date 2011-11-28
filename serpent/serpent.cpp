@@ -163,8 +163,7 @@ bool Serpent::avance() throw(HorsLimite, TraceImpossible) {
 
         if (!vaMourir(nouveauPixelX, nouveauPixelY)) {
         	if (--m_tempsAvantTrou < 10) {
-        		trace(nouveauPixelX, nouveauPixelY, m_couleur);
-//        		traceTrou(nouveauPixelX, nouveauPixelY);
+        		traceTrou(nouveauPixelX, nouveauPixelY);
         		if (m_tempsAvantTrou==0) {
         			donnerProchainTrou();
         		}
