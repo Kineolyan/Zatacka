@@ -23,23 +23,45 @@ vector< vector<int> > positionsExcluesStandard()
 	return matrice;
 }
 
-RegleInitialisation::RegleInitialisation():m_distanceMin(1),m_positionsFixes(false),m_dimJ(13),m_dimI(9),m_positionsExclues(positionsExcluesStandard()),m_hauteurJeu(480), m_largeurJeu(540)
+RegleInitialisation::RegleInitialisation():
+		m_distanceMin(1),
+		m_positionsFixes(false),
+		m_dimJ(13),
+		m_dimI(9),
+		m_positionsExclues(positionsExcluesStandard()),
+		m_hauteurJeu(480),
+		m_largeurJeu(540)
 {
 
 }
 
-RegleInitialisation::RegleInitialisation(vector<double> directionsPossibles, vector< pair<int,int> > positionsPossibles):m_positionsFixes(true),m_directionsPossibles(directionsPossibles),m_positionsPossibles(positionsPossibles),m_hauteurJeu(480), m_largeurJeu(540)
+RegleInitialisation::RegleInitialisation(vector<double> directionsPossibles,
+		vector< pair<int,int> > positionsPossibles):
+	m_positionsFixes(true),
+	m_directionsPossibles(directionsPossibles),
+	m_positionsPossibles(positionsPossibles),
+	m_hauteurJeu(480),
+	m_largeurJeu(540)
 {
 
 }
 
-RegleInitialisation::RegleInitialisation(double distanceMin,vector< vector<int> > positionsExclues,int dimJ, int dimI):m_distanceMin(distanceMin),m_positionsFixes(false),m_dimJ(dimJ),m_dimI(dimI),m_positionsExclues(positionsExclues),m_hauteurJeu(480), m_largeurJeu(540)
+RegleInitialisation::RegleInitialisation(double distanceMin,
+		vector< vector<int> > positionsExclues,
+		int dimJ, int dimI):
+	m_distanceMin(distanceMin),
+	m_positionsFixes(false),
+	m_dimJ(dimJ),
+	m_dimI(dimI),
+	m_positionsExclues(positionsExclues),
+	m_hauteurJeu(480),
+	m_largeurJeu(540)
 {
 
 }
 
-RegleInitialisation::RegleInitialisation(vector<RegleInitialisation> regles):m_hauteurJeu(480), m_largeurJeu(540)
-
+RegleInitialisation::RegleInitialisation(vector<RegleInitialisation> regles):
+	m_hauteurJeu(480), m_largeurJeu(540)
 {
 		m_distanceMin = 1;
 		m_positionsFixes = false;
