@@ -141,7 +141,7 @@ void Zatacka::creerMenuPrincipal() {
 				m_couleurs[JAUNE]);
 	m_optionJoueurs[2] = new Option("(, ;)", "READY", "", m_policeBasique,
 				m_couleurs[ORANGE]);
-	m_optionJoueurs[3] = new Option("(L.Arrow R.Arrow)", "READY", "", m_policeBasique,
+	m_optionJoueurs[3] = new Option("(L.Arrow D.Arrow)", "READY", "", m_policeBasique,
 				m_couleurs[VERT]);
 	m_optionJoueurs[4] = new Option("(/ *)", "READY", "", m_policeBasique,
 				m_couleurs[VIOLET]);

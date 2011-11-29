@@ -77,11 +77,12 @@ void Jeu::initialiserScores() throw() {
     SDL_Rect position = {10, 10};
     TTF_Font* police = m_jeu.policeCalligraphiee();
 
-    int pas = (m_hauteur-20)/6;
-    for (int i=0; i<6; i++) {
-    	m_scores[i].contenu("0");
-        m_scores[i].police(police);
-    	m_scores[i].position(position);
+    int pas = (m_hauteur-20)/m_scores.size();
+    for (vector<TexteSDL>::iterator score = m_scores.begin(),
+    		end = m_scores.end(); score!=end; ++score) {
+    	score->contenu("0");
+    	score->police(police);
+    	score->position(position);
     	position.y+= pas;
     }
 }
@@ -318,7 +319,7 @@ bool Jeu::jouerManche() {
 
 void Jeu::actualiserScores(int indexPerdant) {
 	// Appel à la règle pour connaître le gain en points de chaque joueur
-	for (int i=0; i<6; ++i) {
+	for (int i=0, end = m_joueurs.size(); i<end; ++i) {
 		if (i!=indexPerdant) {
 			m_joueurs[i]->gagnePoints(1);
 		}
