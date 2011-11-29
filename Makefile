@@ -5,8 +5,8 @@ SRC = .
 OBJ = $(SRC)/obj
 rm = $(SRC)/bin/rm -f
 ln = $(SRC)/bin/ln -s
-CC = g++ 
-DEFS =  
+CC = g++
+DEFS =
 INCLUDES =  -I $(SRC)
 
 # Temporary
@@ -38,6 +38,7 @@ OBJS = $(OBJ)/exception.o \
 	$(OBJ)/texte.o \
 	$(OBJ)/option.o \
 	$(OBJ)/serpent.o \
+	$(OBJ)/audio.o \
 	$(OBJ)/jeu.o \
 	$(OBJ)/zatacka.o \
 	$(OBJ)/main.o
@@ -45,7 +46,7 @@ OBJS = $(OBJ)/exception.o \
 $(OBJ)/%.o: %.cpp
 	$(CC) $(CFLAGS) -c $*.cpp
 	mv $*.o $(OBJ)
-	
+
 $(OBJ)/%.o: $(SRC)/jeu/%.cpp
 	$(CC) $(CFLAGS) -c $(SRC)/jeu/$*.cpp
 	mv $*.o $(OBJ)
@@ -54,12 +55,16 @@ $(OBJ)/%.o: $(SRC)/serpent/%.cpp
 	$(CC) $(CFLAGS) -c $(SRC)/serpent/$*.cpp
 	mv $*.o $(OBJ)
 
+$(OBJ)/%.o: $(SRC)/audio/%.cpp
+	$(CC) $(CFLAGS) -c $(SRC)/audio/$*.cpp
+	mv $*.o $(OBJ)
+
 $(OBJ)/%.o: $(SRC)/util/%.cpp
 	$(CC) $(CFLAGS) -c $(SRC)/util/$*.cpp
 	mv $*.o $(OBJ)
-	
+
 # Règles de dépendance
-#$(OBJ)/main.o : $(SRC)/jeu/jeu.h 
+#$(OBJ)/main.o : $(SRC)/jeu/jeu.h
 #$(OBJ)/jeu.o : $(SRC)/jeu/jeu.* $(OBJ)/jeu/texte.h \
 #	$(SRC)/jeu/option.h $(SRC)/exception.h
 #$(OBJ)/texte.o : $(SRC)/jeu/texte.h
@@ -81,4 +86,3 @@ clean:
 install: prepare all
 
 reset: clean all
-

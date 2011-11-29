@@ -38,7 +38,7 @@ void Serpent::pixel(int pixelX, int pixelY) throw() {
 void Serpent::direction(double direction) throw()
 {	m_direction = direction;	}
 
-void Serpent::incrementeDirection(int multiplicateur) throw() {
+void Serpent::incrementeDirection(double multiplicateur) throw() {
 //ATTENTION, la grosse feinte : les ordonnées étant croissantes vers le bas, on compte les angles positivement dans le SENS ANTI-TRIGONOMÉTRIQUE
     m_direction += multiplicateur;
 }

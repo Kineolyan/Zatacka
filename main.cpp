@@ -4,7 +4,7 @@
 using namespace std;
 
 int main(int argc, char* argv[] ){
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		cerr << "Erreur à l'initialisation de la SDL : " << SDL_GetError() << endl;;
 		exit(EXIT_FAILURE);
 	}

@@ -120,7 +120,7 @@ private:
 	int getPixel(int pos) const throw();
 
 	void donnerProchainTrou();
-	void incrementeDirection(int multiplicateur) throw();
+	void incrementeDirection(double multiplicateur) throw();
 
 public:
 	/**

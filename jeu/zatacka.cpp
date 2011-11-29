@@ -462,7 +462,7 @@ void Zatacka::afficherFin() {
 			position.y+=50;
 		}
 	}
-	TexteSDL fin("Konek Hry", m_policeCalligraphiee, m_couleurs[BLANC]);
+	TexteSDL fin("Konec Hry", m_policeCalligraphiee, m_couleurs[BLANC]);
 	position.x = (m_largeur - fin.largeur())/2;
 	position.y = m_hauteur - 100;
 	fin.position(position);
