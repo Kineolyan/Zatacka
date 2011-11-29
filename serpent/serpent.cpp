@@ -7,15 +7,13 @@
 
 using namespace std;
 
-Serpent::Serpent(Couleur couleur, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu):
+Serpent::Serpent(Couleur couleur, int vitesse, Zatacka& ecranJeu):
     m_actif(false),
     m_couleur(couleur),
     m_vitesse(vitesse*10000),
     m_vivant(true),
     m_score(0),
-    m_jeu(ecranJeu)/*,
-    m_reglesDirection(reglesDirection),
-    m_reglesCollision(reglesCollision)*/ {
+    m_jeu(ecranJeu) {
     m_limites.x = m_jeu.largeurJeu() - ECART;
     m_limites.y = m_jeu.hauteurJeu() - ECART;
 }
@@ -57,10 +55,6 @@ void Serpent::vitesse(int vitesse) throw()
  */
 bool Serpent::collision(int pixelX, int pixelY)
 		const throw(HorsLimite) {
-//	if (m_couleur==0) {
-//		cout << "positionCourante : " << m_pixel.x << " " << m_pixel.y << endl;
-//		cout << "positionAVenir : " << pixelX << " " << pixelY << endl;
-//	}
 	bool testCouleur = false;
 	SDL_Rect positionPixel;
 	stringstream ss;
@@ -80,11 +74,6 @@ bool Serpent::collision(int pixelX, int pixelY)
 		positionPixel.x-= ecartX;
 		testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
 		ss << m_jeu.donnerCouleur(positionPixel) << " ";
-//		if (m_couleur==0) {
-//			cout << "testDplctX : " << positionPixel.x << " "
-//					<< positionPixel.y << "-" << boolalpha << testCouleur
-//					<< endl;
-//		}
 	}
 	else if (0!=pixelX - m_pixel.x) {
 		positionPixel.x = 2*pixelX - m_pixel.x;
@@ -92,11 +81,7 @@ bool Serpent::collision(int pixelX, int pixelY)
 		for (int e = -ECART, end = ECART; e<=end; ++e) {
 			testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
 			ss << m_jeu.donnerCouleur(positionPixel) << " ";
-//			if (m_couleur==0) {
-//				cout << "testDplctX : " << positionPixel.x << " "
-//						<< positionPixel.y << "-" << boolalpha << testCouleur
-//						<< endl;
-//			}
+
 			++positionPixel.y;
 		}
 	}
@@ -106,21 +91,20 @@ bool Serpent::collision(int pixelX, int pixelY)
 		for (int e = -ECART, end = ECART; e<=end; ++e) {
 			testCouleur|= (NOIR!=m_jeu.donnerCouleur(positionPixel));
 			ss << m_jeu.donnerCouleur(positionPixel) << " ";
-//			if (m_couleur==0) {
-//				cout << "testDplctY : " << positionPixel.x << " "
-//						<< positionPixel.y << "-" << boolalpha << testCouleur
-//						<< endl;
-//			}
+
 			++positionPixel.x;
 		}
 	}
 
+	#ifdef DEBUG_ACTIVE
 	if (testCouleur) {
 		cout << "Collision(" << m_couleur << ") : "
 			<< m_pixel.x << "-" << m_pixel.y << " | "
 			<< pixelX << "-" << pixelY
 			<< " [ " << ss.str() << "]" << endl;
 	}
+	#endif
+
 	return testCouleur;
 }
 
