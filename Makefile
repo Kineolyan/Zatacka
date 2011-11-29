@@ -43,6 +43,10 @@ OBJS = $(OBJ)/exception.o \
 	$(OBJ)/serpent.o \
 	$(OBJ)/jeu.o \
 	$(OBJ)/zatacka.o \
+	$(OBJ)/regle.o \
+	$(OBJ)/reglecollision.o \
+	$(OBJ)/regleinitialisation.o \
+	$(OBJ)/reglepoints.o \
 	$(OBJ)/main.o
 
 $(OBJ)/%.o: %.cpp
@@ -57,6 +61,11 @@ $(OBJ)/%.o: $(SRC)/jeu/%.cpp
 
 $(OBJ)/%.o: $(SRC)/serpent/%.cpp
 	@$(CC) $(CFLAGS) -c $(SRC)/serpent/$*.cpp
+	@mv $*.o $(OBJ)
+	@echo -- $*.o done
+
+$(OBJ)/%.o: $(SRC)/regle/%.cpp
+	@$(CC) $(CFLAGS) -c $(SRC)/regle/$*.cpp
 	@mv $*.o $(OBJ)
 	@echo -- $*.o done
 

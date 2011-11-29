@@ -18,6 +18,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
 		throw InstanceManquante("Impossible de creer l'ecran");
 	}
 	SDL_WM_SetCaption("Zatacka", NULL);
+	reglerRepetition(2000);
 
 	TTF_Init();
 	chargerPolices();
@@ -101,7 +102,6 @@ void Zatacka::initialiserJeu() {
 }
 
 void Zatacka::afficherAccueil() {
-	reglerRepetition(2000);
 	effacer();
 
 	TexteSDL texte("Achtung, die Kurve !", m_policeCalligraphiee, m_couleurs[BLANC]);
@@ -164,7 +164,6 @@ void Zatacka::creerMenuPrincipal() {
 }
 
 void Zatacka::afficherMenuPrincipal() {
-	reglerRepetition(2000);
 	effacer();
 
 	TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
@@ -372,7 +371,6 @@ void Zatacka::afficherMenuOptions() {
 }
 
 void Zatacka::afficherJeu() {
-    reglerRepetition(100);
 	effacer();
 
 	int indexJoueur = 0, nombreJoueursDansPartie = 0;
