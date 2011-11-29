@@ -60,3 +60,4 @@ void GestionnaireRegles::appliquerTouche(Uint16 touche, SDL_Surface* ecran) {
 		(*regle)->appliquerTouche(touche, ecran);
 	}
 }
+

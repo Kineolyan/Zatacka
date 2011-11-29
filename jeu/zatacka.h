@@ -232,7 +232,8 @@ public:
 
 	void afficherScores() throw();
 
-	void donnerPlacement(Couleur couleurJoueur);
+	std::vector< std::pair<int,int> > positionsDepart() const;
+	std::vector<double> directionsDepart() const;
 };
 
 #endif /* ZATACKA_H_ */

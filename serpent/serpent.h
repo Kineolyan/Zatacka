@@ -164,7 +164,7 @@ public:
 	 * Réssucite, puis place le serpent aléatoirement sur la grille et lui donne
 	 * une nouvelle direction initiale
 	 */
-	void placer();
+	void placer(int pixelX, int pixelY, double direction);
 
 	/**
 	 * Réinitialise le serpent.

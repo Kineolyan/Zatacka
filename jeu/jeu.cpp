@@ -211,9 +211,17 @@ void Jeu::demarrerPartie(int nombreJoueurs) {
 bool Jeu::jouerManche() {
     afficherJeu(m_jeu.ecran());
 
+    vector<pair<int, int> > positionsDepart = m_jeu.positionsDepart();
+    vector<double> directionsDepart = m_jeu.directionsDepart();
+    int indexJoueur = 0;
     for (vector<Serpent*>::iterator joueur = m_joueurs.begin(),
     		end = m_joueurs.end(); joueur<end; ++joueur) {
-    	(*joueur)->placer();
+    	(*joueur)->placer(
+			positionsDepart[indexJoueur].first,
+			positionsDepart[indexJoueur].second,
+			directionsDepart[indexJoueur]
+		);
+    	++indexJoueur;
     }
 
     SDL_Event eventJeu;

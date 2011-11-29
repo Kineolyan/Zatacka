@@ -6,7 +6,7 @@
 
 using namespace std;
 
-vector< vector<int> > positionsExcluesStandard()
+vector< vector<int> > RegleInitialisation::positionsExcluesStandard()
 {
 	vector<int> ligne(13,0);
 	vector< vector<int> > matrice(9,ligne);
@@ -208,7 +208,7 @@ vector<double> RegleInitialisation::directionsDepart() const
 	{
 		for (int i(0); i<6; ++i)
 		{
-			directionsSerpents.push_back(3.14159*0.001*(rand()%2000));
+			directionsSerpents.push_back(rand()%180);
 		}
 		return directionsSerpents;
 	}

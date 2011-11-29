@@ -193,12 +193,12 @@ void Serpent::gagnePoints(int pointsGagnes) throw() {
  * Réssucite, puis place le serpent aléatoirement sur la grille et lui donne
  * une nouvelle direction initiale
  */
-void Serpent::placer() {
+void Serpent::placer(int pixelX, int pixelY, double direction) {
 	if (m_actif) {
 		m_vivant = true;
-		m_direction = rand()%180;
-		m_pixel.x = 50 + (rand()%(m_limites.x - 100));
-		m_pixel.y = 50 + (rand()%(m_limites.y - 100));
+		m_direction = direction;
+		m_pixel.x = pixelX;
+		m_pixel.y = pixelY;
 		m_position.x = m_pixel.x * 10000;
 		m_position.y = m_pixel.y * 10000;
 

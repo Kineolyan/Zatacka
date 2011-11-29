@@ -40,6 +40,9 @@ private:
 	
 	int m_hauteurJeu;
 	int m_largeurJeu;
+
+	std::vector<std::vector<int> > positionsExcluesStandard();
+
 public:
 
 	/**

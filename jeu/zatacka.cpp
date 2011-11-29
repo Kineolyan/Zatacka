@@ -646,4 +646,10 @@ void Zatacka::resetOptionJoueurs() throw() {
 	}
 }
 
-void Zatacka::donnerPlacement(Couleur couleurJoueur) {}
+vector<pair<int, int> > Zatacka::positionsDepart() const {
+	return m_regles.positionsDepart();
+}
+
+vector<double> Zatacka::directionsDepart() const {
+	return m_regles.directionsDepart();
+}
