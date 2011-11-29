@@ -220,86 +220,65 @@ bool Jeu::jouerManche() {
     bool bouclerManche = true;
     int nombreJoueursVivants = m_nbJoueursActifs,
     	tempsActuel, tempsPrecedent = 0;
+    Uint8* etatTouches = NULL;
     while (bouclerManche) {
 		SDL_PollEvent(&eventJeu);
 		switch (eventJeu.type) {
 		case SDL_QUIT:
-			return;
+			return false;
 
 		case SDL_KEYDOWN:
 			switch (eventJeu.key.keysym.unicode) {
 			case SDLK_ESCAPE:
 				return false;
 
-			case SDLK_BACKSPACE:
-				bouclerManche = false;
-				break;
-
-			case SDLK_AMPERSAND:
-                m_joueurs[0]->seDirigeVers(GAUCHE);
-                break;
-			case SDLK_a:
-				m_joueurs[0]->seDirigeVers(DROITE);
-				break;
-
-			case SDLK_x:
-                m_joueurs[1]->seDirigeVers(GAUCHE);
-                break;
-			case SDLK_c:
-				m_joueurs[1]->seDirigeVers(DROITE);
-				break;
-
-			case SDLK_COMMA:
-                m_joueurs[2]->seDirigeVers(GAUCHE);
-                break;
-			case SDLK_SEMICOLON:
-                m_joueurs[2]->seDirigeVers(DROITE);
-                break;
-
-			case SDLK_SLASH:
-                m_joueurs[4]->seDirigeVers(GAUCHE);
-                break;
-			case SDLK_ASTERISK:
-                m_joueurs[4]->seDirigeVers(DROITE);
-                break;
-
 			default:
 				break;
 			}
-
-			switch (eventJeu.key.keysym.sym) {
-			case SDLK_LEFT:
-                m_joueurs[3]->seDirigeVers(GAUCHE);
-                break;
-			case SDLK_DOWN:
-                m_joueurs[3]->seDirigeVers(DROITE);
-                break;
-
-			default:
-				break;
-			}
-			break;
-
-		case SDL_MOUSEBUTTONDOWN:
-			switch (eventJeu.button.button) {
-			case SDL_BUTTON_LEFT:
-                m_joueurs[5]->seDirigeVers(GAUCHE);
-                break;
-			case SDL_BUTTON_RIGHT:
-                m_joueurs[5]->seDirigeVers(DROITE);
-                break;
-
-			default:
-				break;
-			}
-			break;
 
 		default:
 			break;
 		}
 
-		tempsActuel = SDL_GetTicks();
-		if (tempsActuel - tempsPrecedent>=20) {
+    	tempsActuel = SDL_GetTicks();
+		if (tempsActuel - tempsPrecedent>=5) {
+			etatTouches = SDL_GetKeyState(NULL);
+
+			if (etatTouches[SDLK_AMPERSAND]) {
+                m_joueurs[0]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_a]) {
+				m_joueurs[0]->seDirigeVers(DROITE);
+			}
+
+			if (etatTouches[SDLK_x]) {
+                m_joueurs[1]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_c]) {
+				m_joueurs[1]->seDirigeVers(DROITE);
+			}
+
+			if (etatTouches[SDLK_COMMA]) {
+                m_joueurs[2]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_SEMICOLON]) {
+				m_joueurs[2]->seDirigeVers(DROITE);
+			}
+
+			if (etatTouches[SDLK_SLASH]) {
+                m_joueurs[4]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_ASTERISK]) {
+				m_joueurs[4]->seDirigeVers(DROITE);
+			}
+
+			if (etatTouches[SDLK_LEFT]) {
+                m_joueurs[3]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_DOWN]) {
+				m_joueurs[3]->seDirigeVers(DROITE);
+			}
+
 			for (int indexJoueur = 0, end = m_joueurs.size();
 					indexJoueur <end; ++indexJoueur) {
 				if (!m_joueurs[indexJoueur]->avance()) {
@@ -310,7 +289,7 @@ bool Jeu::jouerManche() {
 			tempsPrecedent = tempsActuel;
 		}
 		else {
-			SDL_Delay(20 - (tempsActuel - tempsPrecedent));
+			SDL_Delay(5 - (tempsActuel - tempsPrecedent));
 		}
 
 		if (nombreJoueursVivants<2) {
