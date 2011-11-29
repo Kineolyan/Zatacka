@@ -13,7 +13,6 @@
 #include "regleinitialisation.h"
 #include "reglecollision.h"
 
-class Zatacka;
 
 class Regle
 {
@@ -22,12 +21,11 @@ private:
 	RegleCollision m_regleCollision;
 	RegleInitialisation m_regleInitialisation;
 	ReglePoints m_reglePoints;
-	Zatacka& m_jeu;
 	
 public:
-	Regle(Zatacka& jeu);
-	Regle(RegleCollision reglecollision, RegleInitialisation regleinitialisation, ReglePoints reglepoints, Zatacka& jeu);
-	Regle(std::vector<Regle> regles, Zatacka& jeu);
+	Regle();
+	Regle(RegleCollision reglecollision, RegleInitialisation regleinitialisation, ReglePoints reglepoints);
+	Regle(std::vector<Regle> regles);
 	RegleCollision getRegleColl() const;	
 	RegleInitialisation getRegleInit() const;
 	ReglePoints getReglePts() const;

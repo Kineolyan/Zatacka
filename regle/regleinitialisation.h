@@ -10,8 +10,6 @@
 
 #include <vector>
 
-class Zatacka;
-
 class RegleInitialisation
 {
 private:
@@ -40,25 +38,26 @@ private:
 	int m_dimI;
 	std::vector< std::vector<int> > m_positionsExclues;
 	
-	Zatacka& m_jeu;
-	
+	int m_hauteurJeu;
+	int m_largeurJeu;
 public:
+
 	/**
 	* createur de la regle de jeu standard
 	*/
-	RegleInitialisation(Zatacka& jeu);
+	RegleInitialisation();
 	/**
 	* createur de regle avec positionsFixes
 	*/
-	RegleInitialisation(std::vector<double> directionsPossibles, std::vector< std::pair<int,int> > positionsPossibles, Zatacka& jeu);
+	RegleInitialisation(std::vector<double> directionsPossibles, std::vector< std::pair<int,int> > positionsPossibles);
 	/**
 	* createur de regle avec matrice d'exclusion
 	*/
-	RegleInitialisation(double distanceMin, std::vector< std::vector<int> > positionsExclues, int dimJ, int dimI, Zatacka& jeu);
+	RegleInitialisation(double distanceMin, std::vector< std::vector<int> > positionsExclues, int dimJ, int dimI);
 	/**
 	* createur qui fusionne 2 regles
 	*/
-	RegleInitialisation(std::vector<RegleInitialisation> regles, Zatacka& jeu);
+	RegleInitialisation(std::vector<RegleInitialisation> regles);
 	/**
 	* determination des positions de depart
 	*/

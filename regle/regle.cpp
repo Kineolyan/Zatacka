@@ -1,47 +1,51 @@
 #include "regle.h"
+#include <iostream>
+using namespace std;
 
-Regle::Regle(Zatacka& jeu):m_jeu(jeu)
+Regle::Regle()
 {
-	RegleCollision m_regleCollision();
-	RegleInitialisation m_regleInitialisation(jeu);
-	ReglePoints m_reglePoints();
+	RegleCollision m_regleCollision;
+	RegleInitialisation m_regleInitialisation;
+	ReglePoints m_reglePoints;
 }
 
-Regle::Regle(RegleCollision regleCollision, RegleInitialisation regleInitialisation, ReglePoints reglePoints,Zatacka& jeu):m_regleCollision(regleCollision),m_regleInitialisation(regleInitialisation),m_reglePoints(reglePoints), m_jeu(jeu)
+Regle::Regle(RegleCollision regleCollision, RegleInitialisation regleInitialisation, ReglePoints reglePoints):m_regleCollision(regleCollision),m_regleInitialisation(regleInitialisation),m_reglePoints(reglePoints)
 {
 
 }
 
-Regle::Regle(vector<Regle> regles, Zatacka& jeu):m_jeu(jeu)
+Regle::Regle(vector<Regle> regles)
 {
 	vector<RegleCollision> reglescoll(0);
 	vector<RegleInitialisation> reglesinit(0);
 	vector<ReglePoints> reglespts(0);
-	for (int i(0); i<regles.size(); ++i)
+
+	for (double i(0); i<regles.size(); ++i)
 	{
 		reglescoll.push_back(regles[i].getRegleColl());
 		reglesinit.push_back(regles[i].getRegleInit());
 		reglespts.push_back(regles[i].getReglePts());
 	}
-	
+
 	RegleCollision m_regleCollision(reglescoll);
-	RegleInitialisation m_regleInitialisation(reglesinit, Zatacka& jeu);
+	RegleInitialisation m_regleInitialisation(reglesinit);
 	ReglePoints m_reglePoints(reglespts);
+
 }
 
 RegleCollision Regle::getRegleColl() const
 {
-return m_regleCollision;
+	return m_regleCollision;
 }
-	
+
 RegleInitialisation Regle::getRegleInit() const
 {
-return m_regleInitialisation;
+	return m_regleInitialisation;
 }
 
 ReglePoints Regle::getReglePts() const
 {
-return m_reglePoints;
+	return m_reglePoints;
 }
 
 vector< pair<int,int> > Regle::positionsDepart() const
@@ -56,11 +60,11 @@ vector<double> Regle::directionsDepart() const
 
 bool Regle::collision(int numSerpent, std::vector<int> joueursRencontres) const
 {
-	return m_reglesCollision.collision(int numSerpent, std::vector<int> joueursRencontres);
+	return m_regleCollision.collision(numSerpent,joueursRencontres);
 }
 
-vector<int> attribuePointsA(int serpentMourrant) const
+vector<int> Regle::attribuePointsA(int serpentMourrant) const
 {
-	return m_reglePoints.attribuePointsA(int serpentMourrant);
+	return m_reglePoints.attribuePointsA(serpentMourrant);
 }
 

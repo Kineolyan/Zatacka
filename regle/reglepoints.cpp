@@ -1,5 +1,5 @@
 #include "reglepoints.h"
-
+#include"iostream"
 
 using namespace std;
 
@@ -9,11 +9,11 @@ vector< vector<int> > matriceGainsStandard()
 	vector< vector<int> > matrice(6,ligne);
 	for (int i(0); i<6; i++)
 	{
-		for (int j(0); i<6;j++)
+		for (int j(0); j<6;j++)
 		{
 			if (i == j)
 			{
-				matrice[i].push_back(0);
+				matrice[i][j]=0;
 			}
 		}
 	}
@@ -33,9 +33,9 @@ ReglePoints::ReglePoints(vector<ReglePoints> regles)
 	m_matriceGains = matriceGainsStandard();
 	for (int i(0); i<6; i++)
 	{
-		for (int j(0); i<6;j++)
+		for (int j(0); j<6;j++)
 		{
-			for (int k(0); k<regles.size();k++)
+			for (double k(0); k<regles.size();k++)
 			{
 				m_matriceGains[i][j]*=regles[k].valeurCase(i,j);
 			}
