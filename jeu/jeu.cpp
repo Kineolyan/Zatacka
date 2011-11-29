@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
+Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur, Audio audio)
 	throw(InstanceManquante):
 		ItemEcran(largeurJeu, hauteur),
 		m_jeu(jeu),
@@ -14,6 +14,7 @@ Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 		m_joueurs(6),
 		m_points(7),
 		m_scores(6),
+		m_audio(audio),
 		m_nbJoueursActifs(0) {
 	m_positionScores.x = m_largeur;
 	m_positionScores.y = 0;
@@ -291,8 +292,6 @@ bool Jeu::jouerManche() {
 				if (!m_joueurs[indexJoueur]->avance()) {
 					--nombreJoueursVivants;
 					actualiserScores(indexJoueur);
-					//Signal pour le contrôleur audio
-					m_audio.diminuerNombreJoueurs();
 				}
 			}
 			tempsPrecedent = tempsActuel;

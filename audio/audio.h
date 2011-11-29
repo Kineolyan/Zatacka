@@ -1,5 +1,5 @@
 /*
- * audio.h
+ * Audio.h
  *
  *  Created on: 28 nov. 2011
  *      Author: mathias
@@ -38,15 +38,15 @@ public:
 
   ~Audio();
 
-  void audioCallback(void *udata, Uint8 *stream, int len);
+//  void audioCallback(void *udata, Uint8 *stream, int len);
 
-//  int audio_Init(void);
+  void initialiserAudio();
 
   void chargerEffets();
 
   void chargerMusique(int numeroMorceau);
 
-  void diminuerNombreJoueurs();
+//  void diminuerNombreJoueurs();
 
 };
 #endif /* AUDIO_H_ */

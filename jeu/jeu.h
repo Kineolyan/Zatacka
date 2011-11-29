@@ -20,7 +20,6 @@
 #include "texte.h"
 #include "../util/keywords.h"
 #include "../serpent/serpent.h"
-#include "../audio/audio.h"
 
 class Serpent;
 
@@ -49,6 +48,11 @@ private:
 	Ecran m_ecranScores;
 
 	/**
+	 * Gestionnaire de sons
+	 */
+	Audio m_audio;
+
+	/**
 	 * Motifs de base pour le trace des serpents
 	 */
 	std::vector<Serpent*> m_joueurs;
@@ -70,11 +74,6 @@ private:
 	int m_nbJoueursActifs;
 
 	/**
-	 * Contrôleur audio
-	 */
-  Audio m_audio;
-
-	/**
 	 * Donne à chaque score une couleur, une police et une position
 	 */
 	void initialiserPoints() throw(InstanceManquante);
@@ -82,7 +81,7 @@ private:
 	void colorer(SDL_Surface* ecran, Couleur couleur) throw();
 
 public:
-	Jeu(Zatacka& jeu, int largeurJeu, int largeurScore, int hauteur)
+	Jeu(Zatacka& jeu, int largeurJeu, int largeurScore, int hauteur, Audio audio)
 		throw(InstanceManquante);
 	~Jeu();
 

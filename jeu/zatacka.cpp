@@ -6,7 +6,7 @@ using namespace std;
 Zatacka::Zatacka(int largeur, int hauteur):
 		m_largeur(largeur), m_hauteur(hauteur),
 		m_largeurScores(100), m_ecran(NULL),
-		m_ecranJeu(*this, largeur - m_largeurScores, m_largeurScores, hauteur),
+		m_ecranJeu(*this, largeur - m_largeurScores, m_largeurScores, hauteur, m_audio),
 		m_points(8),
 		m_policeCalligraphiee(NULL),
 		m_policeBasique(NULL),
@@ -25,7 +25,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
 	initialiserCouleurs();
 	initialiserJeu();
 
-	m_audio = Audio();
+  m_audio.initialiserAudio();
 
 	creerMenuPrincipal();
 	creerMenuOptions();

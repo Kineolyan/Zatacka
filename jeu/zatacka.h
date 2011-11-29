@@ -11,6 +11,7 @@
 #include "jeu.h"
 #include "../util/exception.h"
 #include "../serpent/serpent.h"
+#include "../audio/audio.h"
 
 /**
  * Instance de jeu gerant les différents écrans, les serpents, les options
@@ -47,6 +48,8 @@ private:
 	 * Ecran de jeu contenant les serpents
 	 */
 	Jeu m_ecranJeu;
+
+	Audio m_audio;
 
 	/**
 	 * Motifs de base pour le trace des serpents
