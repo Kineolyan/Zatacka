@@ -1,5 +1,4 @@
 #include "reglepoints.h"
-#include"iostream"
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 #include "reglecollision.h"
-#include <iostream>
+
 using namespace std;
 
 vector< vector<bool> > matriceCollisionsStandard()

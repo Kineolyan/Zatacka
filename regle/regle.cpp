@@ -1,5 +1,4 @@
 #include "regle.h"
-#include <iostream>
 using namespace std;
 
 Regle::Regle()
