@@ -11,6 +11,7 @@
 #include "jeu.h"
 #include "../util/exception.h"
 #include "../serpent/serpent.h"
+#include "../regle/gestionnaire.h"
 
 /**
  * Instance de jeu gerant les différents écrans, les serpents, les options
@@ -88,6 +89,8 @@ private:
 	 */
 	int m_nombreJoueurs;
 
+	GestionnaireRegles m_regles;
+
 	/**
 	 * Instancie les polices en chargeant le fichier et définit la taille
 	 */
@@ -134,6 +137,8 @@ private:
 	 * Affiche le menu des options
 	 */
 	void afficherMenuOptions();
+
+	void creerRegles();
 
 	/**
 	 * Affiche l'écran de jeu
