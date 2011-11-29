@@ -645,3 +645,5 @@ void Zatacka::resetOptionJoueurs() throw() {
 		(*option)->desactiver();
 	}
 }
+
+void Zatacka::donnerPlacement(Couleur couleurJoueur) {}

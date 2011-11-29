@@ -231,6 +231,8 @@ public:
 	void changerScore(Couleur couleurJoueur, int score) throw();
 
 	void afficherScores() throw();
+
+	void donnerPlacement(Couleur couleurJoueur);
 };
 
 #endif /* ZATACKA_H_ */
