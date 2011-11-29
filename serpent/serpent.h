@@ -67,16 +67,6 @@ private:
 	int m_score;
 
 	/**
-	 * Règles de direction
-	 */
-	//Regles m_reglesDirection;
-
-	/**
-	 * Règles de collision
-	 */
-	//Regles m_reglesCollision;
-
-	/**
 	 * Gestionnaire de l'écran de jeu
 	 */
 	Zatacka& m_jeu;
@@ -87,13 +77,6 @@ private:
 	int m_tempsAvantTrou;
 
 	void clignoter();
-
-	/**
-	 * Change les règles :
-	 *    - nomRegles : peut prendre les valeurs "direction" et "collision"
-	 *    - regles : un set de règles correspondant
-	 */
-	//void regles(string nomRegles, Regles regles);
 
 	bool collision(int positionX, int positionY)
 		const throw(HorsLimite);
@@ -127,7 +110,7 @@ public:
 	 * Constructeur :
 	 * - posX et posY sont les coordonnées de la tête du serpent en PIXELS
 	 */
-	Serpent(Couleur couleur, int vitesse/*, Regles reglesDirection, Regles reglesCollision*/, Zatacka& ecranJeu);
+	Serpent(Couleur couleur, int vitesse, Zatacka& ecranJeu);
 
 	/**
 	 * Destructeur

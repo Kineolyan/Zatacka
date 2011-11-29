@@ -121,11 +121,6 @@ public:
 			Couleur couleur) const throw(TraceImpossible);
 
 	/**
-	 * Renvoie la couleur des pixels d'une position donnee
-	 */
-	//Couleur donnerCouleurs(const SDL_Rect& position);
-
-	/**
 	 * Met à jour le score d'un joueur
 	 * Cette methode ne permet que de tracer sur l'écran de jeu. Un tracé
 	 * sur un autre écran lancera une exception.

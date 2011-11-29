@@ -223,6 +223,9 @@ bool Jeu::jouerManche() {
     while (bouclerManche) {
 		SDL_PollEvent(&eventJeu);
 		switch (eventJeu.type) {
+		case SDL_QUIT:
+			return;
+
 		case SDL_KEYDOWN:
 			switch (eventJeu.key.keysym.unicode) {
 			case SDLK_ESCAPE:

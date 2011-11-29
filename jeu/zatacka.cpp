@@ -118,6 +118,9 @@ void Zatacka::afficherAccueil() {
 	while (boucler) {
 		SDL_WaitEvent(&event);
 		switch (event.type) {
+		case SDL_QUIT:
+			return;
+
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
@@ -148,24 +151,16 @@ void Zatacka::creerMenuPrincipal() {
 	m_optionJoueurs[5] = new Option("(L.Mouse R.Mouse)", "READY", "", m_policeBasique,
 				m_couleurs[BLEU]);
 
-	SDL_Rect position = {50, 50},
-			positionEtat = {450, 50};
-	m_optionJoueurs[0]->position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	m_optionJoueurs[1]->position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	m_optionJoueurs[2]->position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	m_optionJoueurs[3]->position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	m_optionJoueurs[4]->position(position, positionEtat);
-	position.y+= 50;
-	positionEtat.y+= 50;
-	m_optionJoueurs[5]->position(position, positionEtat);
+	int margeHaut = 30, margeBas = 90, margeGauche = 50;
+	SDL_Rect position = {margeGauche, margeHaut},
+			positionEtat = {m_largeur/2, margeHaut};
+	int pas = (m_hauteur - margeHaut - margeBas)/m_optionJoueurs.size();
+	for (vector<Option*>::iterator option = m_optionJoueurs.begin(),
+			end = m_optionJoueurs.end(); option!=end; ++option) {
+		(*option)->position(position, positionEtat);
+		position.y+= pas;
+		positionEtat.y+= pas;
+	}
 }
 
 void Zatacka::afficherMenuPrincipal() {
@@ -174,7 +169,7 @@ void Zatacka::afficherMenuPrincipal() {
 
 	TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
 			m_couleurs[BLANC]);
-	SDL_Rect position = {50, 400};
+	SDL_Rect position = {50, m_hauteur - 80};
 	options.position(position);
 
     for (vector<Option*>::iterator it = m_optionJoueurs.begin(),
@@ -190,6 +185,9 @@ void Zatacka::afficherMenuPrincipal() {
 	while (boucler) {
 		SDL_WaitEvent(&event);
 		switch (event.type) {
+		case SDL_QUIT:
+			return;
+
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.unicode) {
 			case SDLK_ESCAPE:
@@ -320,7 +318,7 @@ void Zatacka::afficherMenuOptions() {
 
 	TexteSDL retour("Retour au menu principal (space)",
 			m_policeBasique, m_couleurs[BLANC]);
-	SDL_Rect position = {100, 200};
+	SDL_Rect position = {100, 400};
 	retour.position(position);
 	retour.afficher(m_ecran);
 
@@ -332,6 +330,9 @@ void Zatacka::afficherMenuOptions() {
 	while (boucler) {
 		SDL_WaitEvent(&event);
 		switch (event.type) {
+		case SDL_QUIT:
+			return;
+
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.unicode) {
 			case SDLK_ESCAPE:
@@ -371,7 +372,7 @@ void Zatacka::afficherMenuOptions() {
 }
 
 void Zatacka::afficherJeu() {
-    reglerRepetition(20);
+    reglerRepetition(100);
 	effacer();
 
 	int indexJoueur = 0, nombreJoueursDansPartie = 0;
@@ -413,7 +414,10 @@ void Zatacka::afficherJeu() {
             while (attendre) {
                 SDL_WaitEvent(&eventManche);
                 switch (eventManche.type) {
-                case SDL_KEYDOWN:
+        		case SDL_QUIT:
+        			return;
+
+        		case SDL_KEYDOWN:
                     switch (eventManche.key.keysym.unicode) {
                     case SDLK_ESCAPE:
                         return;
@@ -474,6 +478,9 @@ void Zatacka::afficherFin() {
 	while (attendre) {
 		SDL_WaitEvent(&event);
 		switch (event.type) {
+		case SDL_QUIT:
+			return;
+
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.unicode) {
 			case SDLK_ESCAPE:
