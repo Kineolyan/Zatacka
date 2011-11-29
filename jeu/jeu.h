@@ -20,6 +20,7 @@
 #include "texte.h"
 #include "../util/keywords.h"
 #include "../serpent/serpent.h"
+#include "../audio/audio.h"
 
 class Serpent;
 
@@ -67,6 +68,11 @@ private:
 	 * Nombre de joueurs participant à la partie
 	 */
 	int m_nbJoueursActifs;
+
+	/**
+	 * Contrôleur audio
+	 */
+  Audio m_audio;
 
 	/**
 	 * Donne à chaque score une couleur, une police et une position

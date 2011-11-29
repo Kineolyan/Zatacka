@@ -24,6 +24,8 @@ Zatacka::Zatacka(int largeur, int hauteur):
 	initialiserCouleurs();
 	initialiserJeu();
 
+	m_audio = Audio();
+
 	creerMenuPrincipal();
 	creerMenuOptions();
 

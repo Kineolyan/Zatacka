@@ -15,13 +15,13 @@ MODE = debug
 
 ifeq ($(OS), windows)
 PROGNAME = zatacka.exe
-LIBS = `sdl-config --libs` -lSDL_ttf
+LIBS = `sdl-config --libs` -lSDL_ttf -lSDL_mixer
 BIN = /usr/bin
 DEST = /usr/local/games/zatac
 else
 	ifeq ($(OS), unix)
 	PROGNAME = zatacka
-	LIBS = `sdl-config --libs` -lSDL_ttf
+LIBS = `sdl-config --libs` -lSDL_ttf -lSDL_mixer
 	BIN = /usr/bin
 	DEST = /usr/local/games/zatacka
 	endif

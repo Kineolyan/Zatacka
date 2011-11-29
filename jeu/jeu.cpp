@@ -301,6 +301,8 @@ bool Jeu::jouerManche() {
 				if (!m_joueurs[indexJoueur]->avance()) {
 					--nombreJoueursVivants;
 					actualiserScores(indexJoueur);
+					//Signal pour le contrôleur audio
+					m_audio.diminuerNombreJoueurs();
 				}
 			}
 			tempsPrecedent = tempsActuel;

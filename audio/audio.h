@@ -10,30 +10,43 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
+#include <iostream>
 #include "../util/exception.h"
 #include "../util/keywords.h"
 
 class Audio {
 private:
 
-  SDL_AudioSpec audioSortie;
+//  SDL_AudioSpec audioSortie;
 
   //La musique qui sera jouée
-  Mix_Music *music = NULL;
+  Mix_Music *m_musique;
 
-  //Les effets sonores que nous allons utiliser
-  Mix_Chunk *crash = NULL;
-  Mix_Chunk *high = NULL;
-  Mix_Chunk *med = NULL;
-  Mix_Chunk *low = NULL;
+  /**
+   * Nombre de joueurs participant à la partie.
+   */
+  int m_nombreJoueursActifs;
+
+  /**
+   * Nombre de joueurs encore en vie.
+   */
+  int m_nombreJoueursVivants;
 
 public:
 
+  Audio();
+
+  ~Audio();
+
   void audioCallback(void *udata, Uint8 *stream, int len);
 
-  int audio_Init(void);
+//  int audio_Init(void);
 
-  int mixerInit();
+  void chargerEffets();
 
-}
+  void chargerMusique(int numeroMorceau);
+
+  void diminuerNombreJoueurs();
+
+};
 #endif /* AUDIO_H_ */
