@@ -48,15 +48,25 @@ Jeu::~Jeu() {
 
 void Jeu::initialiserJoueurs() throw(InstanceManquante) {
     int index = 0;
-	for (vector<Serpent*>::iterator it = m_joueurs.begin(),
-		end = m_joueurs.end() ; it!=end; it++) {
-		*it = new Serpent((Couleur)index, 1, m_jeu);
+    vector<Serpent*>::iterator it = m_joueurs.begin(),
+    		end = m_joueurs.end();
+	try {
+		for ( ; it!=end; it++) {
+			*it = new Serpent((Couleur)index, 1, m_jeu);
 
-		if (NULL==*it) {
-			throw InstanceManquante(
-					"Impossible de creer un motif de trace");
+			if (NULL==*it) {
+				throw InstanceManquante(
+						"Impossible de creer un motif de trace");
+			}
+			++index;
 		}
-		++index;
+	}
+	catch (const exception& e) {
+		vector<Serpent*>::iterator deleter = m_joueurs.begin();
+		for ( ; deleter!=it; ++deleter) {
+			delete *deleter;
+		}
+		throw;
 	}
 }
 

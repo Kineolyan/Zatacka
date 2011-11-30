@@ -18,7 +18,8 @@ Serpent::Serpent(Couleur couleur, int vitesse, Zatacka& ecranJeu):
     m_limites.y = m_jeu.hauteurJeu() - ECART;
 }
 
-Serpent::~Serpent() {}
+Serpent::~Serpent()
+{}
 
 int Serpent::score() const throw()
 {	return m_score;	}
