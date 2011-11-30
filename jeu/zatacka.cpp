@@ -374,15 +374,16 @@ void Zatacka::afficherJeu() {
 	else {
         m_ecranJeu.demarrerPartie(nombreJoueursDansPartie);
 
-        SDL_Event eventManche;
         int limiteScore = 10*(nombreJoueursDansPartie-1);
         bool bouclerPartie = true, attendre;
         while (bouclerPartie) {
+        	attendre = true;
             if (false==m_ecranJeu.jouerManche()) {
                 return;
             }
             SDL_Delay(500);
 
+            SDL_Event eventManche;
             while (attendre) {
                 SDL_WaitEvent(&eventManche);
                 switch (eventManche.type) {
