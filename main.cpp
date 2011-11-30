@@ -1,5 +1,7 @@
 #include "jeu/zatacka.h"
 #include <iostream>
+#include <cmath>
+#include <ctime>
 
 using namespace std;
 
@@ -9,6 +11,8 @@ int main(int argc, char* argv[] ){
 		exit(EXIT_FAILURE);
 	}
 	SDL_EnableUNICODE(1);
+
+	srand(time(NULL));
 
 	try {
 		Zatacka jeu(640,480);

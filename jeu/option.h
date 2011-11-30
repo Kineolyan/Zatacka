@@ -21,9 +21,12 @@ protected:
 	int m_offset;
 
 public:
+	Option();
 	Option(std::string texte, std::string optionActive,
 			std::string optionInactive, TTF_Font* police,
 			SDL_Color* couleur);
+	Option(Option const&);
+	Option& operator=(const Option&);
 	~Option();
 
 	bool active();

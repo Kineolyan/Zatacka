@@ -9,11 +9,11 @@ void GestionnaireRegles::genererRegles() {
 	vector<RegleInitialisation> reglesinit(m_regles.size());
 	vector<ReglePoints> reglespts(m_regles.size());
 
-	for (vector<Regle*>::iterator regle = m_regles.begin(),
+	for (vector<Regle>::iterator regle = m_regles.begin(),
 			end = m_regles.end(); regle!=end; ++regle) {
-		reglescoll.push_back((*regle)->regleCollision());
-		reglesinit.push_back((*regle)->regleInitialisation());
-		reglespts.push_back((*regle)->reglePoints());
+		reglescoll.push_back(regle->regleCollision());
+		reglesinit.push_back(regle->regleInitialisation());
+		reglespts.push_back(regle->reglePoints());
 	}
 
 	m_regleCollision = RegleCollision(reglescoll);
@@ -21,10 +21,10 @@ void GestionnaireRegles::genererRegles() {
 	m_reglePoints = ReglePoints(reglespts);
 }
 
-void GestionnaireRegles::ajouterRegle(Regle* regle)
+void GestionnaireRegles::ajouterRegle(const Regle& regle)
 {	m_regles.push_back(regle);	}
 
-std::vector<Regle*>& GestionnaireRegles::regles()
+std::vector<Regle>& GestionnaireRegles::regles()
 {	return m_regles;	}
 
 vector< pair<int,int> > GestionnaireRegles::positionsDepart() const
@@ -48,16 +48,23 @@ vector<int> GestionnaireRegles::attribuePointsA(int serpentMourrant) const
 }
 
 void GestionnaireRegles::afficherOptions(SDL_Surface* ecran) {
-	for (vector<Regle*>::iterator regle = m_regles.begin(),
+	for (vector<Regle>::iterator regle = m_regles.begin(),
 			end = m_regles.end(); regle!=end; ++regle) {
-		(*regle)->option()->afficher(ecran);
+		regle->option()->afficher(ecran);
 	}
 }
 
 void GestionnaireRegles::appliquerTouche(Uint16 touche, SDL_Surface* ecran) {
-	for (vector<Regle*>::iterator regle = m_regles.begin(),
+	for (vector<Regle>::iterator regle = m_regles.begin(),
 			end = m_regles.end(); regle!=end; ++regle) {
-		(*regle)->appliquerTouche(touche, ecran);
+		regle->appliquerTouche(touche, ecran);
+	}
+}
+
+void GestionnaireRegles::reset() {
+	for (vector<Regle>::iterator regle = m_regles.begin(),
+			end = m_regles.end(); regle!=end; ++regle) {
+		regle->option()->desactiver();
 	}
 }
 

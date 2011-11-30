@@ -10,7 +10,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
 		m_points(8),
 		m_policeCalligraphiee(NULL),
 		m_policeBasique(NULL),
-		m_couleurs(8), m_optionJoueurs(6), m_options(),
+		m_couleurs(8), m_optionJoueurs(), m_options(),
 		m_nombreJoueurs(6) {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32,
 			SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
@@ -36,22 +36,6 @@ Zatacka::~Zatacka() {
 	TTF_CloseFont(m_policeCalligraphiee);
 	TTF_CloseFont(m_policeBasique);
 
-
-    for (vector<SDL_Color*>::iterator it = m_couleurs.begin(),
-        end = m_couleurs.end() ; it!=end; it++) {
-        delete *it;
-    }
-
-    for (vector<Option*>::iterator it = m_options.begin(),
-            end = m_options.end(); it!=end; it++) {
-    	delete *it;
-    }
-
-    for (vector<Option*>::iterator it = m_optionJoueurs.begin(),
-            end = m_optionJoueurs.end(); it!=end; it++) {
-    	delete *it;
-    }
-
     TTF_Quit();
 	SDL_Quit();
 }
@@ -75,11 +59,11 @@ void Zatacka::chargerPolices() {
  *
  * @return: la couleur demandée
  */
-SDL_Color* Zatacka::creerCouleur(Uint8 r, Uint8 g, Uint8 b) throw() {
-    SDL_Color* couleur = new SDL_Color;
-    couleur->r = r;
-    couleur->g = g;
-    couleur->b = b;
+SDL_Color Zatacka::creerCouleur(Uint8 r, Uint8 g, Uint8 b) throw() {
+    SDL_Color couleur;
+    couleur.r = r;
+    couleur.g = g;
+    couleur.b = b;
 
     return couleur;
 }
@@ -103,13 +87,12 @@ void Zatacka::initialiserJeu() {
 }
 
 void Zatacka::creerRegles() {
-	Regle *regle1 = new Regle(),
-			*regle2 = new Regle();
+	Regle regle1, regle2;
 
-	regle1->option("jouer (P)", "oui", "non",
-		m_policeBasique, m_couleurs[BLANC], SDLK_p);
-	regle2->option("jouer par equipe (T)", "oui", "non",
-		m_policeBasique, m_couleurs[BLANC], SDLK_t);
+	regle1.option("jouer (P)", "oui", "non",
+		m_policeBasique, couleur(BLANC), SDLK_p);
+	regle2.option("jouer par equipe (T)", "oui", "non",
+		m_policeBasique, couleur(BLANC), SDLK_t);
 
 	m_regles.ajouterRegle(regle1);
 	m_regles.ajouterRegle(regle2);
@@ -118,7 +101,7 @@ void Zatacka::creerRegles() {
 void Zatacka::afficherAccueil() {
 	effacer();
 
-	TexteSDL texte("Achtung, die Kurve !", m_policeCalligraphiee, m_couleurs[BLANC]);
+	TexteSDL texte("Achtung, die Kurve !", m_policeCalligraphiee, couleur(BLANC));
 	SDL_Rect position;
 	position.x = (m_largeur - texte.largeur()) / 2;
 	position.y = (m_hauteur - texte.hauteur()) / 2;
@@ -152,26 +135,33 @@ void Zatacka::afficherAccueil() {
 }
 
 void Zatacka::creerMenuPrincipal() {
-	m_optionJoueurs[0] = new Option("(1 A)", "READY", "", m_policeBasique,
-				m_couleurs[ROUGE]);
-	m_optionJoueurs[1] = new Option("(X C)", "READY", "", m_policeBasique,
-				m_couleurs[JAUNE]);
-	m_optionJoueurs[2] = new Option("(, ;)", "READY", "", m_policeBasique,
-				m_couleurs[ORANGE]);
-	m_optionJoueurs[3] = new Option("(L.Arrow D.Arrow)", "READY", "", m_policeBasique,
-				m_couleurs[VERT]);
-	m_optionJoueurs[4] = new Option("(/ *)", "READY", "", m_policeBasique,
-				m_couleurs[VIOLET]);
-	m_optionJoueurs[5] = new Option("(L.Mouse R.Mouse)", "READY", "", m_policeBasique,
-				m_couleurs[BLEU]);
+	Option option0("(1 A)", "READY", "", m_policeBasique,
+			couleur(ROUGE)),
+		option1("(X C)", "READY", "", m_policeBasique,
+				couleur(JAUNE)),
+		option2("(, ;)", "READY", "", m_policeBasique,
+				couleur(ORANGE)),
+		option3("(L.Arrow D.Arrow)", "READY", "", m_policeBasique,
+				couleur(VERT)),
+		option4("(/ *)", "READY", "", m_policeBasique,
+				couleur(VIOLET)),
+		option5("(L.Mouse R.Mouse)", "READY", "", m_policeBasique,
+				couleur(BLEU));
+
+	m_optionJoueurs.push_back(option0);
+	m_optionJoueurs.push_back(option1);
+	m_optionJoueurs.push_back(option2);
+	m_optionJoueurs.push_back(option3);
+	m_optionJoueurs.push_back(option4);
+	m_optionJoueurs.push_back(option5);
 
 	int margeHaut = 30, margeBas = 90, margeGauche = 50;
 	SDL_Rect position = {margeGauche, margeHaut},
 			positionEtat = {m_largeur/2, margeHaut};
 	int pas = (m_hauteur - margeHaut - margeBas)/m_optionJoueurs.size();
-	for (vector<Option*>::iterator option = m_optionJoueurs.begin(),
+	for (vector<Option>::iterator option = m_optionJoueurs.begin(),
 			end = m_optionJoueurs.end(); option!=end; ++option) {
-		(*option)->position(position, positionEtat);
+		option->position(position, positionEtat);
 		position.y+= pas;
 		positionEtat.y+= pas;
 	}
@@ -181,13 +171,13 @@ void Zatacka::afficherMenuPrincipal() {
 	effacer();
 
 	TexteSDL options("Configurer les options de jeu (O)", m_policeBasique,
-			m_couleurs[BLANC]);
+			couleur(BLANC));
 	SDL_Rect position = {50, m_hauteur - 80};
 	options.position(position);
 
-    for (vector<Option*>::iterator it = m_optionJoueurs.begin(),
+    for (vector<Option>::iterator it = m_optionJoueurs.begin(),
             end = m_optionJoueurs.end(); it!=end; it++) {
-    	(*it)->afficher(m_ecran);
+    	it->afficher(m_ecran);
     }
 	options.afficher(m_ecran);
 	SDL_Flip(m_ecran);
@@ -212,43 +202,43 @@ void Zatacka::afficherMenuPrincipal() {
 				break;
 
 			case SDLK_AMPERSAND:
-				m_optionJoueurs[0]->activer();
-				m_optionJoueurs[0]->afficher(m_ecran);
+				m_optionJoueurs[0].activer();
+				m_optionJoueurs[0].afficher(m_ecran);
 				break;
 
 			case SDLK_a:
-				m_optionJoueurs[0]->desactiver();
-				m_optionJoueurs[0]->afficher(m_ecran);
+				m_optionJoueurs[0].desactiver();
+				m_optionJoueurs[0].afficher(m_ecran);
 				break;
 
 			case SDLK_x:
-				m_optionJoueurs[1]->activer();
-				m_optionJoueurs[1]->afficher(m_ecran);
+				m_optionJoueurs[1].activer();
+				m_optionJoueurs[1].afficher(m_ecran);
 				break;
 
 			case SDLK_c:
-				m_optionJoueurs[1]->desactiver();
-				m_optionJoueurs[1]->afficher(m_ecran);
+				m_optionJoueurs[1].desactiver();
+				m_optionJoueurs[1].afficher(m_ecran);
 				break;
 
 			case SDLK_COMMA:
-				m_optionJoueurs[2]->activer();
-				m_optionJoueurs[2]->afficher(m_ecran);
+				m_optionJoueurs[2].activer();
+				m_optionJoueurs[2].afficher(m_ecran);
 				break;
 
 			case SDLK_SEMICOLON:
-				m_optionJoueurs[2]->desactiver();
-				m_optionJoueurs[2]->afficher(m_ecran);
+				m_optionJoueurs[2].desactiver();
+				m_optionJoueurs[2].afficher(m_ecran);
 				break;
 
 			case SDLK_SLASH:
-				m_optionJoueurs[4]->activer();
-				m_optionJoueurs[4]->afficher(m_ecran);
+				m_optionJoueurs[4].activer();
+				m_optionJoueurs[4].afficher(m_ecran);
 				break;
 
 			case SDLK_ASTERISK:
-				m_optionJoueurs[4]->desactiver();
-				m_optionJoueurs[4]->afficher(m_ecran);
+				m_optionJoueurs[4].desactiver();
+				m_optionJoueurs[4].afficher(m_ecran);
 				break;
 
 			case SDLK_o:
@@ -262,13 +252,13 @@ void Zatacka::afficherMenuPrincipal() {
 
 			switch (event.key.keysym.sym) {
 			case SDLK_LEFT:
-				m_optionJoueurs[3]->activer();
-				m_optionJoueurs[3]->afficher(m_ecran);
+				m_optionJoueurs[3].activer();
+				m_optionJoueurs[3].afficher(m_ecran);
 				break;
 
 			case SDLK_DOWN:
-				m_optionJoueurs[3]->desactiver();
-				m_optionJoueurs[3]->afficher(m_ecran);
+				m_optionJoueurs[3].desactiver();
+				m_optionJoueurs[3].afficher(m_ecran);
 				break;
 
 			default:
@@ -279,13 +269,13 @@ void Zatacka::afficherMenuPrincipal() {
 		case SDL_MOUSEBUTTONDOWN:
 			switch (event.button.button) {
 			case SDL_BUTTON_LEFT:
-				m_optionJoueurs[5]->activer();
-				m_optionJoueurs[5]->afficher(m_ecran);
+				m_optionJoueurs[5].activer();
+				m_optionJoueurs[5].afficher(m_ecran);
 				break;
 
 			case SDL_BUTTON_RIGHT:
-				m_optionJoueurs[5]->desactiver();
-				m_optionJoueurs[5]->afficher(m_ecran);
+				m_optionJoueurs[5].desactiver();
+				m_optionJoueurs[5].afficher(m_ecran);
 				break;
 
 			default:
@@ -303,14 +293,15 @@ void Zatacka::afficherMenuPrincipal() {
 
 void Zatacka::creerMenuOptions() {
 	SDL_Rect position = {50, 30};
-	vector<Regle*> regles = m_regles.regles();
+	vector<Regle>& regles = m_regles.regles();
 	int pas = (m_hauteur - 120)/regles.size();
 	if (pas>50) {
 		pas = 50;
 	}
-	for (vector<Regle*>::iterator regle = regles.begin(),
+
+	for (vector<Regle>::iterator regle = regles.begin(),
 		end = regles.end(); regle!=end; ++regle) {
-		(*regle)->option()->position(position);
+		regle->option()->position(position);
 		position.y+= pas;
 	}
 }
@@ -321,7 +312,7 @@ void Zatacka::afficherMenuOptions() {
 	m_regles.afficherOptions(m_ecran);
 
 	TexteSDL retour("Retour au menu principal (space)",
-			m_policeBasique, m_couleurs[BLANC]);
+			m_policeBasique, couleur(BLANC));
 	SDL_Rect position = {50, m_hauteur - 80};
 	retour.position(position);
 	retour.afficher(m_ecran);
@@ -366,9 +357,9 @@ void Zatacka::afficherJeu() {
 	m_regles.genererRegles();
 
 	int indexJoueur = 0, nombreJoueursDansPartie = 0;
-	for (vector<Option*>::iterator option = m_optionJoueurs.begin(),
+	for (vector<Option>::iterator option = m_optionJoueurs.begin(),
 			end = m_optionJoueurs.end(); option!=end; ++option) {
-		if ((*option)->active()) {
+		if (option->active()) {
 			m_ecranJeu.joueur(indexJoueur)->activer(true);
 			++nombreJoueursDansPartie;
 		}
@@ -392,15 +383,6 @@ void Zatacka::afficherJeu() {
             }
             SDL_Delay(500);
 
-            attendre = true;
-            for (int indexJoueur = 0; indexJoueur<m_nombreJoueurs; ++indexJoueur) {
-            	if (m_ecranJeu.joueur(indexJoueur)->score()>=limiteScore) {
-            		m_ecranAAfficher = ECRAN_FINAL;
-            		attendre = false;
-            		bouclerPartie = false;
-            		break;
-            	}
-            }
             while (attendre) {
                 SDL_WaitEvent(&eventManche);
                 switch (eventManche.type) {
@@ -429,6 +411,14 @@ void Zatacka::afficherJeu() {
                 default:
                     break;
                 }
+
+                for (int indexJoueur = 0; indexJoueur<m_nombreJoueurs; ++indexJoueur) {
+                	if (m_ecranJeu.joueur(indexJoueur)->score()>=limiteScore) {
+                		m_ecranAAfficher = ECRAN_FINAL;
+                        bouclerPartie = false;
+                		break;
+                	}
+                }
             }
         }
 	}
@@ -449,14 +439,14 @@ void Zatacka::afficherFin() {
 			stringstream ss;
 			ss << joueur->score();
 			scoreFinal.contenu(ss.str());
-			scoreFinal.couleur(m_couleurs[indexJoueur]);
+			scoreFinal.couleur(couleur(indexJoueur));
 			scoreFinal.position(position);
 			scoreFinal.afficher(m_ecran);
 
 			position.y+=50;
 		}
 	}
-	TexteSDL fin("Konek Hry", m_policeCalligraphiee, m_couleurs[BLANC]);
+	TexteSDL fin("Konek Hry", m_policeCalligraphiee, couleur(BLANC));
 	position.x = (m_largeur - fin.largeur())/2;
 	position.y = m_hauteur - 100;
 	fin.position(position);
@@ -539,7 +529,10 @@ int Zatacka::largeurJeu() const throw()
 {	return m_largeur - m_largeurScores;	}
 
 SDL_Color* Zatacka::couleur(Couleur couleur)
-{	return m_couleurs[couleur];	}
+{	return &(m_couleurs[couleur]);	}
+
+SDL_Color* Zatacka::couleur(int couleur)
+{	return &(m_couleurs[couleur]);	}
 
 TTF_Font* Zatacka::policeCalligraphiee()
 {	return m_policeCalligraphiee;	}
@@ -591,9 +584,9 @@ Couleur Zatacka::donnerCouleur(const SDL_Rect& position)
 	bool comparaison = false;
 	int i = 0;
 	for ( ; i<9; i++) {
-		if (couleurPixel.r==m_couleurs[i]->r
-		 && couleurPixel.g==m_couleurs[i]->g
-		 && couleurPixel.b==m_couleurs[i]->b) {
+		if (couleurPixel.r==m_couleurs[i].r
+		 && couleurPixel.g==m_couleurs[i].g
+		 && couleurPixel.b==m_couleurs[i].b) {
 			comparaison = true;
 			break;
 		}
@@ -632,17 +625,13 @@ void Zatacka::afficherScores() throw() {
 }
 
 void Zatacka::resetOptions() throw() {
-	vector<Option*>::iterator it = m_options.begin(),
-			end = m_options.end();
-	for ( ; it!=end; it++) {
-		(*it)->desactiver();
-	}
+	m_regles.reset();
 }
 
 void Zatacka::resetOptionJoueurs() throw() {
-	for (vector<Option*>::iterator option = m_optionJoueurs.begin(),
+	for (vector<Option>::iterator option = m_optionJoueurs.begin(),
 			end = m_optionJoueurs.end(); option!=end; ++option) {
-		(*option)->desactiver();
+		option->desactiver();
 	}
 }
 

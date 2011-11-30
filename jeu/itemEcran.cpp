@@ -45,6 +45,15 @@ ItemEcran::ItemEcran(int largeur, int hauteur, const SDL_Rect& position):
 	m_position.y = position.y;
 }
 
+ItemEcran& ItemEcran::operator=(const ItemEcran& origine) {
+	m_largeur = origine.m_largeur;
+	m_hauteur = origine.m_hauteur;
+	m_position.x = origine.m_position.x;
+	m_position.y = origine.m_position.y;
+
+	return *this;
+}
+
 /* -- Accesseurs et mutateurs -- */
 int ItemEcran::hauteur() const throw()
 {	return m_hauteur;	}

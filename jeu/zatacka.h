@@ -72,12 +72,12 @@ private:
 	/**
 	 * Tableau des couleurs rgb à utiliser
 	 */
-	std::vector<SDL_Color*> m_couleurs;
+	std::vector<SDL_Color> m_couleurs;
 
 	/**
 	 * Options pour activer ou pas un joueur
 	 */
-	std::vector<Option*> m_optionJoueurs;
+	std::vector<Option> m_optionJoueurs;
 
 	/**
 	 * Options pour activer les différentes règles de jeu
@@ -110,7 +110,7 @@ private:
      * Crée une couleur
      * Le but de cette méthode est d'éviter le warning du compilateur
      */
-    SDL_Color* creerCouleur(Uint8 r, Uint8 g, Uint8 b) throw();
+    SDL_Color creerCouleur(Uint8 r, Uint8 g, Uint8 b) throw();
 
 	/**
 	 * Créer les options du menu principal et leur assigne une position à
@@ -193,6 +193,7 @@ public:
 	int hauteurJeu() const throw();
 	int largeurJeu() const throw();
 	SDL_Color* couleur(Couleur couleur);
+	SDL_Color* couleur(int couleur);
 	TTF_Font* policeCalligraphiee();
 	TTF_Font* policeBasique();
 	SDL_Surface* ecran();

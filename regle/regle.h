@@ -22,7 +22,7 @@ private:
 	RegleInitialisation m_regleInitialisation;
 	ReglePoints m_reglePoints;
 	bool m_active;
-	Option* m_option;
+	Option m_option;
 	Uint16 m_touche;
 
 public:
@@ -30,6 +30,7 @@ public:
 	Regle(RegleCollision& reglecollision,
 			RegleInitialisation& regleinitialisation,
 			ReglePoints& reglepoints);
+	Regle(const Regle&);
 	~Regle();
 
 	RegleCollision& regleCollision();

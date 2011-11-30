@@ -2,6 +2,11 @@
 
 using namespace std;
 
+Option::Option():
+		Ecran(0, 0),
+		m_active(false), m_offset(40)
+{}
+
 Option::Option(string texte, string optionActive, string optionInactive,
 		TTF_Font* police, SDL_Color* couleur):
 		Ecran(0, 0),
@@ -17,6 +22,42 @@ Option::Option(string texte, string optionActive, string optionInactive,
 	m_hauteur = m_texte.hauteur();
 
 	redimensionner(m_largeur, m_hauteur);
+}
+
+Option::Option(Option const& origine) :
+	Ecran(origine.m_largeur, origine.m_hauteur),
+	m_texte(origine.m_texte),
+	m_optionActive(origine.m_optionActive),
+	m_optionInactive(origine.m_optionInactive),
+	m_active(origine.m_active),
+	m_offset(origine.m_offset) {
+	position(origine.m_position);
+
+	m_largeur = m_texte.largeur() + m_offset
+		+ (m_optionActive.largeur() > m_optionInactive.largeur() ?
+			m_optionActive.largeur(): m_optionInactive.largeur());
+	m_hauteur = m_texte.hauteur();
+
+	redimensionner(m_largeur, m_hauteur);
+}
+
+Option& Option::operator=(const Option& origine) {
+	Ecran::operator=(origine);
+
+	m_texte = origine.m_texte;
+	m_optionActive = origine.m_optionActive;
+	m_optionInactive = origine.m_optionInactive;
+
+	position(origine.m_position);
+
+	m_largeur = m_texte.largeur() + m_offset
+		+ (m_optionActive.largeur() > m_optionInactive.largeur() ?
+			m_optionActive.largeur(): m_optionInactive.largeur());
+	m_hauteur = m_texte.hauteur();
+
+	redimensionner(m_largeur, m_hauteur);
+
+	return *this;
 }
 
 Option::~Option()

@@ -54,6 +54,8 @@ public:
 	 */
 	ItemEcran(int largeur, int hauteur, const SDL_Rect& position);
 
+	ItemEcran& operator=(const ItemEcran&);
+
 	/* -- Accesseurs et mutateurs -- */
 	int hauteur() const throw();
 	int largeur() const throw();

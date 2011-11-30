@@ -2,8 +2,7 @@
 using namespace std;
 
 Regle::Regle():
-	m_active(false),
-	m_option(NULL)
+	m_active(false)
 {}
 
 Regle::Regle(RegleCollision& regleCollision,
@@ -12,15 +11,20 @@ Regle::Regle(RegleCollision& regleCollision,
 	m_regleCollision(regleCollision),
 	m_regleInitialisation(regleInitialisation),
 	m_reglePoints(reglePoints),
-	m_active(false),
-	m_option(NULL)
+	m_active(false)
 {}
 
-Regle::~Regle() {
-	if (NULL!=m_option) {
-		delete m_option;
-	}
-}
+Regle::Regle(const Regle& origine):
+	m_regleCollision(origine.m_regleCollision),
+	m_regleInitialisation(origine.m_regleInitialisation),
+	m_reglePoints(origine.m_reglePoints),
+	m_active(origine.m_active),
+	m_option(origine.m_option),
+	m_touche(origine.m_touche)
+{}
+
+Regle::~Regle()
+{}
 
 RegleCollision& Regle::regleCollision()
 {
@@ -59,36 +63,34 @@ vector<int> Regle::attribuePointsA(int serpentMourrant) const
 
 void Regle::activer() {
 	m_active = true;
-	m_option->activer();
+	m_option.activer();
 }
 
 void Regle::desactiver() {
 	m_active = false;
-	m_option->desactiver();
+	m_option.desactiver();
 }
 
 void Regle::echanger() {
 	m_active = !m_active;
-	m_option->echanger();
+	m_option.echanger();
 }
 
 void Regle::option(string texte, string optionActive,
 	string optionInactive, TTF_Font* police,
 	SDL_Color* couleur, Uint16 touche) {
-	if (NULL==m_option) {
-		delete m_option;
-	}
-	m_option = new Option(texte, optionActive, optionInactive, police, couleur);
+	Option nouvelleOption(texte, optionActive, optionInactive, police, couleur);
+	m_option = nouvelleOption;
 	m_touche = touche;
 }
 
 Option* Regle::option()
-{	return m_option;	}
+{	return &m_option;	}
 
 void Regle::appliquerTouche(Uint16 touche, SDL_Surface* ecran) {
 	if (touche==m_touche) {
 		echanger();
-		m_option->afficher(ecran);
+		m_option.afficher(ecran);
 	}
 }
 

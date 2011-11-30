@@ -27,7 +27,10 @@ public:
 	TexteSDL(std::string contenu, TTF_Font* police, SDL_Color* couleur);
 	TexteSDL(std::string contenu, TTF_Font* police,
 			SDL_Color* couleur, const SDL_Rect& position);
+	TexteSDL(TexteSDL const&);
 	~TexteSDL();
+
+	TexteSDL& operator=(const TexteSDL&);
 
 	int largeur() throw(InstanceManquante);
 	int hauteur() throw(InstanceManquante);

@@ -30,6 +30,30 @@ TexteSDL::TexteSDL(string contenu, TTF_Font* police,
 	}
 }
 
+TexteSDL::TexteSDL(TexteSDL const& origine):
+		ItemEcran(origine.m_position),
+		m_contenu(origine.m_contenu),
+		m_police(origine.m_police),
+		m_couleur(origine.m_couleur),
+		m_texte(NULL), m_surfaceAJour(false) {
+	if (""==m_contenu) {
+		m_contenu = " ";
+	}
+}
+
+TexteSDL& TexteSDL::operator=(const TexteSDL& origine) {
+	ItemEcran::operator =(origine);
+	m_contenu = origine.m_contenu;
+	m_police = origine.m_police;
+	m_couleur = origine.m_couleur;
+	if (NULL!=m_texte) {
+		SDL_FreeSurface(m_texte);
+	}
+	m_surfaceAJour= false;
+
+	return *this;
+}
+
 TexteSDL::~TexteSDL() {
 	if (NULL!=m_texte) {
 		SDL_FreeSurface(m_texte);

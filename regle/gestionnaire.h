@@ -14,7 +14,7 @@
 
 class GestionnaireRegles {
 private:
-	std::vector<Regle*> m_regles;
+	std::vector<Regle> m_regles;
 	RegleCollision m_regleCollision;
 	RegleInitialisation m_regleInitialisation;
 	ReglePoints m_reglePoints;
@@ -22,9 +22,9 @@ private:
 public:
 	GestionnaireRegles();
 
-	void ajouterRegle(Regle* regle);
+	void ajouterRegle(const Regle& regle);
 
-	std::vector<Regle*>& regles();
+	std::vector<Regle>& regles();
 
 	std::vector< std::pair<int,int> > positionsDepart() const;
 	std::vector<double> directionsDepart() const;
@@ -36,6 +36,8 @@ public:
 	void afficherOptions(SDL_Surface* ecran);
 
 	void appliquerTouche(Uint16 touche, SDL_Surface* ecran);
+
+	void reset();
 };
 
 

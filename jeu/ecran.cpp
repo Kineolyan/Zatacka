@@ -29,6 +29,34 @@ Ecran::Ecran(int largeur, int hauteur, SDL_Color* couleur):
 	this->couleur(couleur);
 }
 
+Ecran::Ecran(Ecran const& origine):
+		ItemEcran(origine.m_largeur, origine.m_hauteur),
+		m_ecran(NULL) {
+	m_ecran = SDL_CreateRGBSurface(SDL_HWSURFACE,
+			m_largeur, m_hauteur, 32, 0, 0, 0, 0);
+	if (NULL==m_ecran) {
+		throw InstanceManquante("Impossible de creer un ecran");
+	}
+
+	this->couleur(&(origine.m_couleur));
+}
+
+Ecran& Ecran::operator=(const Ecran& origine) {
+	ItemEcran::operator =(origine);
+
+	SDL_FreeSurface(m_ecran);
+	m_ecran = NULL;
+	m_ecran = SDL_CreateRGBSurface(SDL_HWSURFACE,
+			m_largeur, m_hauteur, 32, 0, 0, 0, 0);
+	if (NULL==m_ecran) {
+		throw InstanceManquante("Impossible de creer un ecran");
+	}
+
+	this->couleur(&(origine.m_couleur));
+
+	return *this;
+}
+
 Ecran::~Ecran() {
 	SDL_FreeSurface(m_ecran);
 }
@@ -46,7 +74,7 @@ void Ecran::colorer() throw() {
 	);
 }
 
-void Ecran::couleur(SDL_Color* couleur) throw() {
+void Ecran::couleur(const SDL_Color* couleur) throw() {
 	m_couleur.r = couleur->r;
 	m_couleur.g = couleur->g;
 	m_couleur.b = couleur->b;

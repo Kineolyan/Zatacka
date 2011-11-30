@@ -24,12 +24,13 @@ protected:
 public:
 	Ecran(int largeur =0, int hauteur =0);
 	Ecran(int largeur, int hauteur, SDL_Color* couleur);
+	Ecran(Ecran const&);
 	~Ecran();
 
 	/* -- Accesseurs et mutateurs -- */
     SDL_PixelFormat* format() const throw();
     SDL_Surface* ecran() const throw();
-	void couleur(SDL_Color* couleur) throw();
+	void couleur(const SDL_Color* couleur) throw();
 
 	/**
 	 * Affiche l'écran sur l'écran de destination
@@ -51,6 +52,8 @@ public:
 	 * @param hauteur: nouvelle hauteur
 	 */
 	void redimensionner(int largeur, int hauteur) throw();
+
+	Ecran& operator=(const Ecran&);
 };
 
 #endif /* ECRAN_H_ */
