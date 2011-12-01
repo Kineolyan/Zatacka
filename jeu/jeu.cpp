@@ -30,8 +30,6 @@ Jeu::Jeu(Zatacka& jeu, int largeurJeu, int largeurScores, int hauteur)
 		end = m_points.end() ; it!=end; it++) {
 		*it = NULL;
 	}
-
-	initialiserPoints();
 }
 
 Jeu::~Jeu() {
@@ -44,6 +42,13 @@ Jeu::~Jeu() {
 		end = m_points.end() ; it!=end; it++) {
 		SDL_FreeSurface(*it);
 	}
+}
+
+void Jeu::initialiser() {
+	initialiserPoints();
+    colorerElements();
+    initialiserJoueurs();
+    initialiserScores();
 }
 
 void Jeu::initialiserJoueurs() throw(InstanceManquante) {
@@ -66,6 +71,7 @@ void Jeu::initialiserJoueurs() throw(InstanceManquante) {
 		for ( ; deleter!=it; ++deleter) {
 			delete *deleter;
 		}
+		m_joueurs.clear();
 		throw;
 	}
 }
@@ -81,6 +87,7 @@ void Jeu::initialiserPoints() throw(InstanceManquante) {
 					deleter!=it; ++deleter) {
 				SDL_FreeSurface(*deleter);
 			}
+			m_points.clear();
 			throw InstanceManquante(
 					"Impossible de creer un motif de trace");
 		}

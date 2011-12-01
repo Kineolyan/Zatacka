@@ -80,6 +80,8 @@ public:
 		throw(InstanceManquante);
 	~Jeu();
 
+	void initialiser();
+
     int largeur() const throw();
 
 	void colorerElements() throw();

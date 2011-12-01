@@ -23,13 +23,11 @@ Zatacka::Zatacka(int largeur, int hauteur):
 	TTF_Init();
 	chargerPolices();
 	initialiserCouleurs();
-	initialiserJeu();
+	m_ecranJeu.initialiser();
 
 	creerMenuPrincipal();
 	creerRegles();
 	creerMenuOptions();
-
-	afficherAccueil();
 }
 
 Zatacka::~Zatacka() {
@@ -38,6 +36,10 @@ Zatacka::~Zatacka() {
 
     TTF_Quit();
 	SDL_Quit();
+}
+
+void Zatacka::demarrer() {
+	afficherAccueil();
 }
 
 void Zatacka::chargerPolices() {
@@ -81,9 +83,6 @@ void Zatacka::initialiserCouleurs() {
 }
 
 void Zatacka::initialiserJeu() {
-    m_ecranJeu.colorerElements();
-    m_ecranJeu.initialiserJoueurs();
-    m_ecranJeu.initialiserScores();
 }
 
 void Zatacka::creerRegles() {

@@ -198,6 +198,8 @@ public:
 	TTF_Font* policeBasique();
 	SDL_Surface* ecran();
 
+	void demarrer();
+
 	/**
 	 * Remplit une surface de la couleur demandee
 	 */

@@ -16,6 +16,7 @@ int main(int argc, char* argv[] ){
 
 	try {
 		Zatacka jeu(640,480);
+		jeu.demarrer();
 	}
 	catch (const exception& e) {
 		cerr << e.what() << endl;
