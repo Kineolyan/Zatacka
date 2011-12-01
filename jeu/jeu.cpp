@@ -261,116 +261,6 @@ bool Jeu::jouerManche() {
 			case SDLK_ESCAPE:
 				return false;
 
-			case SDLK_AMPERSAND:
-				m_joueurs[0]->tourne(GAUCHE);
-				break;
-
-			case SDLK_a:
-				m_joueurs[0]->tourne(DROITE);
-				break;
-
-			case SDLK_x:
-				m_joueurs[1]->tourne(GAUCHE);
-				break;
-
-			case SDLK_c:
-				m_joueurs[1]->tourne(DROITE);
-				break;
-
-			case SDLK_COMMA:
-				m_joueurs[2]->tourne(GAUCHE);
-				break;
-
-			case SDLK_SEMICOLON:
-				m_joueurs[2]->tourne(DROITE);
-				break;
-
-			case SDLK_SLASH:
-				m_joueurs[4]->tourne(GAUCHE);
-				break;
-
-			case SDLK_ASTERISK:
-				m_joueurs[4]->tourne(DROITE);
-				break;
-
-			default:
-				break;
-			}
-
-			switch (eventJeu.key.keysym.sym) {
-			case SDLK_LEFT:
-				m_joueurs[3]->tourne(GAUCHE);
-				break;
-
-			case SDLK_DOWN:
-				m_joueurs[3]->tourne(DROITE);
-				break;
-
-			default:
-				break;
-			}
-			break;
-
-		case SDL_KEYUP:
-			switch (eventJeu.key.keysym.unicode) {
-
-			case SDLK_AMPERSAND:
-			case SDLK_a:
-				m_joueurs[0]->tourne(TOUT_DROIT);
-				break;
-
-			case SDLK_x:
-			case SDLK_c:
-				m_joueurs[1]->tourne(TOUT_DROIT);
-				break;
-
-			case SDLK_COMMA:
-			case SDLK_SEMICOLON:
-				m_joueurs[2]->tourne(TOUT_DROIT);
-				break;
-
-			case SDLK_SLASH:
-			case SDLK_ASTERISK:
-				m_joueurs[4]->tourne(TOUT_DROIT);
-				break;
-
-			default:
-				break;
-			}
-
-			switch (eventJeu.key.keysym.sym) {
-			case SDLK_LEFT:
-			case SDLK_DOWN:
-				m_joueurs[3]->tourne(TOUT_DROIT);
-				break;
-
-			default:
-				break;
-			}
-			break;
-
-		case SDL_MOUSEBUTTONDOWN:
-			switch (eventJeu.button.button) {
-			case SDL_BUTTON_LEFT:
-				m_joueurs[5]->tourne(GAUCHE);
-				break;
-
-			case SDL_BUTTON_RIGHT:
-				m_joueurs[5]->tourne(DROITE);
-				break;
-
-			default:
-				break;
-			}
-			break;
-
-		case SDL_MOUSEBUTTONUP:
-			switch (eventJeu.button.button) {
-			case SDL_BUTTON_LEFT:
-			case SDL_BUTTON_RIGHT:
-				m_joueurs[5]->tourne(TOUT_DROIT);
-				break;
-
 			default:
 				break;
 			}
@@ -382,7 +272,7 @@ bool Jeu::jouerManche() {
 
     	tempsActuel = SDL_GetTicks();
     	if (tempsActuel - tempsPrecedent>=15) {
-    		/*etatTouches = SDL_GetKeyState(NULL);
+    		etatTouches = SDL_GetKeyState(NULL);
 
 			if (etatTouches[SDLK_AMPERSAND]) {
 				m_joueurs[0]->seDirigeVers(GAUCHE);
@@ -424,7 +314,7 @@ bool Jeu::jouerManche() {
 			}
 			else if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(3)) {
 				m_joueurs[5]->seDirigeVers(DROITE);
-			}*/
+			}
 
 			for (int indexJoueur = 0, end = m_joueurs.size();
 					indexJoueur <end; ++indexJoueur) {

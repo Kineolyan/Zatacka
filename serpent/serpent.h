@@ -54,8 +54,6 @@ private:
 	 */
 	double m_direction;
 
-	Direction m_commandeDirection;
-
 	/**
 	 * Vitesse, en pixels/iteration
 	 */
@@ -154,8 +152,6 @@ public:
 	void vitesse(int vitesse) throw();
 
 	void seDirigeVers(Direction cote);
-
-	void tourne(Direction cote);
 
 	/**
 	 * Fait avancer le serpent
