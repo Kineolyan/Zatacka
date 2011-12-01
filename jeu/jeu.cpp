@@ -381,7 +381,51 @@ bool Jeu::jouerManche() {
 		}
 
     	tempsActuel = SDL_GetTicks();
-		if (tempsActuel - tempsPrecedent>=15) {
+    	if (tempsActuel - tempsPrecedent>=15) {
+    		/*etatTouches = SDL_GetKeyState(NULL);
+
+			if (etatTouches[SDLK_AMPERSAND]) {
+				m_joueurs[0]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_a]) {
+				m_joueurs[0]->seDirigeVers(DROITE);
+			}
+
+			if (etatTouches[SDLK_x]) {
+				m_joueurs[1]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_c]) {
+				m_joueurs[1]->seDirigeVers(DROITE);
+			}
+
+			if (etatTouches[SDLK_COMMA]) {
+				m_joueurs[2]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_SEMICOLON]) {
+				m_joueurs[2]->seDirigeVers(DROITE);
+			}
+
+			if (etatTouches[SDLK_KP_DIVIDE]) {
+				m_joueurs[4]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_KP_MULTIPLY]) {
+				m_joueurs[4]->seDirigeVers(DROITE);
+			}
+
+			if (etatTouches[SDLK_LEFT]) {
+				m_joueurs[3]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_DOWN]) {
+				m_joueurs[3]->seDirigeVers(DROITE);
+			}
+
+			if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(1)) {
+				m_joueurs[5]->seDirigeVers(GAUCHE);
+			}
+			else if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(3)) {
+				m_joueurs[5]->seDirigeVers(DROITE);
+			}*/
+
 			for (int indexJoueur = 0, end = m_joueurs.size();
 					indexJoueur <end; ++indexJoueur) {
 				if (!m_joueurs[indexJoueur]->avance()) {

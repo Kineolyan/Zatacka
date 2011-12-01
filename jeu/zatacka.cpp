@@ -13,7 +13,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
 		m_couleurs(8), m_optionJoueurs(), m_options(),
 		m_nombreJoueurs(6) {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32,
-			SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+			SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
 	if (NULL==m_ecran) {
 		throw InstanceManquante("Impossible de creer l'ecran");
 	}
@@ -248,16 +248,6 @@ void Zatacka::afficherMenuPrincipal() {
 				m_optionJoueurs[2].afficher(m_ecran);
 				break;
 
-			case SDLK_SLASH:
-				m_optionJoueurs[4].activer();
-				m_optionJoueurs[4].afficher(m_ecran);
-				break;
-
-			case SDLK_ASTERISK:
-				m_optionJoueurs[4].desactiver();
-				m_optionJoueurs[4].afficher(m_ecran);
-				break;
-
 			case SDLK_o:
 				m_ecranAAfficher = MENU_OPTIONS;
 				boucler = false;
@@ -276,6 +266,16 @@ void Zatacka::afficherMenuPrincipal() {
 			case SDLK_DOWN:
 				m_optionJoueurs[3].desactiver();
 				m_optionJoueurs[3].afficher(m_ecran);
+				break;
+
+			case SDLK_KP_DIVIDE:
+				m_optionJoueurs[4].activer();
+				m_optionJoueurs[4].afficher(m_ecran);
+				break;
+
+			case SDLK_KP_MULTIPLY:
+				m_optionJoueurs[4].desactiver();
+				m_optionJoueurs[4].afficher(m_ecran);
 				break;
 
 			default:
