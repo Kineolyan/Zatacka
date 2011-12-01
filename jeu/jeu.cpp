@@ -270,7 +270,7 @@ bool Jeu::jouerManche() {
 		}
 
     	tempsActuel = SDL_GetTicks();
-		if (tempsActuel - tempsPrecedent>=20) {
+		if (tempsActuel - tempsPrecedent>=15) {
 			etatTouches = SDL_GetKeyState(NULL);
 
 			if (etatTouches[SDLK_AMPERSAND]) {
@@ -325,7 +325,7 @@ bool Jeu::jouerManche() {
 			tempsPrecedent = tempsActuel;
 		}
 		else {
-			SDL_Delay(20 - (tempsActuel - tempsPrecedent));
+			SDL_Delay(15 - (tempsActuel - tempsPrecedent));
 		}
 
 		if (nombreJoueursVivants<2) {

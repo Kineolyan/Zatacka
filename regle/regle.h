@@ -21,7 +21,6 @@ private:
 	RegleCollision m_regleCollision;
 	RegleInitialisation m_regleInitialisation;
 	ReglePoints m_reglePoints;
-	bool m_active;
 	Option m_option;
 	Uint16 m_touche;
 

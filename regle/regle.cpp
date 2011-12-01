@@ -1,8 +1,7 @@
 #include "regle.h"
 using namespace std;
 
-Regle::Regle():
-	m_active(false)
+Regle::Regle()
 {}
 
 Regle::Regle(RegleCollision& regleCollision,
@@ -10,15 +9,13 @@ Regle::Regle(RegleCollision& regleCollision,
 		ReglePoints& reglePoints):
 	m_regleCollision(regleCollision),
 	m_regleInitialisation(regleInitialisation),
-	m_reglePoints(reglePoints),
-	m_active(false)
+	m_reglePoints(reglePoints)
 {}
 
 Regle::Regle(const Regle& origine):
 	m_regleCollision(origine.m_regleCollision),
 	m_regleInitialisation(origine.m_regleInitialisation),
 	m_reglePoints(origine.m_reglePoints),
-	m_active(origine.m_active),
 	m_option(origine.m_option),
 	m_touche(origine.m_touche)
 {}
@@ -42,22 +39,19 @@ ReglePoints& Regle::reglePoints()
 }
 
 void Regle::activer() {
-	m_active = true;
 	m_option.activer();
 }
 
 void Regle::desactiver() {
-	m_active = false;
 	m_option.desactiver();
 }
 
 void Regle::echanger() {
-	m_active = !m_active;
 	m_option.echanger();
 }
 
 bool Regle::active()
-{	return m_active;	}
+{	return m_option.active();	}
 
 void Regle::option(string texte, string optionActive,
 	string optionInactive, TTF_Font* police,

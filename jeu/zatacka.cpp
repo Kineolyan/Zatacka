@@ -504,7 +504,7 @@ void Zatacka::afficherFin() {
 void Zatacka::afficher(NomEcran ecran) {
 	switch(ecran) {
 	case ACCUEIL:
-		resetOptions();
+		resetRegles();
 		resetOptionJoueurs();
 		afficherAccueil();
 		break;
@@ -643,7 +643,7 @@ void Zatacka::afficherScores() throw() {
 	SDL_Flip(m_ecran);
 }
 
-void Zatacka::resetOptions() throw() {
+void Zatacka::resetRegles() throw() {
 	m_regles.reset();
 }
 

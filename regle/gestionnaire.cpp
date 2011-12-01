@@ -83,7 +83,7 @@ void GestionnaireRegles::appliquerTouche(Uint16 touche, SDL_Surface* ecran) {
 void GestionnaireRegles::reset() {
 	for (vector<Regle>::iterator regle = m_regles.begin(),
 			end = m_regles.end(); regle!=end; ++regle) {
-		regle->option()->desactiver();
+		regle->desactiver();
 	}
 }
 

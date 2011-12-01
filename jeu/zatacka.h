@@ -173,7 +173,7 @@ private:
 	 */
 	void reglerRepetition(int t);
 
-	void resetOptions() throw();
+	void resetRegles() throw();
 
 	void resetOptionJoueurs() throw();
 
