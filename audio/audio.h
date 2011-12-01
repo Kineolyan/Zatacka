@@ -11,6 +11,8 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
 #include <iostream>
+#include <vector>
+#include <sstream>
 #include "../util/exception.h"
 #include "../util/keywords.h"
 
@@ -18,9 +20,6 @@ class Audio {
 private:
 
 //  SDL_AudioSpec audioSortie;
-
-  //La musique qui sera jouée
-  Mix_Music *m_musique;
 
   /**
    * Nombre de joueurs participant à la partie.
@@ -31,6 +30,17 @@ private:
    * Nombre de joueurs encore en vie.
    */
   int m_nombreJoueursVivants;
+
+  /**
+   * Nombre de joueurs encore en vie au dernier chargement de fichier audio.
+   */
+  int m_nombreJoueursVivantsAvant;
+
+  void chargerMusique();
+
+  void chargerPaire(int numeroPaire, int numeroMorceau);
+
+  std::string intVersString(int entier);
 
 public:
 
@@ -44,7 +54,7 @@ public:
 
   void chargerEffets();
 
-  void chargerMusique(int numeroMorceau);
+  void actualiserNombreJoueurs(int nombreJoueursVivants);
 
 //  void diminuerNombreJoueurs();
 

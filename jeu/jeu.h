@@ -20,6 +20,7 @@
 #include "texte.h"
 #include "../util/keywords.h"
 #include "../serpent/serpent.h"
+#include "../audio/audio.h"
 
 class Serpent;
 
