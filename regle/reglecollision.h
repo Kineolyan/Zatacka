@@ -9,6 +9,7 @@
 #define REGLECOLLISION_H_
 
 #include <vector>
+#include "../util/keywords.h"
 
 class RegleCollision
 {
@@ -36,7 +37,8 @@ public:
 	/**
 	* vecteur designant si un serpent meurt au prochain deplacement
 	*/
-	bool collision(int numSerpent, std::vector<int> joueursRencontres) const;
+	bool collision(Couleur serpent,
+			const std::vector<Couleur>& joueursRencontres) const;
 	/**
 	* renvoie la valeur la case i,j de la matrice de gains 
 	*/

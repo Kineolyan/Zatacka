@@ -41,18 +41,26 @@ bool RegleCollision::valeurCase(int i,int j) const
 	return m_matriceCollision[i][j];
 }
 
-bool RegleCollision::collision(int numSerpent, vector<int> joueursRencontres) const
-{
-	bool reponse = false;
-	for (double i(0); i<joueursRencontres.size(); ++i)
+bool RegleCollision::collision(Couleur serpent,
+		const vector<Couleur>& joueursRencontres) const {
+	for (int i =0, end =joueursRencontres.size(); i<end; ++i)
 	{
-		if (m_matriceCollision[numSerpent][joueursRencontres[i]])
-		{
-			reponse = true;
+		switch(joueursRencontres[i]) {
+		case NOIR:
 			break;
+
+		case GRIS:
+		case BLANC:
+			return true;
+
+		default:
+			if (m_matriceCollision[serpent][joueursRencontres[i]]) {
+				return true;
+			}
 		}
 	}
-	return reponse;
+
+	return false;
 }
 
 
