@@ -86,15 +86,25 @@ void Zatacka::initialiserJeu() {
 }
 
 void Zatacka::creerRegles() {
-	Regle regle1, regle2;
+	Regle regleParDefaut,
+		regle1 = sansDepartsProches(50),
+		regle2 = batailleRangee(m_largeur - m_largeurScores, m_hauteur),
+		regle3 = departAuCentre(m_largeur - m_largeurScores, m_hauteur),
+		regle4 = departAuxCoins(m_largeur - m_largeurScores, m_hauteur);
 
-	regle1.option("jouer (P)", "oui", "non",
+	regle1.option("Sans departs proches (P)", "oui", "non",
 		m_policeBasique, couleur(BLANC), SDLK_p);
-	regle2.option("jouer par equipe (T)", "oui", "non",
-		m_policeBasique, couleur(BLANC), SDLK_t);
+	regle2.option("Bataille rangee (R)", "oui", "non",
+		m_policeBasique, couleur(BLANC), SDLK_r);
+	regle3.option("Depart au centre (M)", "oui", "non",
+		m_policeBasique, couleur(BLANC), SDLK_m);
+	regle4.option("Depart aux coins (C)", "oui", "non",
+		m_policeBasique, couleur(BLANC), SDLK_c);
 
 	m_regles.ajouterRegle(regle1);
 	m_regles.ajouterRegle(regle2);
+	m_regles.ajouterRegle(regle3);
+	m_regles.ajouterRegle(regle4);
 }
 
 void Zatacka::afficherAccueil() {
@@ -353,7 +363,6 @@ void Zatacka::afficherMenuOptions() {
 
 void Zatacka::afficherJeu() {
 	effacer();
-	m_regles.genererRegles();
 
 	int indexJoueur = 0, nombreJoueursDansPartie = 0;
 	for (vector<Option>::iterator option = m_optionJoueurs.begin(),
@@ -371,6 +380,8 @@ void Zatacka::afficherJeu() {
         m_ecranAAfficher = MENU_PRINCIPAL;
 	}
 	else {
+		m_regles.genererRegles();
+
         m_ecranJeu.demarrerPartie(nombreJoueursDansPartie);
 
         int limiteScore = 10*(nombreJoueursDansPartie-1);

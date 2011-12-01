@@ -88,8 +88,8 @@ RegleInitialisation::RegleInitialisation(vector<RegleInitialisation> regles):
 		{
 			for (int j(0); j<6; ++j)
 			{
-				dirpos[j] = regles[i].direction(i);
-				pospos[j] = regles[i].position(i);
+				dirpos[j] = regles[i].direction(j);
+				pospos[j] = regles[i].position(j);
 			}
 		}
 		else

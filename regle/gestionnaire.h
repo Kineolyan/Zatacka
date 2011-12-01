@@ -39,6 +39,10 @@ public:
 	void appliquerTouche(Uint16 touche, SDL_Surface* ecran);
 
 	void reset();
+
+	#ifdef DEBUG_ACTIVE
+	void afficher();
+	#endif
 };
 
 

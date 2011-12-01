@@ -12,6 +12,7 @@
 #include "../util/exception.h"
 #include "../serpent/serpent.h"
 #include "../regle/gestionnaire.h"
+#include "../regle/regles.h"
 
 /**
  * Instance de jeu gerant les différents écrans, les serpents, les options

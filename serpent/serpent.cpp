@@ -56,7 +56,6 @@ void Serpent::vitesse(int vitesse) throw()
  */
 bool Serpent::collision(int pixelX, int pixelY)
 		const throw(HorsLimite) {
-	bool testCouleur = false;
 	vector<Couleur> couleursImpactees;
 	SDL_Rect positionPixel;
 	#ifdef DEBUG_ACTIVE

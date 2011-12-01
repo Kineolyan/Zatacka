@@ -56,6 +56,9 @@ void Regle::echanger() {
 	m_option.echanger();
 }
 
+bool Regle::active()
+{	return m_active;	}
+
 void Regle::option(string texte, string optionActive,
 	string optionInactive, TTF_Font* police,
 	SDL_Color* couleur, Uint16 touche) {

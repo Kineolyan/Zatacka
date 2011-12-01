@@ -48,6 +48,7 @@ OBJS = $(OBJ)/exception.o \
 	$(OBJ)/regleinitialisation.o \
 	$(OBJ)/reglepoints.o \
 	$(OBJ)/gestionnaire.o \
+	$(OBJ)/regles.o \
 	$(OBJ)/main.o
 
 $(OBJ)/%.o: %.cpp
