@@ -106,45 +106,19 @@ Regle parEquipe(int option, int nbrEquipes) {
    	vector< vector<bool> > matriceColli(6,ligneColli);
 	vector<int> lignepts(6,1);
 	vector< vector<int> > matricePts(6,lignepts);
-    for (int i = 0; i<nbrEquipes;++i)
-    		for (int j(0); j<6/nbrEquipes; ++j)
-    		{
-    			for (int k(j); k<6/nbrEquipes; ++k)
-    			{
-                    {
-                        if (j!=k && option == 0)
-                        {
-                            matriceColli[6/nbrEquipes*i+k][6/nbrEquipes*i+j] = false;
-                            matriceColli[6/nbrEquipes*i+j][6/nbrEquipes*i+k] = false;
-                        }
-                        matricePts[6/nbrEquipes*i+k][6/nbrEquipes*i+j] = 0;
-                        matricePts[6/nbrEquipes*i+j][6/nbrEquipes*i+k] = 0;
-    			    }
-    			}
+	for (int i = 0; i<nbrEquipes;++i) {
+		for (int j(0); j<6/nbrEquipes; ++j) {
+			for (int k(j); k<6/nbrEquipes; ++k) {
+				if (j!=k && option == 0) {
+					matriceColli[6/nbrEquipes*i+k][6/nbrEquipes*i+j] = false;
+					matriceColli[6/nbrEquipes*i+j][6/nbrEquipes*i+k] = false;
+				}
+				matricePts[6/nbrEquipes*i+k][6/nbrEquipes*i+j] = 0;
+				matricePts[6/nbrEquipes*i+j][6/nbrEquipes*i+k] = 0;
+			}
+		}
+	}
 
-
-    		}
-
-    for (int i(0); i<6;++i)
-    	{
-    		for (int j(0); j<6; ++j)
-    			{
-                        cout << matriceColli[i][j] << "\t";
-                }
-            cout << endl;
-
-        }
-        cout << endl << endl ;
-
-    for (int i(0); i<6;++i)
-    	{
-    		for (int j(0); j<6; ++j)
-    			{
-                        cout << matricePts[i][j] << "\t";
-                }
-            cout << endl;
-
-        }
     RegleCollision regleCollision(matriceColli);
    	ReglePoints reglePoints(matricePts);
 	RegleInitialisation regleInitialisation;

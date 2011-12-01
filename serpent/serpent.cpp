@@ -10,6 +10,7 @@ using namespace std;
 Serpent::Serpent(Couleur couleur, int vitesse, Zatacka& ecranJeu):
     m_actif(false),
     m_couleur(couleur),
+    m_commandeDirection(TOUT_DROIT),
     m_vitesse(vitesse*10000),
     m_vivant(true),
     m_score(0),
@@ -148,10 +149,15 @@ void Serpent::seDirigeVers(Direction cote) {
 	}
 }
 
+void Serpent::tourne(Direction cote)
+{	m_commandeDirection = cote;	}
+
 /**
  *
  */
 bool Serpent::avance() throw(HorsLimite, TraceImpossible) {
+	seDirigeVers(m_commandeDirection);
+
     if (m_vivant) {
         int nouvellePosX = m_position.x + m_vitesse * cos(m_direction*M_PI/90),
             nouvellePosY = m_position.y + m_vitesse * sin(m_direction*M_PI/90),
@@ -209,6 +215,7 @@ void Serpent::gagnePoints(int pointsGagnes) throw() {
 void Serpent::placer(int pixelX, int pixelY, double direction) {
 	if (m_actif) {
 		m_vivant = true;
+		m_commandeDirection = TOUT_DROIT;
 		m_direction = direction;
 		m_pixel.x = pixelX;
 		m_pixel.y = pixelY;
