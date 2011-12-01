@@ -30,15 +30,6 @@ void GestionnaireRegles::genererRegles() {
 	m_reglePoints = ReglePoints(reglespts);
 }
 
-#ifdef DEBUG_ACTIVE
-void GestionnaireRegles::afficher() {
-	vector<pair<int, int> > position = positionsDepart();
-	for (int i = 0; i<6; ++i) {
-		cout << position[i].first << "-" << position[i].second << endl;
-	}
-}
-#endif
-
 void GestionnaireRegles::ajouterRegle(const Regle& regle)
 {	m_regles.push_back(regle);	}
 
