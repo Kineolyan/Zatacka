@@ -635,7 +635,7 @@ void Zatacka::resetOptionJoueurs() throw() {
 	}
 }
 
-vector<pair<int, int> > Zatacka::positionsDepart() const {
+vector<pair<int, int> > Zatacka::positionsDepart() {
 	return m_regles.positionsDepart();
 }
 

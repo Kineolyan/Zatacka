@@ -26,7 +26,7 @@ public:
 
 	std::vector<Regle>& regles();
 
-	std::vector< std::pair<int,int> > positionsDepart() const;
+	std::vector< std::pair<int,int> > positionsDepart();
 	std::vector<double> directionsDepart() const;
 	bool collision(Couleur serpent,
 			const std::vector<Couleur>& joueursRencontres) const;

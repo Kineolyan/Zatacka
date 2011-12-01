@@ -235,7 +235,7 @@ public:
 
 	void afficherScores() throw();
 
-	std::vector< std::pair<int,int> > positionsDepart() const;
+	std::vector< std::pair<int,int> > positionsDepart();
 	std::vector<double> directionsDepart() const;
 
 	bool appliquerReglesCollision(Couleur serpent,

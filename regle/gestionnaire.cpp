@@ -27,7 +27,7 @@ void GestionnaireRegles::ajouterRegle(const Regle& regle)
 std::vector<Regle>& GestionnaireRegles::regles()
 {	return m_regles;	}
 
-vector< pair<int,int> > GestionnaireRegles::positionsDepart() const
+vector< pair<int,int> > GestionnaireRegles::positionsDepart()
 {
 	return m_regleInitialisation.positionsDepart();
 }

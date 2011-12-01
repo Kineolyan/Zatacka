@@ -1,8 +1,7 @@
 #include "regleinitialisation.h"
-#include <ctime>
-#include <cstdlib>
-#include <math.h>
-//#include "../util/keywords.h"
+
+#include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,7 +13,7 @@ vector< vector<int> > RegleInitialisation::positionsExcluesStandard()
 	{
 		for (int j(0); j<13; ++j)
 		{
-			if (j<3||j>9||i<2||i>7)
+			if (j<2||j>10||i<1||i>7)
 			{
 				matrice[i][j]=1;
 			}
@@ -30,9 +29,12 @@ RegleInitialisation::RegleInitialisation():
 		m_dimI(9),
 		m_positionsExclues(positionsExcluesStandard()),
 		m_hauteurJeu(480),
-		m_largeurJeu(540)
-{
-
+		m_largeurJeu(540),
+		m_indices(6) {
+	for (int i = 0; i<6;++i)
+	{
+		m_indices[i] = i;
+	}
 }
 
 RegleInitialisation::RegleInitialisation(vector<double> directionsPossibles,
@@ -41,9 +43,12 @@ RegleInitialisation::RegleInitialisation(vector<double> directionsPossibles,
 	m_directionsPossibles(directionsPossibles),
 	m_positionsPossibles(positionsPossibles),
 	m_hauteurJeu(480),
-	m_largeurJeu(540)
-{
-
+	m_largeurJeu(540),
+	m_indices(6) {
+	for (int i = 0; i<6;++i)
+	{
+		m_indices[i] = i;
+	}
 }
 
 RegleInitialisation::RegleInitialisation(double distanceMin,
@@ -55,66 +60,73 @@ RegleInitialisation::RegleInitialisation(double distanceMin,
 	m_dimI(dimI),
 	m_positionsExclues(positionsExclues),
 	m_hauteurJeu(480),
-	m_largeurJeu(540)
-{
-
+	m_largeurJeu(540),
+	m_indices(6) {
+	for (int i = 0; i<6;++i)
+	{
+		m_indices[i] = i;
+	}
 }
 
 RegleInitialisation::RegleInitialisation(vector<RegleInitialisation> regles):
-	m_hauteurJeu(480), m_largeurJeu(540)
-{
-		m_distanceMin = 1;
-		m_positionsFixes = false;
-		m_dimJ = 0;
-		m_dimI = 0;
-		vector<double> dirpos(6,0);
-		vector< pair<int,int> > pospos(6);
-		for (double i(0); i<regles.size(); ++i)
-		{
-			m_positionsFixes |= regles[i].positionsFixes();
-			if (regles[i].positionsFixes())
-			{
-				for (int j(0); j<6; ++j)
-				{
-					dirpos[j] = regles[i].direction(i);
-					pospos[j] = regles[i].position(i);
-				}
-			}
-			else
-			{
-				if (regles[i].distanceMin()>m_distanceMin)
-				{
-					m_distanceMin = regles[i].distanceMin();
-				}
-				if (regles[i].dimJ()>m_dimJ)
-				{
-					m_dimJ = regles[i].dimJ();
-				}
-				if (regles[i].dimI()>m_dimI)
-				{
-					m_dimI = regles[i].dimI();
-				}
-			}
+		m_hauteurJeu(480), m_largeurJeu(540),
+		m_indices(6) {
+	for (int i = 0; i<6;++i) {
+		m_indices[i] = i;
+	}
 
-		}
-		vector<int> ligneex(m_dimJ);
-		vector< vector<int> > posex(m_dimI, ligneex);
-		for (int i(0); i<m_dimI; ++i)
+	m_distanceMin = 1;
+	m_positionsFixes = false;
+	m_dimJ = 0;
+	m_dimI = 0;
+	vector<double> dirpos(6,0);
+	vector< pair<int,int> > pospos(6);
+	for (double i(0); i<regles.size(); ++i)
+	{
+		m_positionsFixes |= regles[i].positionsFixes();
+		if (regles[i].positionsFixes())
 		{
-			for (int j(0); j<m_dimJ; ++j)
+			for (int j(0); j<6; ++j)
 			{
-				for (double k(0); k<regles.size(); ++k)
+				dirpos[j] = regles[i].direction(i);
+				pospos[j] = regles[i].position(i);
+			}
+		}
+		else
+		{
+			if (regles[i].distanceMin()>m_distanceMin)
+			{
+				m_distanceMin = regles[i].distanceMin();
+			}
+			if (regles[i].dimJ()>m_dimJ)
+			{
+				m_dimJ = regles[i].dimJ();
+			}
+			if (regles[i].dimI()>m_dimI)
+			{
+				m_dimI = regles[i].dimI();
+			}
+		}
+
+	}
+	vector<int> ligneex(m_dimJ);
+	vector< vector<int> > posex(m_dimI, ligneex);
+	for (int i(0); i<m_dimI; ++i)
+	{
+		for (int j(0); j<m_dimJ; ++j)
+		{
+			for (double k(0); k<regles.size(); ++k)
+			{
+				if (regles[k].positionsFixes() == false)
 				{
-					if (regles[k].positionsFixes() == false)
-					{
-						posex[i][j] = regles[k].positionExclue((i*regles[k].dimI())/m_dimI, (j*regles[k].dimJ())/m_dimJ);
-					}
+					posex[i][j] = regles[k].positionExclue((i*regles[k].dimI())/m_dimI, (j*regles[k].dimJ())/m_dimJ);
 				}
 			}
 		}
-		m_directionsPossibles = dirpos;
-		m_positionsPossibles = pospos;
-		m_positionsExclues = posex;
+	}
+	m_directionsPossibles = dirpos;
+	m_positionsPossibles = pospos;
+	m_positionsExclues = posex;
 }
 
 double RegleInitialisation::distanceMin() const
@@ -153,14 +165,14 @@ pair<int , int> RegleInitialisation::position(int i) const
 }
 
 
-vector< pair<int,int> > RegleInitialisation::positionsDepart() const
+vector< pair<int,int> > RegleInitialisation::positionsDepart()
 {
 	vector< pair<int,int> > positionsSerpents(0);
-	if (m_positionsFixes == true)
-	{
+	if (m_positionsFixes == true) {
+		random_shuffle(m_indices.begin(), m_indices.end());
 		for (int i(0); i<6; ++i)
 		{
-			positionsSerpents.push_back(m_positionsPossibles[i]);
+			positionsSerpents.push_back(m_positionsPossibles[m_indices[i]]);
 		}
 	}
 	else
@@ -176,8 +188,7 @@ vector< pair<int,int> > RegleInitialisation::positionsDepart() const
 			{
 				positionTemporaire.first = 1+ (rand() % (m_largeurJeu-2)); //on exclut automatiquement les premiere et dernieres lignes de pixel
 				positionTemporaire.second = 1+ (rand() % (m_hauteurJeu-2));
-				if (m_positionsExclues[(positionTemporaire.second*m_dimI)/m_hauteurJeu][(positionTemporaire.first*m_dimJ)/m_largeurJeu]==1)
-				{
+				if (m_positionsExclues[(positionTemporaire.second*m_dimI)/m_hauteurJeu][(positionTemporaire.first*m_dimJ)/m_largeurJeu]==0) {
 					positionValide = true;
 					x=positionTemporaire.first;
 					y=positionTemporaire.second;
@@ -202,7 +213,9 @@ vector<double> RegleInitialisation::directionsDepart() const
 	vector<double> directionsSerpents(0);
 	if (m_positionsFixes == true)
 	{
-		return m_directionsPossibles;
+		for (int i(0); i<6; ++i) {
+			directionsSerpents.push_back(m_directionsPossibles[m_indices[i]]);
+		}
 	}
 	else
 	{
@@ -210,9 +223,9 @@ vector<double> RegleInitialisation::directionsDepart() const
 		{
 			directionsSerpents.push_back(rand()%180);
 		}
-		return directionsSerpents;
 	}
 
+	return directionsSerpents;
 }
 
 

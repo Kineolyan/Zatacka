@@ -41,6 +41,8 @@ private:
 	int m_hauteurJeu;
 	int m_largeurJeu;
 
+	std::vector<int> m_indices;
+
 	std::vector<std::vector<int> > positionsExcluesStandard();
 
 public:
@@ -67,7 +69,7 @@ public:
 	/**
 	* determination des positions de depart
 	*/
-	std::vector< std::pair<int,int> > positionsDepart() const;
+	std::vector< std::pair<int,int> > positionsDepart();
 	/**
 	* determination des positions de depart
 	*/
