@@ -30,7 +30,7 @@ public:
 	std::vector<double> directionsDepart() const;
 	bool collision(Couleur serpent,
 			const std::vector<Couleur>& joueursRencontres) const;
-	std::vector<int> attribuePointsA(int serpentMourrant) const;
+	const std::vector<int>& attribuePointsA(int serpentMourrant) const;
 
 	void genererRegles();
 

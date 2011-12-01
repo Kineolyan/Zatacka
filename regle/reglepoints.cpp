@@ -47,7 +47,7 @@ int ReglePoints::valeurCase(int i,int j) const
 	return m_matriceGains[i][j];
 }
 
-vector<int> ReglePoints::attribuePointsA(int numSerpentMourrant) const
+const vector<int>& ReglePoints::attribuePointsA(int numSerpentMourrant) const
 {
 	return m_matriceGains[numSerpentMourrant];
 }

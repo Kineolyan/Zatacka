@@ -34,7 +34,7 @@ public:
 	/**
 	* vecteur designant combien de points gagnent chaque serpent quand serpentMourrant meurt 
 	*/
-	std::vector<int> attribuePointsA(int numSerpentMourrant) const;
+	const std::vector<int>& attribuePointsA(int numSerpentMourrant) const;
 	/**
 	* renvoie la valeur la case i,j de la matrice de gains 
 	*/

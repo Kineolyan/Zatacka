@@ -238,6 +238,8 @@ public:
 
 	bool appliquerReglesCollision(Couleur serpent,
 			const std::vector<Couleur>& joueursRencontres) const;
+
+	const std::vector<int>& donnerScores(int indexPerdant) const;
 };
 
 #endif /* ZATACKA_H_ */

@@ -43,8 +43,8 @@ bool GestionnaireRegles::collision(Couleur serpent,
 	return m_regleCollision.collision(serpent,joueursRencontres);
 }
 
-vector<int> GestionnaireRegles::attribuePointsA(int serpentMourrant) const
-{
+const vector<int>& GestionnaireRegles::attribuePointsA(int serpentMourrant)
+	const {
 	return m_reglePoints.attribuePointsA(serpentMourrant);
 }
 

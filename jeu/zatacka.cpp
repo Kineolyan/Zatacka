@@ -648,3 +648,7 @@ bool Zatacka::appliquerReglesCollision(Couleur serpent,
 		const vector<Couleur>& joueursRencontres) const {
 	return m_regles.collision(serpent, joueursRencontres);
 }
+
+const vector<int>& Zatacka::donnerScores(int indexPerdant) const {
+	return m_regles.attribuePointsA(indexPerdant);
+}

@@ -325,11 +325,9 @@ bool Jeu::jouerManche() {
 }
 
 void Jeu::actualiserScores(int indexPerdant) {
-	// Appel à la règle pour connaître le gain en points de chaque joueur
+	const vector<int>& scores = m_jeu.donnerScores(indexPerdant);
 	for (int i=0, end = m_joueurs.size(); i<end; ++i) {
-		if (i!=indexPerdant) {
-			m_joueurs[i]->gagnePoints(1);
-		}
+		m_joueurs[i]->gagnePoints(scores[i]);
 	}
 
 	m_jeu.afficherScores();
