@@ -37,11 +37,6 @@ public:
 	RegleInitialisation& regleInitialisation();
 	ReglePoints& reglePoints();
 
-	std::vector< std::pair<int,int> > positionsDepart() const;
-	std::vector<double> directionsDepart() const;
-	bool collision(int numSerpent, std::vector<int> joueursRencontres) const;
-	std::vector<int> attribuePointsA(int serpentMourrant) const;
-
 	void option(std::string texte, std::string optionActive,
 			std::string optionInactive, TTF_Font* police,
 			SDL_Color* couleur, Uint16 touche);

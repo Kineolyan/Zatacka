@@ -37,9 +37,10 @@ vector<double> GestionnaireRegles::directionsDepart() const
 	return m_regleInitialisation.directionsDepart();
 }
 
-bool GestionnaireRegles::collision(int numSerpent, vector<int> joueursRencontres) const
+bool GestionnaireRegles::collision(Couleur serpent,
+		const vector<Couleur>& joueursRencontres) const
 {
-	return m_regleCollision.collision(numSerpent,joueursRencontres);
+	return m_regleCollision.collision(serpent,joueursRencontres);
 }
 
 vector<int> GestionnaireRegles::attribuePointsA(int serpentMourrant) const

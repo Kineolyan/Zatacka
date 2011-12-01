@@ -235,6 +235,9 @@ public:
 
 	std::vector< std::pair<int,int> > positionsDepart() const;
 	std::vector<double> directionsDepart() const;
+
+	bool appliquerReglesCollision(Couleur serpent,
+			const std::vector<Couleur>& joueursRencontres) const;
 };
 
 #endif /* ZATACKA_H_ */

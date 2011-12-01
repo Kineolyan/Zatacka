@@ -643,3 +643,8 @@ vector<pair<int, int> > Zatacka::positionsDepart() const {
 vector<double> Zatacka::directionsDepart() const {
 	return m_regles.directionsDepart();
 }
+
+bool Zatacka::appliquerReglesCollision(Couleur serpent,
+		const vector<Couleur>& joueursRencontres) const {
+	return m_regles.collision(serpent, joueursRencontres);
+}

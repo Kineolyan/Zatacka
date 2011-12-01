@@ -41,26 +41,6 @@ ReglePoints& Regle::reglePoints()
 	return m_reglePoints;
 }
 
-vector< pair<int,int> > Regle::positionsDepart() const
-{
-	return m_regleInitialisation.positionsDepart();
-}
-
-vector<double> Regle::directionsDepart() const
-{
-	return m_regleInitialisation.directionsDepart();
-}
-
-bool Regle::collision(int numSerpent, vector<int> joueursRencontres) const
-{
-	return m_regleCollision.collision(numSerpent,joueursRencontres);
-}
-
-vector<int> Regle::attribuePointsA(int serpentMourrant) const
-{
-	return m_reglePoints.attribuePointsA(serpentMourrant);
-}
-
 void Regle::activer() {
 	m_active = true;
 	m_option.activer();
