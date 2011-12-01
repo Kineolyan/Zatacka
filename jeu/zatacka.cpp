@@ -13,7 +13,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
 		m_couleurs(8), m_optionJoueurs(), m_options(),
 		m_nombreJoueurs(6) {
 	m_ecran = SDL_SetVideoMode(m_largeur, m_hauteur, 32,
-			SDL_SWSURFACE | SDL_DOUBLEBUF/* | SDL_FULLSCREEN*/);
+			SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
 	if (NULL==m_ecran) {
 		throw InstanceManquante("Impossible de creer l'ecran");
 	}
@@ -90,7 +90,9 @@ void Zatacka::creerRegles() {
 		regle1 = sansDepartsProches(50),
 		regle2 = batailleRangee(m_largeur - m_largeurScores, m_hauteur),
 		regle3 = departAuCentre(m_largeur - m_largeurScores, m_hauteur),
-		regle4 = departAuxCoins(m_largeur - m_largeurScores, m_hauteur);
+		regle4 = departAuxCoins(m_largeur - m_largeurScores, m_hauteur),
+		regle5 = parEquipe(1, 2),
+		regle6 = parEquipe(0, 2);
 
 	regle1.option("Sans departs proches (P)", "oui", "non",
 		m_policeBasique, couleur(BLANC), SDLK_p);
@@ -100,11 +102,17 @@ void Zatacka::creerRegles() {
 		m_policeBasique, couleur(BLANC), SDLK_m);
 	regle4.option("Depart aux coins (C)", "oui", "non",
 		m_policeBasique, couleur(BLANC), SDLK_c);
+	regle5.option("Par equipe (E)", "oui", "non",
+		m_policeBasique, couleur(BLANC), SDLK_e);
+	regle6.option("Par equipe (sans collision alliee) (T)", "oui", "non",
+		m_policeBasique, couleur(BLANC), SDLK_t);
 
 	m_regles.ajouterRegle(regle1);
 	m_regles.ajouterRegle(regle2);
 	m_regles.ajouterRegle(regle3);
 	m_regles.ajouterRegle(regle4);
+	m_regles.ajouterRegle(regle5);
+	m_regles.ajouterRegle(regle6);
 }
 
 void Zatacka::afficherAccueil() {
