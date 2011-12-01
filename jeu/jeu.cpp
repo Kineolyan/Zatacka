@@ -77,6 +77,10 @@ void Jeu::initialiserPoints() throw(InstanceManquante) {
 			TAILLE_SERPENT, TAILLE_SERPENT, 32, 0, 0, 0, 0);
 
 		if (NULL==*it) {
+			for (vector<SDL_Surface*>::iterator deleter = m_points.begin();
+					deleter!=it; ++deleter) {
+				SDL_FreeSurface(*deleter);
+			}
 			throw InstanceManquante(
 					"Impossible de creer un motif de trace");
 		}
