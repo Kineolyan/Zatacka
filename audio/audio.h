@@ -11,36 +11,57 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
 #include <iostream>
-#include <vector>
 #include <sstream>
+#include <vector>
+#include <algorithm>
+#include "pthread.h"
 #include "../util/exception.h"
 #include "../util/keywords.h"
 
 class Audio {
 private:
 
-//  SDL_AudioSpec audioSortie;
+
+  /**
+   * Sample en cours de lecture
+   */
+  Mix_Music* m_basse;
+
+  /**
+   * Numéro du morceau en cours de lecture
+   */
+  int m_numeroMorceau;
+
+  /**
+   * Numéro du sample en cours de lecture
+   */
+  int m_numeroSample;
 
   /**
    * Nombre de joueurs participant à la partie.
    */
-  int m_nombreJoueursActifs;
+  static int m_nombreJoueurs;
 
   /**
    * Nombre de joueurs encore en vie.
    */
-  int m_nombreJoueursVivants;
+  static int m_nombreJoueursVivants;
 
   /**
    * Nombre de joueurs encore en vie au dernier chargement de fichier audio.
    */
-  int m_nombreJoueursVivantsAvant;
+  static int m_nombreJoueursVivantsAvant;
 
-  void chargerMusique();
+  /**
+   * Le son joué actuellement est-il une transition (i.e. doit être joué une unique fois) ?
+   */
+  bool m_transition;
 
-  void chargerPaire(int numeroPaire, int numeroMorceau);
+  const char* construireCheminFichier();
 
   std::string intVersString(int entier);
+
+  pthread_t threadAudio;
 
 public:
 
@@ -48,13 +69,21 @@ public:
 
   ~Audio();
 
-//  void audioCallback(void *udata, Uint8 *stream, int len);
+  static void* threadAudioCallback(void*);
+
+  void fonctionThread();
+
+  void chargerMusique();
+
+  void musiqueFinie();
 
   void initialiserAudio();
 
-  void chargerEffets();
+  void chargerSamples();
 
-  void actualiserNombreJoueurs(int nombreJoueursVivants);
+  void actualiserNombreJoueurs(int nombreJoueurs);
+
+  void actualiserNombreJoueursVivants(int nombreJoueursVivants);
 
 //  void diminuerNombreJoueurs();
 

@@ -211,6 +211,7 @@ void Jeu::demarrerPartie(int nombreJoueurs) {
 
 bool Jeu::jouerManche() {
     afficherJeu(m_jeu.ecran());
+    m_audio.actualiserNombreJoueurs(m_nbJoueursActifs);
 
     for (vector<Serpent*>::iterator joueur = m_joueurs.begin(),
     		end = m_joueurs.end(); joueur<end; ++joueur) {
@@ -242,6 +243,7 @@ bool Jeu::jouerManche() {
 		}
 
     	tempsActuel = SDL_GetTicks();
+
 		if (tempsActuel - tempsPrecedent>=20) {
 			etatTouches = SDL_GetKeyState(NULL);
 
@@ -292,7 +294,7 @@ bool Jeu::jouerManche() {
 				if (!m_joueurs[indexJoueur]->avance()) {
 					--nombreJoueursVivants;
 					actualiserScores(indexJoueur);
-					m_audio.actualiserNombreJoueurs(nombreJoueursVivants);
+					m_audio.actualiserNombreJoueursVivants(nombreJoueursVivants);
 				}
 			}
 			tempsPrecedent = tempsActuel;
