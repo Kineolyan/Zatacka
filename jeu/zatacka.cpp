@@ -104,7 +104,7 @@ void Zatacka::creerRegles() {
 		m_policeBasique, couleur(BLANC), SDLK_c);
 	regle5.option("Par equipe (E)", "oui", "non",
 		m_policeBasique, couleur(BLANC), SDLK_e);
-	regle6.option("Par equipe (sans collision alliee) (T)", "oui", "non",
+	regle6.option("Par equipe (sans collision) (T)", "oui", "non",
 		m_policeBasique, couleur(BLANC), SDLK_t);
 
 	m_regles.ajouterRegle(regle1);

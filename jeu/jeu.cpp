@@ -274,12 +274,21 @@ bool Jeu::jouerManche() {
     	if (tempsActuel - tempsPrecedent>=15) {
     		etatTouches = SDL_GetKeyState(NULL);
 
+            #if defined(WIN32) || defined(WIN64)
+			if (etatTouches[SDLK_1]) {
+				m_joueurs[0]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_q]) {
+				m_joueurs[0]->seDirigeVers(DROITE);
+			}
+			#else
 			if (etatTouches[SDLK_AMPERSAND]) {
 				m_joueurs[0]->seDirigeVers(GAUCHE);
 			}
 			else if (etatTouches[SDLK_a]) {
 				m_joueurs[0]->seDirigeVers(DROITE);
 			}
+			#endif
 
 			if (etatTouches[SDLK_x]) {
 				m_joueurs[1]->seDirigeVers(GAUCHE);
@@ -288,12 +297,21 @@ bool Jeu::jouerManche() {
 				m_joueurs[1]->seDirigeVers(DROITE);
 			}
 
+			#if defined(WIN32) || defined(WIN64)
+			if (etatTouches[SDLK_m]) {
+				m_joueurs[2]->seDirigeVers(GAUCHE);
+			}
+			else if (etatTouches[SDLK_COMMA]) {
+				m_joueurs[2]->seDirigeVers(DROITE);
+			}
+			#else
 			if (etatTouches[SDLK_COMMA]) {
 				m_joueurs[2]->seDirigeVers(GAUCHE);
 			}
 			else if (etatTouches[SDLK_SEMICOLON]) {
 				m_joueurs[2]->seDirigeVers(DROITE);
 			}
+			#endif
 
 			if (etatTouches[SDLK_KP_DIVIDE]) {
 				m_joueurs[4]->seDirigeVers(GAUCHE);
