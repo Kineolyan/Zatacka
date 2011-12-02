@@ -28,6 +28,7 @@ Zatacka::Zatacka(int largeur, int hauteur):
   m_audio.initialiserAudio();
 
 	creerMenuPrincipal();
+	creerRegles();
 	creerMenuOptions();
 
 	afficherAccueil();
@@ -101,6 +102,19 @@ void Zatacka::initialiserJeu() {
     m_ecranJeu.colorerElements();
     m_ecranJeu.initialiserJoueurs();
     m_ecranJeu.initialiserScores();
+}
+
+void Zatacka::creerRegles() {
+	Regle *regle1 = new Regle(),
+			*regle2 = new Regle();
+
+	regle1->option("jouer (P)", "oui", "non",
+		m_policeBasique, m_couleurs[BLANC], SDLK_p);
+	regle2->option("jouer par equipe (T)", "oui", "non",
+		m_policeBasique, m_couleurs[BLANC], SDLK_t);
+
+	m_regles.ajouterRegle(regle1);
+	m_regles.ajouterRegle(regle2);
 }
 
 void Zatacka::afficherAccueil() {
@@ -290,36 +304,27 @@ void Zatacka::afficherMenuPrincipal() {
 }
 
 void Zatacka::creerMenuOptions() {
-	Option *option1 = new Option("jouer (P)", "oui", "non",
-			m_policeBasique, m_couleurs[BLANC]),
-			*option2 = new Option("jouer par equipe (E)", "oui", "non",
-					m_policeBasique, m_couleurs[BLANC]),
-			*option3 = new Option("jouer par equipe (T)", "oui", "non",
-					m_policeBasique, m_couleurs[BLANC]);
-	SDL_Rect position = {100, 50};
-	option1->position(position);
-	position.y+= 50;
-	option2->position(position);
-	position.y+= 50;
-	option3->position(position);
-
-	m_options.push_back(option1);
-	m_options.push_back(option2);
-	m_options.push_back(option3);
+	SDL_Rect position = {50, 30};
+	vector<Regle*> regles = m_regles.regles();
+	int pas = (m_hauteur - 120)/regles.size();
+	if (pas>50) {
+		pas = 50;
+	}
+	for (vector<Regle*>::iterator regle = regles.begin(),
+		end = regles.end(); regle!=end; ++regle) {
+		(*regle)->option()->position(position);
+		position.y+= pas;
+	}
 }
 
 void Zatacka::afficherMenuOptions() {
 	effacer();
 
-	vector<Option*>::iterator it = m_options.begin(),
-			end = m_options.end();
-	for ( ; it!=end; it++) {
-		(*it)->afficher(m_ecran);
-	}
+	m_regles.afficherOptions(m_ecran);
 
 	TexteSDL retour("Retour au menu principal (space)",
 			m_policeBasique, m_couleurs[BLANC]);
-	SDL_Rect position = {100, 400};
+	SDL_Rect position = {50, m_hauteur - 80};
 	retour.position(position);
 	retour.afficher(m_ecran);
 
@@ -344,22 +349,8 @@ void Zatacka::afficherMenuOptions() {
 				boucler = false;
 				break;
 
-			case SDLK_p:
-				m_options[0]->echanger();
-				m_options[0]->afficher(m_ecran);
-				break;
-
-			case SDLK_e:
-				m_options[1]->echanger();
-				m_options[1]->afficher(m_ecran);
-				break;
-
-			case SDLK_t:
-				m_options[2]->echanger();
-				m_options[2]->afficher(m_ecran);
-				break;
-
 			default:
+				m_regles.appliquerTouche(event.key.keysym.unicode, m_ecran);
 				break;
 			}
 			break;
@@ -374,6 +365,7 @@ void Zatacka::afficherMenuOptions() {
 
 void Zatacka::afficherJeu() {
 	effacer();
+	m_regles.genererRegles();
 
 	int indexJoueur = 0, nombreJoueursDansPartie = 0;
 	for (vector<Option*>::iterator option = m_optionJoueurs.begin(),

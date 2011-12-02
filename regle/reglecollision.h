@@ -18,6 +18,8 @@ private:
 	*/
 	std::vector< std::vector<bool> > m_matriceCollision;
 	
+	std::vector< std::vector<bool> > matriceCollisionsStandard();
+
 public:
 	/**
 	* createur de la regle de jeu standard

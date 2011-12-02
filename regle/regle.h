@@ -9,30 +9,49 @@
 #define REGLE_H_
 
 #include <vector>
+#include <SDL/SDL.h>
 #include "reglepoints.h"
 #include "regleinitialisation.h"
 #include "reglecollision.h"
+#include "../jeu/option.h"
 
-
-class Regle
-{
+class Regle {
 private:
 
 	RegleCollision m_regleCollision;
 	RegleInitialisation m_regleInitialisation;
 	ReglePoints m_reglePoints;
-	
+	bool m_active;
+	Option* m_option;
+	Uint16 m_touche;
+
 public:
 	Regle();
-	Regle(RegleCollision reglecollision, RegleInitialisation regleinitialisation, ReglePoints reglepoints);
-	Regle(std::vector<Regle> regles);
-	RegleCollision getRegleColl() const;	
-	RegleInitialisation getRegleInit() const;
-	ReglePoints getReglePts() const;
+	Regle(RegleCollision& reglecollision,
+			RegleInitialisation& regleinitialisation,
+			ReglePoints& reglepoints);
+	~Regle();
+
+	RegleCollision& regleCollision();
+	RegleInitialisation& regleInitialisation();
+	ReglePoints& reglePoints();
+
 	std::vector< std::pair<int,int> > positionsDepart() const;
 	std::vector<double> directionsDepart() const;
 	bool collision(int numSerpent, std::vector<int> joueursRencontres) const;
 	std::vector<int> attribuePointsA(int serpentMourrant) const;
+
+	void option(std::string texte, std::string optionActive,
+			std::string optionInactive, TTF_Font* police,
+			SDL_Color* couleur, Uint16 touche);
+	Option* option();
+
+	void activer();
+	void desactiver();
+	void echanger();
+	bool active();
+
+	void appliquerTouche(Uint16 touche, SDL_Surface* ecran);
 };
 
 

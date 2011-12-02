@@ -49,11 +49,14 @@ public:
 	/**
 	* createur de regle avec positionsFixes
 	*/
-	RegleInitialisation(std::vector<double> directionsPossibles, std::vector< std::pair<int,int> > positionsPossibles);
+	RegleInitialisation(std::vector<double> directionsPossibles,
+			std::vector< std::pair<int,int> > positionsPossibles);
 	/**
 	* createur de regle avec matrice d'exclusion
 	*/
-	RegleInitialisation(double distanceMin, std::vector< std::vector<int> > positionsExclues, int dimJ, int dimI);
+	RegleInitialisation(double distanceMin,
+			std::vector< std::vector<int> > positionsExclues,
+			int dimJ, int dimI);
 	/**
 	* createur qui fusionne 2 regles
 	*/
@@ -76,8 +79,6 @@ public:
 	int dimI() const;
 	double direction(int i) const;
 	std::pair<int,int> position(int i) const;
-
-	
 };
 
 
