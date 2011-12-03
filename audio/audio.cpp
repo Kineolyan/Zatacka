@@ -2,10 +2,6 @@
 
 using namespace std;
 
-int Audio::m_nombreJoueurs = 5;
-int Audio::m_nombreJoueursVivants = 5;
-int Audio::m_nombreJoueursVivantsAvant = 5;
-
 Audio::Audio():
     m_transition(true) {
   initialiserAudio();
@@ -15,54 +11,39 @@ Audio::~Audio(){
   Mix_CloseAudio();
 }
 
-
-
-void* Audio::threadAudioCallback(void* audioVoid){
-  Audio* m_audio = (Audio*) audioVoid;
-  m_audio->fonctionThread();
-  return 0;
-}
-
 void Audio::initialiserAudio(){
   if(Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 1, 4096 ) == -1){
     //cout << "Error in Mix_OpenAudio" << endl;
   }
   //cout << "Initialisation de l'audio ! " << endl;
-  m_numeroMorceau = 1;
-  m_numeroSample = 0;
+
+  /* Configuration des morceaux */
+  m_morceauxParTheme[1] = 5;
+  m_nombreThemes = 1;
+
+  m_numeroTheme = rand()%m_nombreThemes +1;
+  m_numeroMorceau = 0;
+  m_nombreJoueurs = 6;
+  srand(time(NULL));
+  Mix_PlayMusic(m_sampleTransition,1);
+  Mix_HookMusicFinished(threadAudioCallback);
   //cout << "Initialisation de l'audio ! " << endl;
-  pthread_create(&threadAudio, NULL, threadAudioCallback, (void*)this);
+  //pthread_create(&threadAudio, NULL, threadAudioCallback, (void*)this);
 }
 
-void Audio::chargerEffets(){
+void actualiserMeilleurScore(int meilleurScore){
 
 }
 
-void Audio::fonctionThread(){
-  while (true){
+void Audio::changerMusique(){
+  Mix_HaltMusic();
+  const char* cheminFichier = construireCheminFichier();
+  m_musique = Mix_LoadMUS(cheminFichier);
+  Mix_PlayMusic(m_musique,-1);
+}
 
-    if (!Mix_PlayingMusic()){
-      //cout << "Aucune musique n'est en train d'être jouée" << endl;
-      //cout << "Nombre de joueurs vivants : " << m_nombreJoueursVivants << "  ---  Nombre de joueurs vivants avant : " << m_nombreJoueursVivantsAvant << endl;
-      const char* cheminFichier = construireCheminFichier();
-      //cout << cheminFichier <<endl;
-      m_sample = Mix_LoadMUS(cheminFichier);
-      Mix_PlayMusic(m_sample,-1);
-
-      if(m_transition){
-        m_transition = false;
-      }
-    }
-
-    if (m_nombreJoueursVivants != m_nombreJoueursVivantsAvant){
-      //cout << "Coucou, m_nombreJoueursVivants et m_nombreJoueursVivantsAvant sont différents ! " << m_nombreJoueursVivants << " " << m_nombreJoueursVivantsAvant << endl;
-      m_numeroSample += 1;
-      m_transition = true;
-      m_nombreJoueursVivantsAvant = m_nombreJoueursVivants;
-    }
-
-    SDL_Delay(5);
-  }
+void Audio::changerTheme(){
+  m_numeroTheme =
 }
 
 zz//void Audio::chargerMusique(){
@@ -82,21 +63,14 @@ zz//void Audio::chargerMusique(){
 //  }
 //}
 
-void Audio::changerMusique(){
-
-}
-
 const char* Audio::construireCheminFichier(){
-  string numeroMorceauString = intVersString(m_numeroMorceau);
-  string numeroSampleString = intVersString(m_numeroSample);
+  string numeroMorceauString = intVersString(m_numeroTheme);
+  string numeroSampleString = intVersString(m_numeroMorceau);
   string chemin = "audio/musique_";
   chemin += numeroMorceauString;
   chemin += "/";
   chemin += numeroSampleString;
-  if (m_transition){
-    chemin += "_1.wav";
-  } else {
-    chemin += "_2.wav";
+  chemin += "_2.wav";
   }
   const char* cheminChar = chemin.c_str();
   return cheminChar;

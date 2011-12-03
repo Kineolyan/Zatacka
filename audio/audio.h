@@ -14,6 +14,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
 #include "pthread.h"
 #include "../util/exception.h"
 #include "../util/keywords.h"
@@ -21,11 +22,30 @@
 class Audio {
 private:
 
+  /**
+   * Nombre de joueurs dans la partie
+   */
+  int m_nombreJoueurs;
 
   /**
-   * Sample en cours de lecture
+   * Meilleur score du moment
    */
-  Mix_Music* m_basse;
+  int m_meilleurScore;
+
+  /**
+   * Musique en cours de lecture
+   */
+  Mix_Music* m_musique;
+
+  /**
+   * Nombre de thèmes disponibles
+   */
+  int m_nombreThemes;
+
+  /**
+   * Numéro du thème en cours de lecture
+   */
+  int m_numeroTheme;
 
   /**
    * Numéro du morceau en cours de lecture
@@ -33,35 +53,13 @@ private:
   int m_numeroMorceau;
 
   /**
-   * Numéro du sample en cours de lecture
+   * Nombre de morceaux par thème (0 : musique du menu , 1-nombreMorceauxParTheme : musiques du jeu, nombreMorceauxParTheme +1 : game over)
    */
-  int m_numeroSample;
-
-  /**
-   * Nombre de joueurs participant à la partie.
-   */
-  static int m_nombreJoueurs;
-
-  /**
-   * Nombre de joueurs encore en vie.
-   */
-  static int m_nombreJoueursVivants;
-
-  /**
-   * Nombre de joueurs encore en vie au dernier chargement de fichier audio.
-   */
-  static int m_nombreJoueursVivantsAvant;
-
-  /**
-   * Le son joué actuellement est-il une transition (i.e. doit être joué une unique fois) ?
-   */
-  bool m_transition;
+  map <int, int> m_morceauxParTheme;
 
   const char* construireCheminFichier();
 
   std::string intVersString(int entier);
-
-  pthread_t threadAudio;
 
 public:
 
@@ -69,21 +67,15 @@ public:
 
   ~Audio();
 
-  static void* threadAudioCallback(void*);
+  void changerMusique();
 
-  void fonctionThread();
-
-  void chargerMusique();
-
-  void musiqueFinie();
+  void changerTheme();
 
   void initialiserAudio();
 
-  void chargerSamples();
-
   void actualiserNombreJoueurs(int nombreJoueurs);
 
-  void actualiserNombreJoueursVivants(int nombreJoueursVivants);
+  void actualiserMeilleurScore();
 
 //  void diminuerNombreJoueurs();
 
