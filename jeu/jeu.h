@@ -21,6 +21,7 @@
 #include "../util/keywords.h"
 #include "../serpent/serpent.h"
 
+
 class Serpent;
 
 class Jeu: public ItemEcran {

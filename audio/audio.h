@@ -11,26 +11,54 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
 #include <iostream>
+#include <sstream>
+#include <map>
+#include <cstdlib>
+#include "pthread.h"
 #include "../util/exception.h"
 #include "../util/keywords.h"
 
 class Audio {
 private:
 
-//  SDL_AudioSpec audioSortie;
-
-  //La musique qui sera jouée
-  Mix_Music *m_musique;
+  /**
+   * Nombre de joueurs dans la partie
+   */
+  int m_nombreJoueurs;
 
   /**
-   * Nombre de joueurs participant à la partie.
+   * Meilleur score du moment
    */
-  int m_nombreJoueursActifs;
+  int m_meilleurScore;
 
   /**
-   * Nombre de joueurs encore en vie.
+   * Musique en cours de lecture
    */
-  int m_nombreJoueursVivants;
+  Mix_Music* m_musique;
+
+  /**
+   * Nombre de thèmes disponibles
+   */
+  int m_nombreThemes;
+
+  /**
+   * Numéro du thème en cours de lecture
+   */
+  int m_numeroTheme;
+
+  /**
+   * Numéro du morceau en cours de lecture
+   */
+  int m_numeroMorceau;
+
+  /**
+   * Nombre de morceaux par thème (0 : musique du menu , 1-nombreMorceauxParTheme : musiques du jeu, nombreMorceauxParTheme +1 : game over)
+   */
+  std::map<int, int> m_morceauxParTheme;
+
+  const char* construireCheminFichier();
+
+  std::string intVersString(int entier);
 
 public:
 
@@ -38,13 +66,15 @@ public:
 
   ~Audio();
 
-//  void audioCallback(void *udata, Uint8 *stream, int len);
+  void changerMusique();
+
+  void changerTheme();
 
   void initialiserAudio();
 
-  void chargerEffets();
+  void actualiserNombreJoueurs(int nombreJoueurs);
 
-  void chargerMusique(int numeroMorceau);
+  void actualiserMeilleurScore(int score);
 
 //  void diminuerNombreJoueurs();
 
