@@ -24,6 +24,8 @@ Zatacka::Zatacka(int largeur, int hauteur):
 	chargerPolices();
 	initialiserCouleurs();
 	m_ecranJeu.initialiser();
+  m_audio = Audio();
+  m_ecranJeu.ajouterAudio(m_audio);
 
 	creerMenuPrincipal();
 	creerRegles();
@@ -465,7 +467,7 @@ void Zatacka::afficherFin() {
 			position.y+=50;
 		}
 	}
-	TexteSDL fin("Konek Hry", m_policeCalligraphiee, couleur(BLANC));
+	TexteSDL fin("Konec Hry", m_policeCalligraphiee, couleur(BLANC));
 	position.x = (m_largeur - fin.largeur())/2;
 	position.y = m_hauteur - 100;
 	fin.position(position);
@@ -488,6 +490,7 @@ void Zatacka::afficherFin() {
 			case SDLK_SPACE:
 				m_ecranAAfficher = ACCUEIL;
 				attendre = false;
+				m_audio.menu();
 				break;
 
 			default:

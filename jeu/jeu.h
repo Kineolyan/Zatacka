@@ -20,12 +20,18 @@
 #include "texte.h"
 #include "../util/keywords.h"
 #include "../serpent/serpent.h"
+#include "../audio/audio.h"
 
 class Serpent;
 
 class Jeu: public ItemEcran {
 private:
 	Zatacka& m_jeu;
+
+  /**
+   * Gestionnaire du son
+   */
+  Audio m_audio;
 
 	/**
 	 * Largeur du panneau des scores
@@ -79,6 +85,8 @@ public:
 	Jeu(Zatacka& jeu, int largeurJeu, int largeurScore, int hauteur)
 		throw(InstanceManquante);
 	~Jeu();
+
+  void ajouterAudio(Audio audio);
 
 	void initialiser();
 

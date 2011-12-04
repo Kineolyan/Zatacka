@@ -13,6 +13,7 @@
 #include "../serpent/serpent.h"
 #include "../regle/gestionnaire.h"
 #include "../regle/regles.h"
+#include "../audio/audio.h"
 
 /**
  * Instance de jeu gerant les différents écrans, les serpents, les options
@@ -24,6 +25,11 @@ private:
 	};
 
 private:
+
+  /**
+   * Gestionnaire du son
+   */
+  Audio m_audio;
 
 	/**
 	 * Largeur de la fenetre de jeu

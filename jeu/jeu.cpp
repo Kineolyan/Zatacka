@@ -44,6 +44,10 @@ Jeu::~Jeu() {
 	}
 }
 
+void Jeu::ajouterAudio(Audio audio){
+  m_audio = audio;
+}
+
 void Jeu::initialiser() {
 	initialiserPoints();
     colorerElements();
@@ -219,6 +223,7 @@ void Jeu::changerScore(Couleur couleurJoueur, int score) throw() {
  */
 void Jeu::demarrerPartie(int nombreJoueurs) {
 	m_nbJoueursActifs = nombreJoueurs;
+	m_audio.actualiserNombreJoueurs(m_nbJoueursActifs);
 
     afficherJeu(m_jeu.ecran());
 
@@ -227,6 +232,7 @@ void Jeu::demarrerPartie(int nombreJoueurs) {
 		(*joueur)->reset();
 	}
 	m_jeu.afficherScores();
+  m_audio.commencerPartie();
 }
 
 bool Jeu::jouerManche() {
@@ -351,6 +357,9 @@ bool Jeu::jouerManche() {
 			bouclerManche = false;
 		}
 	}
+	for (int i=0, end = m_joueurs.size(); i<end; ++i) {
+    m_audio.actualiserMeilleurScore(m_joueurs[i]->score());
+  }
     return true;
 }
 

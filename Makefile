@@ -16,11 +16,11 @@ OPTIONS =
 OS = unix
 ifeq ($(OS), windows)
 	PROGNAME = zatacka.exe
-	LIBS = `sdl-config --libs` -lSDL_ttf
+	LIBS = `sdl-config --libs` -lSDL_ttf -lSDL_mixer
 else
 	ifeq ($(OS), unix)
 		PROGNAME = zatacka
-		LIBS = `sdl-config --libs` -lSDL_ttf
+		LIBS = `sdl-config --libs` -lSDL_ttf -lSDL_mixer
 	endif
 endif
 
@@ -49,6 +49,7 @@ OBJS = $(OBJ)/exception.o \
 	$(OBJ)/reglepoints.o \
 	$(OBJ)/gestionnaire.o \
 	$(OBJ)/regles.o \
+	$(OBJ)/audio.o \
 	$(OBJ)/main.o
 
 $(OBJ)/%.o: %.cpp
@@ -75,6 +76,11 @@ $(OBJ)/%.o: $(SRC)/util/%.cpp
 	@$(CC) $(CFLAGS) -c $(SRC)/util/$*.cpp
 	@mv $*.o $(OBJ)
 	@echo -- $*.o done
+
+$(OBJ)/%.o: $(SRC)/audio/%.cpp
+	@$(CC) $(CFLAGS) -c $(SRC)/audio/$*.cpp
+	@mv $*.o $(OBJ)
+	@echo -- $*.o done
 	
 # Règles de dépendance
 #$(OBJ)/main.o : $(SRC)/jeu/jeu.h 
@@ -83,6 +89,7 @@ $(OBJ)/%.o: $(SRC)/util/%.cpp
 #$(OBJ)/texte.o : $(SRC)/jeu/texte.h
 #$(OBJ)/option.o : $(SRC)/jeu/option.h $(SRC)/jeu/texte.h
 #$(OBJ)/exception.o : $(SRC)/exceptions/exception.h
+#$(OBJ)/audio.o : $(SRC)/audio/audio.h
 
 # Commandes executables
 
