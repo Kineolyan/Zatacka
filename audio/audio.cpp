@@ -10,7 +10,7 @@ Audio::Audio():
 }
 
 Audio::~Audio(){
-  //Mix_CloseAudio();
+  Mix_CloseAudio();
 }
 
 void Audio::initialiserThemes(){
