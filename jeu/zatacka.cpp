@@ -24,9 +24,8 @@ Zatacka::Zatacka(int largeur, int hauteur):
 	chargerPolices();
 	initialiserCouleurs();
 	m_ecranJeu.initialiser();
-  m_audio = Audio();
-  m_ecranJeu.ajouterAudio(m_audio);
 
+  creerAudio();
 	creerMenuPrincipal();
 	creerRegles();
 	creerMenuOptions();
@@ -184,6 +183,11 @@ void Zatacka::creerMenuPrincipal() {
 		position.y+= pas;
 		positionEtat.y+= pas;
 	}
+}
+
+void Zatacka::creerAudio() {
+  m_audio = Audio();
+  m_ecranJeu.ajouterAudio(m_audio);
 }
 
 void Zatacka::afficherMenuPrincipal() {

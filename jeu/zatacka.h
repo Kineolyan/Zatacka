@@ -131,6 +131,11 @@ private:
 	void creerMenuOptions();
 
 	/**
+	 * Crée le gestionnaire de sons.
+	 */
+	void creerAudio();
+
+	/**
 	 * Affiche l'écran d'accueil
 	 */
 	void afficherAccueil();
